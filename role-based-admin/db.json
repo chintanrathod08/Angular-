@@ -1,0 +1,19 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "name": "Website Redesign",
+      "client": "Acme Corp",
+      "budget": 5000,
+      "status": "Ongoing"
+    },
+    {
+      "id": 2,
+      "name": "Mobile App",
+      "client": "Beta Ltd",
+      "budget": 8000,
+      "status": "Pending"
+    }
+  ],
+  "estimates": []
+}
