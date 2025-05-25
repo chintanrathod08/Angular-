@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 export class AuthService {
   private role: string = '';
 
+  constructor(private router: Router) {}
+
   login(username: string, password: string, role: string): boolean {
     if (username && password && role) {
       localStorage.setItem('role', role);
@@ -25,6 +27,4 @@ export class AuthService {
     localStorage.clear();
     this.router.navigate(['/auth/signin']);
   }
-
-  constructor(private router: Router) {}
 }

@@ -1,20 +1,38 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Dash } from '';
+import { LayoutComponent } from './layout/dashboard.component';  // fixed import path
+import { AuthGuard } from '../auth/auth.guard';
+
+import { AdminComponent } from './pages/admin/admin.component';
+import { EmployeeComponent } from './pages/employee/employee.component';
+import { ClientComponent } from './pages/client/client.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DashboardComponent,
+    component: LayoutComponent,
     children: [
       {
-        path: 'projects',
-        loadChildren: () =>
-          import('./projects/projects.module').then(m => m.ProjectsModule)
+        path: 'admin',
+        component: AdminComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['admin'] }  // lowercase
+      },
+      {
+        path: 'employee',
+        component: EmployeeComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['employee'] }  // lowercase
+      },
+      {
+        path: 'client',
+        component: ClientComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['client'] }  // lowercase
       },
       {
         path: '',
-        redirectTo: 'projects',
+        redirectTo: 'admin',  // or choose default route dynamically later
         pathMatch: 'full'
       }
     ]

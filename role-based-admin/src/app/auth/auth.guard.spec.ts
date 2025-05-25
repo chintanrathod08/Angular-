@@ -26,13 +26,21 @@ describe('AuthGuard', () => {
     guard = TestBed.inject(AuthGuard);
   });
 
-  it('should allow activation if user is logged in', () => {
-    expect(guard.canActivate()).toBeTrue();
+  it('should allow activation if user role is allowed', () => {
+    const mockRoute: any = {
+      data: { roles: ['admin', 'employee'] }
+    };
+
+    expect(guard.canActivate(mockRoute)).toBeTrue();
   });
 
-  it('should redirect to signin if not logged in', () => {
-    authServiceStub.getRole = () => ''; // no role
-    expect(guard.canActivate()).toBeFalse();
+  it('should redirect to signin if user role is not allowed', () => {
+    authServiceStub.getRole = () => 'client'; // user role that is NOT allowed
+    const mockRoute: any = {
+      data: { roles: ['admin', 'employee'] }
+    };
+
+    expect(guard.canActivate(mockRoute)).toBeFalse();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/auth/signin']);
   });
 });
