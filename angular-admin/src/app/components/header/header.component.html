@@ -1,0 +1,37 @@
+<mat-toolbar class="bg-[#FFFFFF]! flex justify-between items-center" style="font-family: Poppins, sans-serif;background-color: white;">
+
+  <!----------------1------------------ -->
+
+
+  <div class="flex justify-between items-center  h-full" style="width: 17%;">
+
+   
+
+      <div class="flex items-center gap-2  cursor-pointer" routerLink="/home" >
+        <img src="https://einfosoft.com/templates/admin/kuber/source/light/assets/images/logo.png" alt="">
+
+        <h1 class="">KUBER</h1>
+      </div>
+
+      <button mat-icon-button (click)="sideBarButtonClick()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+   
+  </div>
+
+  <!------------------2---------------- -->
+
+  <div class="h-full flex justify-end items-center">
+    <!-- <mat-icon class="me-3">add_alert</mat-icon> -->
+    <button [matMenuTriggerFor]="menu">
+      <mat-icon>people</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item >Setting</button>
+      <button mat-menu-item routerLink="/login">Logout</button>
+    </mat-menu>
+
+  </div>
+
+</mat-toolbar>

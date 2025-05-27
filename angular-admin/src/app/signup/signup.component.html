@@ -1,0 +1,82 @@
+<div class="w-full h-[100vh] grid grid-cols-2">
+
+    <div class="bg-[#ECF0F4]">
+        <img src="https://einfosoft.com/templates/admin/kuber/source/light/assets/images/pages/bg-02.png" alt="">
+    </div>
+
+
+    <div class="w-full flex flex-col justify-evenly items-center ">
+
+        <div class="w-[60%]">
+
+            <div class="">
+                <p class="mt-2 text-[1.8rem]">Sign Up</p>
+                <p class="text-[gray]">Enter details to create your account</p>
+            </div>
+
+            <form class="mb-0 space-y-6 mt-10">
+
+                <div>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Username*</mat-label>
+                        <input id="username" name="username" type="text" matInput placeholder="Admin">
+                        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                        <!-- <mat-hint>Hint</mat-hint> -->
+                    </mat-form-field>
+                </div>
+
+                <!-- email -->
+                <div>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Email*</mat-label>
+                        <input id="email" name="email" type="email" matInput placeholder="Email">
+                        <mat-icon matSuffix>sentiment_very_Email</mat-icon>
+                        <!-- <mat-hint>Hint</mat-hint> -->
+                    </mat-form-field>
+                </div>
+
+                    <!-- password -->
+                    <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="****">
+                    <button mat-icon-button matSuffix type="button" (click)="togglePassword()">
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                    </mat-form-field>
+
+                    <!-- Confirm Password Field -->
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Confirm Password</mat-label>
+                        <input matInput [type]="hideConfirmPassword ? 'password' : 'text'"
+                            formControlName="confirmPassword" placeholder="****" >
+                        <button mat-icon-button matSuffix type="button" (click)="toggleConfirmPassword()">
+                            <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        </button>
+                    </mat-form-field>
+
+                    
+                    <div class="flex items-center justify-between">
+                        <span>Already Registered? <a href="" class="text-[blue]">Login</a></span>
+                    </div>
+
+                    <div>
+                        <button type="submit"
+                            class="w-full flex justify-center py-4 px-4  rounded-[50px] text-sm font-medium text-[black] hover:text-[white] bg-[#E3E3E4]  hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Register
+                        </button>
+                    </div>
+            </form>
+
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">OR</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

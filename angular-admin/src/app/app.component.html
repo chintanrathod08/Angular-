@@ -1,0 +1,56 @@
+<section class="w-full h-[100vh] flex flex-col">
+<app-header (sidebarToggle)="drawer.toggle()"></app-header>
+
+<mat-drawer-container class="example-container" autosize>
+
+  <!-- ✅ Side Drawer -->
+  <mat-drawer #drawer class="example-sidenav" mode="side" [opened]="isSideOpen" style="width: 15%;font-family: poppins, sans-serif; border-radius: 0%;"   >
+    <div class="bg-white h-full px-3">
+      <mat-nav-list role="list">
+        
+        <mat-list-item role="listitem" class="px-3">
+          <a routerLink="/" class="flex items-center gap-3 text-[#767676]">
+            <mat-icon>home</mat-icon>
+            <span>Dashboard</span>  
+          </a>
+        </mat-list-item>
+
+        <mat-list-item role="listitem" class="px-3">
+          <a routerLink="/allproject" class="flex items-center gap-3 text-[#767676]">
+            <mat-icon>folder</mat-icon>
+            <span>All Projects</span>
+          </a>
+        </mat-list-item>
+      
+        <mat-list-item role="listitem" class="px-3">
+          <a routerLink="/addproject" class="flex items-center gap-3 text-[#767676]">
+            <mat-icon>create_new_folder</mat-icon>
+            <span>Add Project</span>
+          </a>
+        </mat-list-item>
+
+        <mat-list-item role="listitem" class="px-3">
+          <a routerLink="/estimate" class="flex items-center gap-3 text-[#767676]">
+            <mat-icon>library_books</mat-icon>
+            <span>Estimate</span>
+          </a>
+        </mat-list-item>
+
+        <mat-list-item role="listitem" class="px-3">
+          <a routerLink="/projectdetails" class="flex items-center gap-3 text-[#767676]">
+            <mat-icon>featured_play_list</mat-icon>
+            <span>Project Details</span>
+          </a>
+        </mat-list-item>
+
+      </mat-nav-list>
+    </div>
+  </mat-drawer>
+
+  <!-- ✅ Main Content Area -->
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+
+</mat-drawer-container>
+</section>

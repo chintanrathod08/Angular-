@@ -1,0 +1,109 @@
+<section class="w-full min-h-[90vh] flex justify-center pt-5 pb-7">
+  <section class="w-[96%]">
+
+    <!-- Breadcrumb Section -->
+    <div class="w-full flex justify-between items-center mb-5">
+      <h1 class="text-[1.3rem] text-[#767676]">Add Projects</h1>
+      <div class="flex items-center text-[#767676]">
+        <mat-icon>home</mat-icon>
+        <mat-icon>chevron_right</mat-icon>
+        <span class="ps-2">Projects</span>
+        <mat-icon>chevron_right</mat-icon>
+        <span class="ps-2">Add Projects</span>
+      </div>
+    </div>
+
+    <!-- Form Card Section -->
+    <section class="w-full bg-white p-6 rounded-xl shadow-xl">
+      <h2 class="text-xl font-semibold text-[#5B626B] mb-6">Add Projects</h2>
+
+      <form class="space-y-6">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Project ID</mat-label>
+            <input matInput placeholder="Enter project ID" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Project Title</mat-label>
+            <input matInput placeholder="Enter project title" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Department</mat-label>
+            <mat-select required>
+              <mat-option *ngFor="let dept of departments" [value]="dept">{{ dept }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Project Priority</mat-label>
+            <mat-select required>
+              <mat-option *ngFor="let p of priorities" [value]="p">{{ p }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Client</mat-label>
+            <input matInput placeholder="Client Name" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Price</mat-label>
+            <input matInput type="number" placeholder="₹" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Project Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" required />
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Project End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" required />
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="md:col-span-2">
+            <mat-label>Team</mat-label>
+            <mat-select required>
+              <mat-option *ngFor="let member of team" [value]="member">{{ member }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Work Status -->
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Work Status:</label>
+          <mat-radio-group class="flex flex-wrap gap-4" [(ngModel)]="status" name="status">
+            <mat-radio-button *ngFor="let s of statuses" [value]="s">{{ s }}</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Descriptions:</label>
+          <textarea rows="6" placeholder="Type here..." class="w-full border p-4 rounded-md"></textarea>
+        </div>
+
+        <!-- Upload Image -->
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Upload Image</label>
+          <input type="file" class="border border-dashed p-4 w-full rounded-md" />
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end gap-4">
+          <button mat-flat-button color="primary">Submit</button>
+          <button mat-flat-button color="warn">Cancel</button>
+        </div>
+
+      </form>
+    </section>
+
+  </section>
+</section>
