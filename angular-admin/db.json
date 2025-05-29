@@ -1,0 +1,49 @@
+{
+  "projects": [
+    {
+      "title": "ERP Management",
+      "department": "Testing",
+      "priority": "Medium",
+      "client": "Techlab",
+      "price": 2000,
+      "startDate": "2025-05-28T18:30:00.000Z",
+      "endDate": "2025-05-30T18:30:00.000Z",
+      "team": "Example 2",
+      "leader": "Paras sir",
+      "status": "Active",
+      "description": "xyz",
+      "progress": 0,
+      "id": 3
+    },
+    {
+      "title": "Employee Management",
+      "department": "Development",
+      "priority": "Medium",
+      "client": "Techlab",
+      "price": 2000,
+      "startDate": "2025-05-28T18:30:00.000Z",
+      "endDate": "2025-05-30T18:30:00.000Z",
+      "team": "Example 1",
+      "leader": "Paras sir",
+      "status": "Active",
+      "description": "xyz",
+      "progress": 0,
+      "id": 4
+    },
+    {
+      "title": "School Management ",
+      "department": "Testing",
+      "priority": "Medium",
+      "client": "Techlab",
+      "price": 2000,
+      "startDate": "2025-05-28T18:30:00.000Z",
+      "endDate": "2025-05-30T18:30:00.000Z",
+      "team": "Example 1",
+      "leader": "Paras sir",
+      "status": "Running",
+      "description": "xyz",
+      "progress": 0,
+      "id": 5
+    }
+  ]
+}

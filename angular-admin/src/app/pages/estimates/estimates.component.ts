@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { TableComponent } from '../../components/table/table.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-estimates',
-  imports: [],
+  imports: [TableComponent,MatIconModule],
   templateUrl: './estimates.component.html',
   styleUrl: './estimates.component.scss'
 })

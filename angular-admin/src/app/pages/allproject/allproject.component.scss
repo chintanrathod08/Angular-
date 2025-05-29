@@ -1,0 +1,28 @@
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  display: none !important;
+}
+
+
+::ng-deep .mat-radio-button.active-bg.mat-accent .mat-radio-inner-circle {
+  background-color: #2196f3 !important; // blue
+}
+
+::ng-deep .mat-radio-button.completed-bg.mat-accent .mat-radio-inner-circle {
+  background-color: #4caf50 !important; // green
+}
+
+::ng-deep .mat-radio-button.running-bg.mat-accent .mat-radio-inner-circle {
+  background-color: #ffc107 !important; // yellow
+}
+
+::ng-deep .mat-radio-button.pending-bg.mat-accent .mat-radio-inner-circle {
+  background-color: #9e9e9e !important; // gray
+}
+
+::ng-deep .mat-radio-button.not-started-bg.mat-accent .mat-radio-inner-circle {
+  background-color: #000000 !important; // black
+}
+
+::ng-deep .mat-radio-button.cancled-bg.mat-accent .mat-radio-inner-circle {
+  background-color: #f44336 !important; // red
+}

@@ -5,10 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-// import { AppComponent } from './app.component';
-
-
-
+  
 @NgModule({
   declarations: [],
   imports: [
