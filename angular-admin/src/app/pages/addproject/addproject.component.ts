@@ -90,7 +90,7 @@ export class AddprojectComponent implements OnInit {
 
   onSubmit(): void {
     if (this.addProjectForm.invalid) {
-      alert('Please fill all required fields');
+      alert('Please fill all required fields ❌');
       return;
     }
 

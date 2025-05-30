@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'; 
@@ -9,7 +9,7 @@ import { Project } from '../../project';
 @Component({
   selector: 'app-project-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, MatProgressBarModule], 
+  imports: [CommonModule, RouterModule, MatIconModule, MatProgressBarModule, NgClass,], 
   templateUrl: './project-details.component.html',
   styleUrl: './project-details.component.scss'
 })
@@ -45,6 +45,23 @@ export class ProjectDetailsComponent implements OnInit {
     }
   }
 
+   getPriorityClass(priority: string): string {
+    switch (priority) {
+      case 'Low': return 'text-green-500';
+      case 'Medium': return 'text-blue-500';
+      case 'High': return 'text-red-500';
+      default: return '';
+    }
+  }
 
+  getPriorityIcon(priority: string): string {
+   switch (priority) {
+    case 'Low': return 'keyboard_arrow_down';
+    case 'Medium': return 'code';
+    case 'High': return 'keyboard_arrow_up';
+    default: return '';
+  }
+
+}
 
 }

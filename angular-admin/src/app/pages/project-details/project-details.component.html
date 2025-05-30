@@ -8,9 +8,10 @@
 
             <div class="flex items-center">
                 <button routerLink="/allproject"
-                    class="p-2 text-[12px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon class="me-1">keyboard_backspace</mat-icon>
+                    class="p-2 text-[12px] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon
+                        class="me-1">keyboard_backspace</mat-icon>
                     Go back</button>
-                <h1 class="lg:text-[1.3rem] text-[#767676] ms-3">Projects Details</h1>
+                <h1 class="md:text-[1.3rem] text-[#767676] ms-3">Projects Details</h1>
             </div>
 
             <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100">
@@ -25,21 +26,29 @@
 
         <!-- section-2 -->
         <section *ngIf="projectData" class="w-full h-auto bg-white p-3 md:p-6 rounded-xl shadow-xl">
-           
+
             <h2 class="text-[#5B626B] mb-3">Project Details</h2>
 
             <div class="w-full h-auto p-3">
                 <h1 class="text-[#F68C1F] text-[1.5rem]">{{projectData.title}}</h1>
-                <p class="mt-2"><span class="text-[#555555]">Status:</span> 
-                <span class="px-3 py-1 rounded-[5px] text-white text-[0.9rem] ms-3" [ngClass]="getStatusClass(projectData.status)">{{projectData.status}}</span>
-            </p>
+                <p class="mt-2"><span class="text-[#555555]">Status:</span>
+                    <span class="px-3 py-1 rounded-[5px] text-white text-[0.9rem] ms-3"
+                        [ngClass]="getStatusClass(projectData.status)">{{projectData.status}}</span>
+                </p>
 
                 <div class="w-full h-auto sm:grid sm:grid-cols-2 mt-3 gap-10">
                     <div class="leading-10">
                         <p><span class="text-[#555555] me-2">Leader :</span> {{projectData.leader}}</p>
                         <p><span class="text-[#555555] me-2">Team :</span> {{projectData.team}}</p>
                         <p><span class="text-[#555555] me-2">Department :</span> {{projectData.department}}</p>
-                        <p><span class="text-[#555555] me-2">Priority :</span> <span>{{projectData.priority}}</span></p>
+                        <p class="flex items-center">
+                            <span>Priority :</span>
+                            <span class="text-[#555555] ms-3 flex items-center gap-1"
+                                [ngClass]="getPriorityClass(projectData.priority)">
+                                <mat-icon>{{ getPriorityIcon(projectData.priority) }}</mat-icon>
+                                {{ projectData.priority }}
+                            </span>
+                        </p>
                         <p><span class="text-[#555555] me-2">Price :</span> ${{projectData.price}}</p>
                     </div>
                     <div class="leading-10">
@@ -57,5 +66,3 @@
     </section>
 
 </section>
-
-
