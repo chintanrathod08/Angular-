@@ -1,11 +1,12 @@
 <section class="w-full h-[100vh] flex flex-col">
+
 <app-header (sidebarToggle)="drawer.toggle()"></app-header>
 
 <mat-drawer-container class="example-container" autosize>
 
   <!-- ✅ Side Drawer -->
   <mat-drawer #drawer class="example-sidenav" mode="side" [opened]="isSideOpen" style="width: 15%;font-family: poppins, sans-serif; border-radius: 0%;"   >
-    <div class="bg-white h-full px-3">
+    <div class="bg-white h-full">
       <mat-nav-list role="list">
         
         <mat-list-item role="listitem" class="px-3">

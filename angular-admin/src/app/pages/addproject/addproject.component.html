@@ -1,19 +1,19 @@
-<section class="w-full min-h-[90vh] flex justify-center pt-5 pb-7">
+<section class="w-full min-h-[100vh] flex justify-center pt-5 pb-7">
 
     <section class="w-[96%]">
 
         <!-- Breadcrumb Section -->
-        <div class="w-full grid grid-cols-2 flex justify-between items-center mb-5">
+        <div class="w-full md:grid md:grid-cols-2 md:flex md:justify-between  md:items-center md:mb-5">
 
             <div class="flex items-center">
                 <button routerLink="/allproject"
-                    class="p-2 text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon
+                    class="p-2 text-[12px] text-[white] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon
                         class="me-1">keyboard_backspace</mat-icon>
                     Go back</button>
-                <h1 class="text-[1.3rem] text-[#767676] ms-3">Add Project</h1>
+                <h1 class="md:text-[1.3rem] text-[#767676] ms-3">Add Project</h1>
             </div>
 
-            <div class="flex justify-end text-[#767676]">
+            <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100">
                 <mat-icon>home</mat-icon>
                 <mat-icon>chevron_right</mat-icon>
                 <span class="ps-2">Projects</span>
@@ -28,14 +28,14 @@
 
             <form class="space-y-6" [formGroup]="addProjectForm" (ngSubmit)="onSubmit()">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="w-full md:grid md:grid-cols-2 gap-6">
 
-                    <mat-form-field appearance="outline">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Project Title</mat-label>
                         <input matInput placeholder="Enter project title" required formControlName="title" />
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Department</mat-label>
                         <mat-select required formControlName="department">
                             <mat-option value="Designing">Designing</mat-option>
@@ -45,42 +45,48 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline">
+
+
+                    <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Project Priority</mat-label>
                         <mat-select required formControlName="priority">
-                            <mat-option value="Low">Low</mat-option>
-                            <mat-option value="Medium">Medium</mat-option>
-                            <mat-option value="High">High</mat-option>
+
+                            <mat-option *ngFor="let priority of priorityList" [value]="priority" class="flex items-center gap-2">
+                                <mat-icon>{{priority}}</mat-icon>
+                                {{ priority }}
+                            </mat-option>
+
+
                         </mat-select>
                     </mat-form-field>
 
 
-
-                    <mat-form-field appearance="outline">
+ 
+                    <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Client</mat-label>
                         <input matInput placeholder="Client Name" required formControlName="client" />
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Price</mat-label>
                         <input matInput type="number" placeholder="$" required formControlName="price" />
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Project Start Date</mat-label>
                         <input matInput [matDatepicker]="startPicker" required formControlName="startDate" />
                         <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                         <mat-datepicker #startPicker></mat-datepicker>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Project End Date</mat-label>
                         <input matInput [matDatepicker]="endPicker" required formControlName="endDate" />
                         <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
                         <mat-datepicker #endPicker></mat-datepicker>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Leader</mat-label>
                         <mat-select required formControlName="leader">
                             <mat-option value="Paras sir">Paras sir</mat-option>
@@ -90,7 +96,7 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline" class="col-span-2">
+                    <mat-form-field appearance="outline" class="col-span-2" style="width: 100%;">
                         <mat-label>Team</mat-label>
                         <mat-select required formControlName="team">
                             <mat-option value="Example 1">Example 1</mat-option>
@@ -105,36 +111,15 @@
 
                 <!-- Work Status -->
                 <div>
-
                     <label class="block text-gray-700 font-medium mb-2">Work Status :</label>
 
-                    <div class="w-full flex gap-10">
+                    <mat-radio-group formControlName="status" class="w-full flex flex-wrap gap-4">
 
-                        <mat-radio-group aria-label="Select an option" formControlName="status"
-                            class="status-radio-group">
+                        <mat-radio-button *ngFor="let status of statusList" [value]="status">
+                            {{ status }}
+                        </mat-radio-button>
 
-                            <mat-radio-button value="Active"
-                                [ngClass]="getStatusClass('Active')">Active</mat-radio-button>
-
-                            <mat-radio-button value="Completed"
-                                [ngClass]="getStatusClass('Completed')">Completed</mat-radio-button>
-
-                            <mat-radio-button value="Running"
-                                [ngClass]="getStatusClass('Running')">Running</mat-radio-button>
-
-                            <mat-radio-button value="Pending"
-                                [ngClass]="getStatusClass('Pending')">Pending</mat-radio-button>
-
-                            <mat-radio-button value="Not Started" [ngClass]="getStatusClass('Not Started')">Not
-                                Started</mat-radio-button>
-
-                            <mat-radio-button value="Cancled"
-                                [ngClass]="getStatusClass('Cancled')">Cancled</mat-radio-button>
-
-                        </mat-radio-group>
-
-
-                    </div>
+                    </mat-radio-group>
 
                 </div>
 

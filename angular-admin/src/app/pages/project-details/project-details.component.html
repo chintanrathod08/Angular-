@@ -4,16 +4,16 @@
     <section class="w-[96%]">
 
         <!-- section Section -->
-        <div class="w-full grid grid-cols-2 flex justify-between items-center mb-5">
+        <div class="w-full md:grid md:grid-cols-2 md:flex md:justify-between md:items-center md:mb-5">
 
             <div class="flex items-center">
                 <button routerLink="/allproject"
-                    class="p-2 text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon class="me-1">keyboard_backspace</mat-icon>
+                    class="p-2 text-[12px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon class="me-1">keyboard_backspace</mat-icon>
                     Go back</button>
-                <h1 class="text-[1.3rem] text-[#767676] ms-3">Projects Details</h1>
+                <h1 class="lg:text-[1.3rem] text-[#767676] ms-3">Projects Details</h1>
             </div>
 
-            <div class="flex justify-end text-[#767676]">
+            <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100">
                 <mat-icon>home</mat-icon>
                 <mat-icon>chevron_right</mat-icon>
                 <span class="ps-2">Projects</span>
@@ -24,21 +24,22 @@
 
 
         <!-- section-2 -->
-        <section *ngIf="projectData" class="w-full h-auto bg-white p-6 rounded-xl shadow-xl">
+        <section *ngIf="projectData" class="w-full h-auto bg-white p-3 md:p-6 rounded-xl shadow-xl">
+           
             <h2 class="text-[#5B626B] mb-3">Project Details</h2>
 
             <div class="w-full h-auto p-3">
                 <h1 class="text-[#F68C1F] text-[1.5rem]">{{projectData.title}}</h1>
-                <p class="mt-2"><span class="text-[#555555]">Status:</span> <span
-                        class="ms-2 p-1 ps-2 pe-2 rounded-[5px] bg-[#6777EF] text-[white]">{{projectData.status}}</span>
-                </p>
+                <p class="mt-2"><span class="text-[#555555]">Status:</span> 
+                <span class="px-3 py-1 rounded-[5px] text-white text-[0.9rem] ms-3" [ngClass]="getStatusClass(projectData.status)">{{projectData.status}}</span>
+            </p>
 
-                <div class="w-full h-auto grid grid-cols-2 mt-3 gap-10">
+                <div class="w-full h-auto sm:grid sm:grid-cols-2 mt-3 gap-10">
                     <div class="leading-10">
                         <p><span class="text-[#555555] me-2">Leader :</span> {{projectData.leader}}</p>
                         <p><span class="text-[#555555] me-2">Team :</span> {{projectData.team}}</p>
                         <p><span class="text-[#555555] me-2">Department :</span> {{projectData.department}}</p>
-                        <p><span class="text-[#555555] me-2">Priority :</span> {{projectData.priority}}</p>
+                        <p><span class="text-[#555555] me-2">Priority :</span> <span>{{projectData.priority}}</span></p>
                         <p><span class="text-[#555555] me-2">Price :</span> ${{projectData.price}}</p>
                     </div>
                     <div class="leading-10">
@@ -46,8 +47,8 @@
                         <p><span class="text-[#555555] me-2">Created :</span> {{projectData.startDate}}</p>
                         <p><span class="text-[#555555] me-2">Deadline :</span> {{projectData.endDate}}</p>
                         <p><span class="text-[#555555] me-2">Description :</span> {{projectData.description}}</p>
-                        <p><span class="text-[#555555] me-2">Progress : {{projectData.progress}}%</span></p>
-                        <mat-progress-bar mode="determinate" [value]="projectData.progress"></mat-progress-bar>
+                        <!-- <p><span class="text-[#555555] me-2">Progress : {{projectData.progress}}%</span></p> -->
+                        <!-- <mat-progress-bar mode="determinate" [value]="projectData.progress"></mat-progress-bar> -->
                     </div>
                 </div>
             </div>

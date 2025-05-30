@@ -31,4 +31,20 @@ export class ProjectDetailsComponent implements OnInit {
       }
     })
   }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'Active': return 'bg-blue-800';
+      case 'Completed': return 'bg-green-600';
+      case 'Running': return 'bg-yellow-400 text-black';
+      case 'Pending': return 'bg-gray-500';
+      case 'Not Started': return 'bg-black';
+      case 'Cancelled':
+      case 'Cancled': return 'bg-red-600';
+      default: return 'bg-gray-400';
+    }
+  }
+
+
+
 }

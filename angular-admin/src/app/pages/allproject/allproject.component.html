@@ -1,18 +1,18 @@
-<section class="w-full min-h-[90vh] flex justify-center pt-5 pb-7">
-<!-- <mat-icon>add</mat-icon> -->
+<section class="w-full min-h-[100vh] flex justify-center pt-5 pb-7">
+    <!-- <mat-icon>add</mat-icon> -->
     <section class="w-[96%]">
 
         <!-- section-1 -->
-        <div class="w-full grid grid-cols-2 flex justify-between items-center mb-5">
+        <div class="w-full md:grid md:grid-cols-2  md:flex  md:justify-between md:items-center md:mb-5">
 
             <div class="flex items-center">
                 <button routerLink="/addproject"
-                    class="p-2 text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon>add</mat-icon>
+                    class="p-2 text-[12px] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon>add</mat-icon>
                     Add New Project</button>
-                <h1 class="text-[1.3rem] text-[#767676] ms-3">All Projects</h1>
+                <h1 class="md:text-[1.3rem] text-[#767676] ms-3">All Projects</h1>
             </div>
 
-            <div class="flex justify-end text-[#767676]">
+            <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100">
                 <mat-icon>home</mat-icon>
                 <mat-icon>chevron_right</mat-icon>
                 <span class="ps-2">Projects</span>
@@ -23,40 +23,53 @@
 
         <!-- section-2 -->
         <div
-            class="w-full h-auto bg-white p-6 rounded-xl shadow-xl grid  grid-cols-4 gap-5 flex justify-evenly items-center">
+            class="w-full h-auto bg-white p-3 md:p-6 rounded-xl shadow-xl grid grid-cols-1 gap-8  md:grid md:grid-cols-2 md:gap-5  md:flex md:justify-evenly xl:grid xl:grid-cols-3 xl:gap-5 xl:flex xl:justify-evenly 2xl:grid 2xl:grid-cols-3 2xl:gap-5 2xl:flex 2xl:justify-evenly">
 
 
-            <div class="h-auto shadow-xl rounded-[8px] p-5 bg-[#ECF0F4] leading-[2.5rem]"
-                *ngFor="let data of apiData; let i = index">
-                
+            <div class="h-auto shadow-xl rounded-[8px] p-5 bg-[#ECF0F4]" *ngFor="let data of apiData; let i = index">
+
                 <!-- div-1 -->
                 <div class="w-full h-auto flex justify-between items-center">
-                    
+
                     <h1 class="flex items-center text-[1.1rem] text-[#F68C1F]"><mat-icon
                             class="me-2">check_circle_outline</mat-icon> {{ i + 1 }} - {{data.title}}</h1>
-                    
-                    <button matButton [matMenuTriggerFor]="menu" class="flex items-center"><mat-icon>more_vert</mat-icon></button>
-                    
+
+                    <button matButton [matMenuTriggerFor]="menu"
+                        class="flex items-center"><mat-icon>more_vert</mat-icon></button>
+
                     <mat-menu #menu="matMenu">
                         <button mat-menu-item (click)="onUpdate(data.id)"><mat-icon>create</mat-icon> Edit</button>
                         <button mat-menu-item (click)="onView(data.id)"><mat-icon>visibility</mat-icon> View</button>
-                        <button mat-menu-item (click)="onDelete(data.id)"><mat-icon>delete_forever</mat-icon> Delete</button>
+                        <button mat-menu-item (click)="onDelete(data.id)"><mat-icon>delete_forever</mat-icon>
+                            Delete</button>
                     </mat-menu>
                 </div>
 
                 <!-- div-2 -->
-                <h1><span></span> <span class="">{{data.status}}</span></h1>
-                <p class=""><span class="text-start">Created : </span> <span class="text-[gray] ms-3">{{data.startDate}}</span></p>
-                <p class=""><span>Leader :</span> <span class="text-[gray] ms-3">{{data.leader}}</span></p>
-                <p class=""><span>Team :</span> <span class="text-[gray] ms-3">{{data.team}}</span></p>
-                <p class=""><span>Priority :</span> <span class="text-[gray] ms-3">{{data.priority}}</span></p>
-                <p class=""><span>Deadline :</span> <span class="text-[gray] ms-3">{{data.endDate}}</span></p>
-                <p class=""><span>Team : </span> <span class="text-[gray] ms-3">{{data.team}}</span></p> 
-                <p><span>Progress : {{data.progress}}%</span><mat-progress-bar mode="determinate"
-                        [value]="data.progress" class="mt-2"></mat-progress-bar></p>
-                <mat-progress-bar mode="determinate" value="60"></mat-progress-bar>
+                <div class="leading-[2.5rem]">
+                    <span class="px-3 py-1 rounded-[5px] text-white text-[0.9rem]"
+                        [ngClass]="getStatusClass(data.status)">{{data.status}}</span>
+                    <p class=""><span class="text-start">Created : </span> <span
+                            class="text-[gray] ms-3">{{data.startDate}}</span></p>
+                    <p class=""><span>Leader :</span> <span class="text-[gray] ms-3">{{data.leader}}</span></p>
+                    <p class=""><span>Team :</span> <span class="text-[gray] ms-3">{{data.team}}</span></p>
+                    
+                    <p class="flex items-center">
+                        <span>Priority :</span>
+                        <span class="text-[gray] ms-3 flex items-center gap-1"
+                            [ngClass]="getPriorityClass(data.priority)">
+                            <mat-icon>{{ getPriorityIcon(data.priority) }}</mat-icon>
+                            {{ data.priority }}
+                        </span>
+                    </p>
 
-             </div>
+                    <p class=""><span>Deadline :</span> <span class="text-[gray] ms-3">{{data.endDate}}</span></p>
+                    <p class=""><span>Team : </span> <span class="text-[gray] ms-3">{{data.team}}</span></p>
+                    <!-- <p><span>Progress : {{data.progress}}%</span><mat-progress-bar mode="determinate" [value]="data.progress" class="mt-2"></mat-progress-bar></p> -->
+
+                    <!-- <mat-progress-bar mode="determinate" value="60"></mat-progress-bar> -->
+                </div>
+            </div>
         </div>
 
     </section>

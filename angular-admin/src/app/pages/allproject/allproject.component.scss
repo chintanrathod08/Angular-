@@ -1,28 +1,30 @@
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-  display: none !important;
+.active-bg {
+  background-color: #2196f3;
+  color: white;
+  
 }
 
-
-::ng-deep .mat-radio-button.active-bg.mat-accent .mat-radio-inner-circle {
-  background-color: #2196f3 !important; // blue
+.completed-bg {
+  background-color: #4caf50;
+  color: white;
 }
 
-::ng-deep .mat-radio-button.completed-bg.mat-accent .mat-radio-inner-circle {
-  background-color: #4caf50 !important; // green
+.running-bg {
+  background-color: #ffeb3b;
+  color: black;
 }
 
-::ng-deep .mat-radio-button.running-bg.mat-accent .mat-radio-inner-circle {
-  background-color: #ffc107 !important; // yellow
+.pending-bg {
+  background-color: #9e9e9e;
+  color: white;
 }
 
-::ng-deep .mat-radio-button.pending-bg.mat-accent .mat-radio-inner-circle {
-  background-color: #9e9e9e !important; // gray
+.not-started-bg {
+  background-color: #000;
+  color: white;
 }
 
-::ng-deep .mat-radio-button.not-started-bg.mat-accent .mat-radio-inner-circle {
-  background-color: #000000 !important; // black
-}
-
-::ng-deep .mat-radio-button.cancled-bg.mat-accent .mat-radio-inner-circle {
-  background-color: #f44336 !important; // red
+.cancelled-bg {
+  background-color: #f44336;
+  color: white;
 }

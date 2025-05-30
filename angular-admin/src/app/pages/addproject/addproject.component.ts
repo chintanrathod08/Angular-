@@ -1,18 +1,18 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl} from '@angular/forms';
+import { Component, ChangeDetectionStrategy, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
+import { NgClass, NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-addproject',
@@ -30,22 +30,24 @@ import { NgClass } from '@angular/common';
     MatRadioModule,
     MatButtonModule,
     RouterLink,
-    MatRadioModule,
-    NgClass
+    NgFor,
+    NgClass,
+    MatIcon
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './addproject.component.html',
-  styleUrl: './addproject.component.scss'
+  styleUrls: ['./addproject.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 
 export class AddprojectComponent implements OnInit {
- 
+
   addProjectForm!: FormGroup;
   isEditMode: boolean = false;
   editId: number | null = null;
 
-  
+
 
   constructor(
     private router: Router,
@@ -105,16 +107,62 @@ export class AddprojectComponent implements OnInit {
         this.router.navigate(['/allproject']);
       });
     }
+
+    this.router.navigate(['/allproject'], {
+      queryParams: { status: data.status },
+    });
+
   }
 
   onCancel(): void {
     this.router.navigate(['/allproject']);
   }
 
-  getStatusClass(value: string): string {
-  const selected = this.addProjectForm.get('status')?.value;
-  return selected === value ? value.toLowerCase().replace(' ', '-') + '-bg' : '';
+  // radio-button
+  statusList = ['Active', 'Completed', 'Running', 'Pending', 'Not Started', 'Cancelled'];
+
+  getStatusClass(status: string): string {
+    const selected = this.addProjectForm.get('status')?.value;
+    if (selected !== status) return '';
+
+    switch (status) {
+      case 'Active': return 'bg-blue-500';
+      case 'Completed': return 'bg-green-600';
+      case 'Running': return 'bg-yellow-400 text-black';
+      case 'Pending': return 'bg-gray-500';
+      case 'Not Started': return 'bg-black';
+      case 'Cancelled': return 'bg-red-600';
+      default: return '';
+    }
   }
 
+  //priority 
+
+  priorityList = ['Low', 'Medium', 'High'];
+
+  getPriorityClass(priority: string): string {
+
+    const select = this.addProjectForm.get('priority')?.value;
+    if (select !== priority) return '';
+
+    switch (priority) {
+      case 'Low': return 'text-green-500';
+      case 'Medium': return 'text-blue-500';
+      case 'High': return 'text-red-500';
+      default: return '';
+    }
+  }
+
+  getPriorityIcon(priority: string): string {
+    const select = this.addProjectForm.get('priority')?.value;
+    if (select !== priority) return '';
+
+   switch (priority) {
+    case 'Low': return '<mat-icon> keyboard_arrow_down </mat-icon> ';
+    case 'Medium': return '<mat-icon> vertical_align_center </mat-icon> ';
+    case 'High': return '<mat-icon> keyboard_arrow_up </mat-icon> ';
+    default: return '';
+  }
+}
 
 }

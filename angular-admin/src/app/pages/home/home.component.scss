@@ -1,18 +1,22 @@
-.sitting{
+.sitting {
     animation: sitting;
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-direction: normal;
 }
 
-@keyframes sitting{
-    0%{
+@keyframes sitting {
+    0% {
         transform: rotate(0deg);
     }
-    50%{
+
+    50% {
         transform: rotate(-7deg);
     }
-    100%{
+
+    100% {
         transform: rotate(0deg);
     }
 }
+
+

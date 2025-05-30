@@ -7,6 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbar } from '@angular/material/toolbar';
 import { BreakpointObserver, LayoutModule, Breakpoints } from '@angular/cdk/layout';
+// import { LoginComponent } from './login/login.component';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,7 @@ import { BreakpointObserver, LayoutModule, Breakpoints } from '@angular/cdk/layo
     MatIconModule,
     MatToolbar,
     LayoutModule,
-    RouterLink
+    RouterLink,
   ]
 })
 export class AppComponent {
@@ -39,8 +40,13 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).subscribe(result => {
-      this.isSideOpen = !result.matches;
+    this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
+    .subscribe(result => {
+      if(this.breakpointObserver.isMatched([Breakpoints.XSmall,Breakpoints.Small])){
+        this.isSideOpen = false;
+      }else{
+        this.isSideOpen = true;
+      }
     });
   }
 }

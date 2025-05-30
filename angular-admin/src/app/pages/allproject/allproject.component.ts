@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { MatIconModule } from '@angular/material/icon';
 import { Project } from '../../project';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Router, RouterLink } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,7 +17,9 @@ import { MatButtonModule } from '@angular/material/button';
     RouterLink,
     MatProgressBarModule,
     MatMenuModule,
-    MatButtonModule],
+    MatButtonModule,
+    NgClass
+  ],
   templateUrl: './allproject.component.html',
   styleUrl: './allproject.component.scss'
 })
@@ -62,6 +64,36 @@ export class AllprojectComponent implements OnInit {
     }
   }
 
-  
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'Active': return 'bg-blue-800';
+      case 'Completed': return 'bg-green-600';
+      case 'Running': return 'bg-yellow-400 text-black';
+      case 'Pending': return 'bg-gray-500';
+      case 'Not Started': return 'bg-black';
+      case 'Cancelled':
+      case 'Cancled': return 'bg-red-600';
+      default: return 'bg-gray-400';
+    }
+  }
+
+  getPriorityClass(priority: string): string {
+    switch (priority) {
+      case 'Low': return 'text-green-500';
+      case 'Medium': return 'text-blue-500';
+      case 'High': return 'text-red-500';
+      default: return '';
+    }
+  }
+
+  getPriorityIcon(priority: string): string {
+   switch (priority) {
+    case 'Low': return 'keyboard_arrow_down';
+    case 'Medium': return 'vertical_align_center';
+    case 'High': return 'keyboard_arrow_up';
+    default: return '';
+  }
+
+}
 
 }
