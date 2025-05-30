@@ -89,7 +89,7 @@ export class AllprojectComponent implements OnInit {
   getPriorityIcon(priority: string): string {
    switch (priority) {
     case 'Low': return 'keyboard_arrow_down';
-    case 'Medium': return 'vertical_align_center';
+    case 'Medium': return 'code';
     case 'High': return 'keyboard_arrow_up';
     default: return '';
   }

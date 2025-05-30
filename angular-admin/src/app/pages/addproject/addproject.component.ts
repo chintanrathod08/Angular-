@@ -159,7 +159,7 @@ export class AddprojectComponent implements OnInit {
 
    switch (priority) {
     case 'Low': return '<mat-icon> keyboard_arrow_down </mat-icon> ';
-    case 'Medium': return '<mat-icon> vertical_align_center </mat-icon> ';
+    case 'Medium': return '<mat-icon>code</mat-icon>';
     case 'High': return '<mat-icon> keyboard_arrow_up </mat-icon> ';
     default: return '';
   }

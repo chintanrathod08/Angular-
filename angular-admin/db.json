@@ -3,7 +3,7 @@
     {
       "title": "ERP Management",
       "department": "Testing",
-      "priority": "Medium",
+      "priority": "High",
       "client": "Techlab",
       "price": 2000,
       "startDate": "2025-05-28T18:30:00.000Z",
@@ -33,7 +33,7 @@
     {
       "title": "School Management ",
       "department": "Development",
-      "priority": "Medium",
+      "priority": "Low",
       "client": "Techlab",
       "price": 500,
       "startDate": "2025-05-29T18:30:00.000Z",
