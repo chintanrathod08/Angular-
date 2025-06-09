@@ -1,5 +1,5 @@
-<section class="w-full min-h-[100vh] flex justify-center pt-5 pb-7">
-    <!-- <mat-icon>add</mat-icon> -->
+<section class="w-full min-h-[100vh] flex justify-center items-start pt-5 pb-7">
+
     <section class="w-[96%]">
 
         <!-- section-1 -->
@@ -25,8 +25,16 @@
         <div
             class="w-full h-auto bg-white p-3 md:p-6 rounded-xl shadow-xl grid grid-cols-1 gap-8  md:grid md:grid-cols-2 md:gap-5  md:flex md:justify-evenly xl:grid xl:grid-cols-3 xl:gap-5 xl:flex xl:justify-evenly 2xl:grid 2xl:grid-cols-3 2xl:gap-5 2xl:flex 2xl:justify-evenly">
 
+            <!-- smg-no-job-available -->
+            <div *ngIf="apiData.length === 0" class="text-center text-gray-500 text-lg col-span-full">
+                No projects available! 😞
+            </div>
+
+
             <!-- main-contant-div -->
-            <div class="h-auto shadow-xl rounded-[8px] p-5 bg-[#ECF0F4] cursor-pointer" *ngFor="let data of apiData; let i = index">
+            <div class="h-auto shadow-xl rounded-[8px] p-5 bg-[#ECF0F4] cursor-pointer"
+                
+                *ngFor="let data of apiData; let i = index">
 
                 <!-- div-1 -->
                 <div class="w-full h-auto flex justify-between items-center">
@@ -35,12 +43,12 @@
                             class="me-2">check_circle_outline</mat-icon> {{ i + 1 }} - {{data.title}}</h1>
 
                     <button matButton [matMenuTriggerFor]="menu"
-                        class="flex items-center cursor-pointer"><mat-icon>more_vert</mat-icon></button>
+                        class="flex items-center cursor-pointer" style="color: #6F6F6F;"><mat-icon>more_vert</mat-icon></button>
 
                     <mat-menu #menu="matMenu" class="cursor-pointer">
-                        <button mat-menu-item (click)="onUpdate(data.id)"><mat-icon>create</mat-icon> Edit</button>
-                        <button mat-menu-item (click)="onView(data.id)"><mat-icon>visibility</mat-icon> View</button>
-                        <button mat-menu-item (click)="onDelete(data.id)"><mat-icon>delete_forever</mat-icon>
+                        <button mat-menu-item (click)="onUpdate(data.id)" style="color: #218B5A;" ><mat-icon style="color: #218B5A;">create</mat-icon> Edit</button>
+                        <button mat-menu-item (click)="onView(data.id)" style="color: #6777EF;" ><mat-icon style="color: #6777EF;">visibility</mat-icon> View</button>
+                        <button mat-menu-item (click)="onDelete(data.id)" style="color: #F05206;" ><mat-icon style="color: #F05206;">delete_forever</mat-icon>
                             Delete</button>
                     </mat-menu>
                 </div>
@@ -53,7 +61,7 @@
                             class="text-[gray] ms-3">{{data.startDate}}</span></p>
                     <p class=""><span>Leader :</span> <span class="text-[gray] ms-3">{{data.leader}}</span></p>
                     <p class=""><span>Team :</span> <span class="text-[gray] ms-3">{{data.team}}</span></p>
-                    
+
                     <p class="flex items-center">
                         <span>Priority :</span>
                         <span class="text-[gray] ms-3 flex items-center gap-1"
@@ -64,12 +72,10 @@
                     </p>
 
                     <p class=""><span>Deadline :</span> <span class="text-[gray] ms-3">{{data.endDate}}</span></p>
-                    <p class=""><span>Team : </span> <span class="text-[gray] ms-3">{{data.team}}</span></p>
-                    <!-- <p><span>Progress : {{data.progress}}%</span><mat-progress-bar mode="determinate" [value]="data.progress" class="mt-2"></mat-progress-bar></p> -->
-
-                    <!-- <mat-progress-bar mode="determinate" value="60"></mat-progress-bar> -->
-                </div>
+                    <p class=""><span>Client : </span> <span class="text-[gray] ms-3">{{data.client}}</span></p>
+                        </div>
             </div>
+        
         </div>
 
     </section>

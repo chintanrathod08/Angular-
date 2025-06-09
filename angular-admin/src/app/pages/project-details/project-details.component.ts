@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'; 
 import { ProjectService } from '../../services/project.service';
-import { Project } from '../../project';
+import { Project } from '../../model/project';
 
 @Component({
   selector: 'app-project-details',

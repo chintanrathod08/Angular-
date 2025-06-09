@@ -5,9 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-  
+import { ToastrModule } from 'ngx-toastr'
+
 @NgModule({
-  declarations: [],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -15,8 +15,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     ReactiveFormsModule,
     MatIconModule,
     MatSidenavModule,
+    ToastrModule.forRoot()
   ],    
   providers: [],
-  // bootstrap: [AppComponent], 
+  // bootstrap: [AppComponent]
 })
 export class AppModule {}

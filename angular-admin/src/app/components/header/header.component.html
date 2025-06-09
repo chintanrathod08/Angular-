@@ -1,4 +1,4 @@
-<mat-toolbar class="bg-[#dbdbdb]! flex justify-between items-center" style="font-family: Poppins, sans-serif;background-color: white;">
+<mat-toolbar class="bg-[#6777EF]! flex justify-between items-center" style="font-family: Poppins, sans-serif;background-color: white;">
 
   <!----------------1------------------ -->
 
@@ -10,11 +10,11 @@
       <div class="flex items-center gap-2  cursor-pointer" routerLink="/home" >
         <img src="https://einfosoft.com/templates/admin/kuber/source/light/assets/images/logo.png" alt="">
 
-        <h1 class="">KUBER</h1>
+        <h1 class="text-[white]">KUBER</h1>
       </div>
 
       <button mat-icon-button (click)="sideBarButtonClick()" class="ms-15">
-        <mat-icon>menu</mat-icon>
+        <mat-icon style="color: white;">menu</mat-icon>
       </button>
 
    
@@ -24,12 +24,12 @@
 
   <div class="h-full flex justify-end items-center">
     <!-- <mat-icon class="me-3">add_alert</mat-icon> -->
-    <button [matMenuTriggerFor]="menu">
-      <mat-icon>people</mat-icon>
+    <button [matMenuTriggerFor]="menu" class="cursor-pointer">
+      <mat-icon style="color: white;" >person</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item >Setting</button>
-      <button mat-menu-item routerLink="/login">Logout</button>
+      <button mat-menu-item ><mat-icon>settings</mat-icon>Setting</button>
+      <button mat-menu-item routerLink="/login"><mat-icon>logout</mat-icon>Logout</button>
     </mat-menu>
 
   </div>

@@ -1,3 +1,10 @@
-.mdc-notched-outline__notch{
-    border: none;
+// .mat-mdc-form-field .mat-mdc-text-field-wrapper.mdc-text-field .mdc-notched-outline__notch {
+//     padding-top: 0;
+//     border-right: none !important;
+// }
+
+
+form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch {
+    border-left: 1px solid rgba(0, 0, 0, 0);
+    border-right: 1px solid rgba(0, 0, 0, 0);
 }

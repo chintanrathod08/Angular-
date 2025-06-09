@@ -1,0 +1,117 @@
+<section class="w-full min-h-[100vh] flex justify-center items-start pt-5 pb-7">
+
+    <section class="w-[96%]">
+
+        <!-- section-1 -->
+        <div class="w-full md:grid md:grid-cols-2  md:flex  md:justify-between md:items-center md:mb-5">
+
+            <div class="flex items-center">
+                <button routerLink="/addemployee"
+                    class="p-2 text-[12px] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon>add</mat-icon>
+                    Add New Employee</button>
+                <h1 class="md:text-[1.3rem] text-[#767676] ms-3">All Employee</h1>
+            </div>
+
+            <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100">
+                <mat-icon>home</mat-icon>
+                <mat-icon>chevron_right</mat-icon>
+                <span class="ps-2">Employees</span>
+                <mat-icon>chevron_right</mat-icon>
+                <span class="ps-2">All Employee</span>
+            </div>
+
+        </div>
+
+        <!-- section-2 -->
+
+        <section class="shadow-xl">
+
+            <div
+                class="w-full h-auto bg-[#DAE1F3] p-5 md:flex-row md:items-center flex flex-col items-start  rounded-tl-xl rounded-tr-xl">
+
+                <h1 class="text-[1.2rem] text-[gray]">Employees</h1>
+
+                <div
+                    class="md:ms-5 mt-3 md:mt-0 bg-[white] rounded-[10px] flex justify-center items-center text-[gray]">
+                    <mat-icon class="ms-1">search</mat-icon>
+                    <input type="text" class="w-[200px] h-[40px] rounded-[10px] ps-2" placeholder="Search here...">
+                </div>
+
+            </div>
+
+
+
+            <!-- table-section -->
+
+            <table class="overflow-x-auto table-auto w-full">
+                <thead>
+                    <tr class="h-[60px] border-b border-[gray]">
+                        <th class="text-center p-3 font-medium">No.</th>
+                        <th class="text-center p-3 font-medium">Name</th>
+                        <th class="text-center p-3 font-medium">Role</th>
+                        <th class="text-center p-3 font-medium">Department</th>
+                        <th class="text-center p-3 font-medium">Mobile</th>
+                        <th class="text-center p-3 font-medium">Joining Date</th>
+                        <th class="text-center p-3 font-medium">Email</th>
+                        <th class="text-center p-3 font-medium">Gender</th>
+                        <th class="text-center p-3 font-medium">Address</th>
+                        <th class="text-center p-3 font-medium">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <!--------------->
+                    <div *ngIf="epApiData.length === 0" class="w-full p-2 flex justify-center col-span-full">
+                        No employee data here! 😞
+                    </div>
+
+                    <!---------------> 
+                    <tr *ngFor="let data of epApiData, let i = index"
+                        class="w-full border-b border-dashed border-[gray] text-[#808080] hover:bg-[#DAE1F3]  cursor-pointer">
+                        <td class="flex justify-center items-center p-2.5">{{ i + 1 }}</td>
+                        <td class="p-2.5">{{ data.firstName }}</td>
+                        <td class="p-2.5">{{ data.designation }}</td>
+                        <td class="p-2.5">{{ data.department }}</td>
+                        
+                        <td class="p-2.5">
+                            <mat-icon class="align-middle" style="color: #50B153; font-size: 19px; ">call</mat-icon>
+                            {{ data.mobile }}
+                        </td>
+                        
+                        <td class="p-2.5">{{ data.joindate | date: 'dd mmm yyyy' }}</td>
+                       
+                        <td class="p-2.5">{{ data.email }}</td>
+                       
+                        <td class="text-sm" [ngClass]="data.gender === 'Male' ? 'text-green-600 bg-green-100 p-1 rounded-[5px] flex justify-center items-center h-[32px]' : 'text-purple-600 bg-purple-100 p-1 rounded-[5px] flex justify-center items-center h-[32px]'">
+                            {{ data.gender }}
+                        </td>
+                       
+                        <td class="p-2.5">
+                             <mat-icon class="align-middle" style="color: #2196F3;font-size: 19px;" >room</mat-icon>
+                            {{ data.address }}
+                        </td>
+                       
+                        <td class="text-center p-2.5">
+                            <button matButton [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="onUpdate(data.id)" style="color: #218B5A;"><mat-icon
+                                        style="color: #218B5A;">create</mat-icon> Edit</button>
+                                <button mat-menu-item (click)="onView(data.id)" style="color: #6777EF;"><mat-icon
+                                        style="color: #6777EF;">visibility</mat-icon> View</button>
+                                <button mat-menu-item (click)="onDelete(data.id)" style="color: #F05206;"><mat-icon
+                                        style="color: #F05206;">delete_forever</mat-icon> Delete</button>
+                            </mat-menu>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </section>
+
+</section>

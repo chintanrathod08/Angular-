@@ -2,7 +2,7 @@
 
     <section class="w-[96%]">
 
-        <!-- Breadcrumb Section -->
+        <!--  Section -1  -->
         <div class="w-full md:grid md:grid-cols-2 md:flex md:justify-between  md:items-center md:mb-5">
 
             <div class="flex items-center">
@@ -22,20 +22,24 @@
             </div>
         </div>
 
-        <!-- Form Card Section -->
+        <!-- Section -2  -->
         <section class="w-full bg-white p-6 rounded-xl shadow-xl">
             <h2 class="text-[#5B626B] mb-6">Add Projects</h2>
+
+
+            <!-- add-project-form -->
 
             <form class="space-y-6" [formGroup]="addProjectForm" (ngSubmit)="onSubmit()">
 
                 <div class="w-full md:grid md:grid-cols-2 gap-6">
 
-                    <mat-form-field appearance="outline">
+                    <!-- project-title -->
+                    <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Project Title</mat-label>
                         <input matInput placeholder="Enter project title" required formControlName="title" />
-                        <!-- <mat-hint>Project Title is required</mat-hint> -->
                     </mat-form-field>
 
+                    <!-- Department -->
                     <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Department</mat-label>
                         <mat-select required formControlName="department">
@@ -46,33 +50,33 @@
                         </mat-select>
                     </mat-form-field>
 
-
-
+                    <!-- priority -->
                     <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Project Priority</mat-label>
                         <mat-select required formControlName="priority">
 
-                            <mat-option *ngFor="let priority of priorityList" [value]="priority" class="flex items-center gap-2">
+                            <mat-option *ngFor="let priority of priorityList" [value]="priority"
+                                class="flex items-center gap-2">
                                 <mat-icon>{{priority}}</mat-icon>
                                 {{ priority }}
                             </mat-option>
 
-
                         </mat-select>
                     </mat-form-field>
 
-
- 
+                    <!-- client -->
                     <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Client</mat-label>
                         <input matInput placeholder="Client Name" required formControlName="client" />
                     </mat-form-field>
 
+                    <!-- price -->
                     <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Price</mat-label>
                         <input matInput type="number" placeholder="$" required formControlName="price" />
                     </mat-form-field>
 
+                    <!-- start-date -->
                     <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Project Start Date</mat-label>
                         <input matInput [matDatepicker]="startPicker" required formControlName="startDate" />
@@ -80,6 +84,7 @@
                         <mat-datepicker #startPicker></mat-datepicker>
                     </mat-form-field>
 
+                    <!-- end-date -->
                     <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Project End Date</mat-label>
                         <input matInput [matDatepicker]="endPicker" required formControlName="endDate" />
@@ -87,6 +92,7 @@
                         <mat-datepicker #endPicker></mat-datepicker>
                     </mat-form-field>
 
+                    <!-- leader -->
                     <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Leader</mat-label>
                         <mat-select required formControlName="leader">
@@ -97,6 +103,7 @@
                         </mat-select>
                     </mat-form-field>
 
+                    <!-- team -->
                     <mat-form-field appearance="outline" class="col-span-2" style="width: 100%;">
                         <mat-label>Team</mat-label>
                         <mat-select required formControlName="team">

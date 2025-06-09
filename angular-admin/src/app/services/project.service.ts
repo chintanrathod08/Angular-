@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Project } from '../project';
+import { Project } from '../model/project';
 
 
 @Injectable({
@@ -26,7 +26,6 @@ export class ProjectService {
   updateProject(id: number, data: Project) {
     return this.http.put(`${this.api}/${id}`, data);
   }
-
 
   // ProjectDetails
   getDataByID(id: number) {

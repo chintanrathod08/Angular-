@@ -12,11 +12,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgFor } from '@angular/common';
+import {  NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-addproject',
   standalone: true,
+  selector: 'app-addproject',
   imports: [
     ReactiveFormsModule,
     FormsModule,
@@ -31,7 +31,6 @@ import { NgClass, NgFor } from '@angular/common';
     MatButtonModule,
     RouterLink,
     NgFor,
-    NgClass,
     MatIcon
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -152,7 +151,8 @@ export class AddprojectComponent implements OnInit {
       default: return '';
     }
   }
-
+  
+  // priority icon 
   getPriorityIcon(priority: string): string {
     const select = this.addProjectForm.get('priority')?.value;
     if (select !== priority) return '';

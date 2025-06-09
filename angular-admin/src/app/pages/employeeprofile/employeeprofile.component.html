@@ -1,0 +1,181 @@
+<section class="w-full min-h-[100vh] flex justify-center items-start pt-5 pb-7">
+
+    <section class="w-[96%]">
+
+        <!-- section-1 -->
+        <div class="w-full md:grid md:grid-cols-2 md:flex md:justify-between  md:items-center md:mb-5">
+
+            <div class="flex items-center">
+                <button routerLink="/allemployee"
+                    class="p-2 text-[12px] text-[white] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon
+                        class="me-1">keyboard_backspace</mat-icon>
+                    Go back</button>
+                <h1 class="md:text-[1.3rem] text-[#767676] ms-3">Profile</h1>
+            </div>
+
+            <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100">
+                <mat-icon>home</mat-icon>
+                <mat-icon>chevron_right</mat-icon>
+                <span class="ps-2">Employees</span>
+                <mat-icon>chevron_right</mat-icon>
+                <span class="ps-2">Profile</span>
+            </div>
+        </div>
+
+        <!-- section-2 -->
+
+        <section *ngIf="employeeData" class="w-full h-auto grid grid-cols-3 gap-5">
+
+
+            <!-- left - section -->
+
+            <div class="h-auto w-full flex flex-col justify-center items-center gap-6">
+
+                <!-- photo-section -->
+                <div
+                    class="h-[18rem] w-full rounded-xl overflow-hidden shadow-xl relative flex flex-col justify-between items-center bg-[#ECF0F4]">
+
+                    <!-- div-1 -->
+                    <div class="w-full h-[35%] bg-[#212529]"></div>
+
+                    <!-- div-2 -->
+                    <div
+                        class="shadow-xl w-[8rem] h-[8rem] rounded-[50%] absolute top-[2.5rem] left-[8rem] flex justify-center items-center overflow-hidden bg-[white]" style="z-index: 1;">
+                        <img [src]="employeeData?.file" alt="Employee Image" class="w-full h-full object-cover">
+                     </div>
+
+                    <!-- div-3 -->
+                    <div class="h-[45%] w-full text-center flex flex-col items-center justify-center leading-10">
+
+                        <div class="w-full h-auto flex justify-center items-center gap-2 text-[1.5rem] text-[#FD7E14] ">
+                            <h1>{{employeeData.firstName}}</h1>
+                            <h1>{{employeeData.lastName}}</h1>
+                        </div>
+
+                        <h1 class="text-[#6777EF] text-[1.2rem]">{{employeeData.designation}}</h1>
+
+                    </div>
+
+                </div>
+
+                <!-- emial-number-section -->
+
+                <div class="w-full h-auto rounded-xl shadow-xl p-4 flex flex-col gap-5 bg-[#ECF0F4]">
+
+                    <div class="flex items-center underline underline-offset-5  text-[1.1rem]">
+                        Contact Details :
+                    </div>
+
+                    <!-- info -->
+                    <div class="w-full h-auto flex flex-col leading-10">
+
+                        <div class="flex items-center border-b border-dashed ps-2">
+                            <mat-icon style="font-size: 1.3rem"> call</mat-icon> <span
+                                class="ms-[2%] text-[14px] text-[gray]">{{employeeData.mobile}}</span>
+                        </div>
+
+                        <div class="flex items-center border-b border-dashed ps-2">
+                            <mat-icon style="font-size: 1.2rem">mail</mat-icon> <span
+                                class="ms-[2%] text-[14px] text-[gray]">{{employeeData.email}}</span>
+                        </div>
+
+                        <div class="flex items-center border-b border-dashed ps-2">
+                            <mat-icon style="font-size: 1.5rem">room</mat-icon> <span
+                                class="ms-[2%] text-[14px] text-[gray]">{{employeeData.address}}</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- right - about-section -->
+            <div class="h-auto col-span-2 p-4 rounded-xl shadow-xl bg-[#ECF0F4]">
+
+                <!-- about -->
+                <div class="w-full h-auto flex flex-col gap-6">
+
+                    <div class="w-full flex items-center underline underline-offset-5  text-[1.1rem]">
+                        About :
+                    </div>
+
+                    <div class="w-full grid grid-cols-4">
+
+                        <div class="">
+                            <h2 class="text-[15px]">Department :</h2>
+                            <p class="text-[14px] text-[gray]">{{employeeData.department}}</p>
+                        </div>
+
+                        <div class="">
+                            <h2 class="text-[15px]">Joining Date :</h2>
+                            <p class="text-[14px] text-[gray]">{{employeeData.joindate}}</p>
+                        </div>
+
+                        <div class="">
+                            <h2 class="text-[15px]">Gender :</h2>
+                            <p class="text-[14px] text-[gray]">{{employeeData.gender}}</p>
+                        </div>
+
+                        <div class="">
+                            <h2 class="text-[15px]">Date of Birth :</h2>
+                            <p class="text-[14px] text-[gray]">{{employeeData.dob}}</p>
+                        </div>
+
+
+                    </div>
+
+                    <div class="w-full h-auto flex justify-center"><mat-icon
+                            style="font-size: 15px; margin-top: 0.4%">fiber_manual_record</mat-icon> <span
+                            class="w-full text-[14px] text-[gray]"> {{employeeData.about}}</span>
+                    </div>
+
+                </div>
+
+                <!-- Education -->
+                <div class="w-full h-auto flex flex-col gap-4 mt-5">
+
+                    <div class="w-full flex items-center underline underline-offset-5  text-[1.1rem]">
+                        Education :
+                    </div>  
+
+                    <div class="">
+                        <p class="text-[gray]" >{{employeeData.education}}</p>
+                    </div>
+                
+                </div>
+
+                <!-- Skill -->
+                <div class="w-full h-auto flex flex-col gap-4 mt-5">
+
+                    <div class="w-full flex items-center underline underline-offset-5  text-[1.1rem]">
+                        Skill :
+                    </div>  
+
+                     <div class="">
+                        <p class="text-[gray]" >{{employeeData.skills}}</p>
+                    </div>
+
+                </div>
+
+
+                <!-- Experience -->
+                <div class="w-full h-auto flex flex-col gap-4 mt-5">
+
+                    <div class="w-full flex items-center underline underline-offset-5  text-[1.1rem]">
+                        Experience :
+                    </div>  
+
+                     <div class="">
+                        <p class="text-[gray]" >{{employeeData.experience}}</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </section>
+
+</section>

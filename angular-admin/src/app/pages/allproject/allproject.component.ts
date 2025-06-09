@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { MatIconModule } from '@angular/material/icon';
-import { Project } from '../../project';
+import { Project } from '../../model/project';
 import { CommonModule, NgClass } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Router, RouterLink } from '@angular/router';
@@ -11,7 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   standalone: true,
   selector: 'app-allproject',
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     MatIconModule,
     MatProgressBarModule,
     RouterLink,
@@ -51,10 +52,10 @@ export class AllprojectComponent implements OnInit {
   }
 
   onDelete(id: number) {
-    if (confirm('Are you sure you want to delete this project?')) {
+    if (confirm('Are you sure you want to delete this project? 🗑️')) {
       this.projectService.deleteProject(id).subscribe({
         next: () => {
-          alert('Project deleted successfully 🗑️');
+          alert('Project deleted successfully ✅');
           this.getAllData(); // Refresh list
         },
         error: (err) => {
@@ -62,8 +63,11 @@ export class AllprojectComponent implements OnInit {
         }
       });
     }
+
   }
 
+
+  //status
   getStatusClass(status: string): string {
     switch (status) {
       case 'Active': return 'bg-blue-800';
@@ -77,6 +81,7 @@ export class AllprojectComponent implements OnInit {
     }
   }
 
+  //priority
   getPriorityClass(priority: string): string {
     switch (priority) {
       case 'Low': return 'text-green-500';
@@ -86,14 +91,15 @@ export class AllprojectComponent implements OnInit {
     }
   }
 
+  //priority icon 
   getPriorityIcon(priority: string): string {
-   switch (priority) {
-    case 'Low': return 'keyboard_arrow_down';
-    case 'Medium': return 'code';
-    case 'High': return 'keyboard_arrow_up';
-    default: return '';
-  }
+    switch (priority) {
+      case 'Low': return 'keyboard_arrow_down';
+      case 'Medium': return 'code';
+      case 'High': return 'keyboard_arrow_up';
+      default: return '';
+    }
 
-}
+  }
 
 }

@@ -1,0 +1,230 @@
+<section class="w-full min-h-[100vh] flex justify-center pt-5 pb-7">
+
+    <section class="w-[96%]">
+
+        <!-- section-1 -->
+        <div class="w-full md:grid md:grid-cols-2 md:flex md:justify-between  md:items-center md:mb-5">
+
+            <div class="flex items-center">
+                <button routerLink="/allemployee"
+                    class="p-2 text-[12px] text-[white] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon
+                        class="me-1">keyboard_backspace</mat-icon>
+                    Go back</button>
+                <h1 class="md:text-[1.3rem] text-[#767676] ms-3">Add Employee</h1>
+            </div>
+
+            <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100">
+                <mat-icon>home</mat-icon>
+                <mat-icon>chevron_right</mat-icon>
+                <span class="ps-2">Employees</span>
+                <mat-icon>chevron_right</mat-icon>
+                <span class="ps-2">Add Employee</span>
+            </div>
+        </div>
+
+        <!-- section-2 -->
+        <section class="w-full bg-white p-6 rounded-xl shadow-xl">
+
+            <h2 class="text-[#5B626B] mb-6">Add Employee</h2>
+
+            <!-- add-employee-form -->
+            <form [formGroup]="addemployeeForm" (ngSubmit)="onSubmit()" class="p-6 space-y-4">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <!-- firt-name -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>First name</mat-label>
+                        <input matInput formControlName="firstName" required>
+                        <mat-error *ngIf="addemployeeForm.get('firstName')?.hasError('required')">
+                            First name is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- last-name -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Last name</mat-label>
+                        <input matInput formControlName="lastName" required>
+                        <mat-error *ngIf="addemployeeForm.get('lastName')?.hasError('required')">
+                            Last name is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- gender -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Gender</mat-label>
+                        <mat-select formControlName="gender" required>
+
+                            <mat-option *ngFor="let gender of genderList" [value]="gender">{{gender}}</mat-option>
+
+                        </mat-select>
+                        <mat-error *ngIf="addemployeeForm.get('gender')?.hasError('required')">
+                            Gender is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- Mobile -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Mobile</mat-label>
+                        <input matInput type="number" formControlName="mobile" required>
+                        <mat-icon matSuffix>call</mat-icon> 
+                        <mat-error *ngIf="addemployeeForm.get('mobile')?.hasError('required')">
+                            Mobile Number is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- password -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input matInput type="password" formControlName="password" required>
+                        <mat-error *ngIf="addemployeeForm.get('password')?.hasError('required')">
+                            Password is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- re-enter-password -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Re-Enter Password</mat-label>
+                        <input matInput type="password" formControlName="rePassword" required>
+                        <mat-error *ngIf="addemployeeForm.get('rePassword')?.hasError('required')">
+                            Re-Enter Password is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- designation -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Designation</mat-label>
+                        <input matInput formControlName="designation" required>
+                        <mat-error *ngIf="addemployeeForm.get('designation')?.hasError('required')">
+                            Designation Password is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- select-department -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Select Department</mat-label>
+                        <mat-select formControlName="department" required>
+                            <mat-option value="HR">HR</mat-option>
+                            <mat-option value="Engineering">Engineering</mat-option>
+                            <mat-option value="Sales">Sales</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="addemployeeForm.get('department')?.hasError('required')">
+                            Department is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- email -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input matInput type="email" formControlName="email" required>
+                        <mat-error *ngIf="addemployeeForm.get('email')?.hasError('required')">
+                            Email is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- Joining-date -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Joining Date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="joindate" required>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="addemployeeForm.get('joindate')?.hasError('required')">
+                            Joining Date is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- DOB -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Date of Birth</mat-label>
+                        <input matInput [matDatepicker]="dobPicker" formControlName="dob" required>
+                        <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #dobPicker></mat-datepicker>
+                        <mat-error *ngIf="addemployeeForm.get('dob')?.hasError('required')">
+                            Date of Birth is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- Location -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Location</mat-label>
+                        <mat-select formControlName="location" required>
+                            <mat-option value="India">India</mat-option>
+                            <mat-option value="USA">USA</mat-option>
+                            <mat-option value="UK">UK</mat-option>
+                            <mat-option value="Germany">Germany</mat-option>
+                            <mat-option value="Canada">Canada</mat-option>
+                            <mat-option value="Australia">Australia</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="addemployeeForm.get('location')?.hasError('required')">
+                            Location is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- Education -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Education</mat-label>
+                        <textarea matInput formControlName="education" required></textarea>
+                        <mat-error *ngIf="addemployeeForm.get('education')?.hasError('required')">
+                            Education is required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- Skill -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Skills</mat-label>
+                        <textarea matInput formControlName="skills" required></textarea>
+                        <mat-error *ngIf="addemployeeForm.get('skills')?.hasError('required')">
+                            Skills are required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- Experience -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Experience Details</mat-label>
+                        <textarea matInput formControlName="experience" required></textarea>
+                        <mat-error *ngIf="addemployeeForm.get('experience')?.hasError('required')">
+                            Experience details are required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- address -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Address</mat-label>
+                        <textarea matInput formControlName="address" required></textarea>
+                        <mat-icon matSuffix>room</mat-icon>
+                        <mat-error *ngIf="addemployeeForm.get('address')?.hasError('required')">
+                            Address is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- About -->
+                    <mat-form-field class="col-span-2" appearance="outline">
+                        <mat-label>About</mat-label>
+                        <textarea matInput formControlName="about" rows="4"
+                            placeholder="Write something about the employee..."></textarea>
+                    </mat-form-field>
+
+
+                </div>
+
+                <!-- Upload-img -->
+                <div class="pt-2">
+                    <label class="block text-gray-700 font-medium mb-2">Upload Image</label>
+                    <input type="file" class="border border-dashed p-4 w-full rounded-md"
+                        (change)="onFileChange($event)">
+                </div>
+
+                <!-- submit-btn -->
+                <div class="mt-6 flex justify-start gap-4">
+                    <button mat-raised-button color="primary" type="submit">Submit</button>
+                    <button mat-raised-button color="warn" type="button" (click)="onCancel()">Cancel</button>
+                </div>
+
+            </form>
+
+        </section>
+
+    </section>
+
+</section>

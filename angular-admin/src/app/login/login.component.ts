@@ -1,51 +1,71 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
-// import { RemixIconModule } from 'angular-remix-icon';
+import { AuthService } from '../services/auth.service';
+import { User } from '../model/user';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
+    CommonModule,
+    RouterLink,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    FormsModule,
-    ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
+  loginForm: FormGroup;
+  hidePassword = true;
+  error = '';
 
-  // ✅ Toggle password visibility
-  hidePassword: boolean = true;
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private auth: AuthService
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
+  }
 
-  constructor(private router: Router) {}
-
-  // ✅ Toggle method
-  clickEvent(event: Event): void {
-    event.preventDefault();
+  togglePassword(): void {
     this.hidePassword = !this.hidePassword;
   }
 
-  // ✅ Getter for password visibility
-  hide(): boolean {
-    return this.hidePassword;
-  }
-
-  onSubmit(): void {
-    if (this.username && this.password) {
-      this.router.navigate(['/dashboard']);
-    } else {
-      alert('Please fill in all fields.');
+  onLogin(): void {
+    if (this.loginForm.invalid) {
+      alert('Please enter valid email and password!');
+      return;
     }
+
+    const { email, password } = this.loginForm.value;
+
+    this.auth.login(email, password).subscribe({
+      next: (user: User) => {
+        console.log('Login successful ✅', user);
+        alert('Login Successful ✅');
+        localStorage.setItem('user', JSON.stringify(user));
+        this.router.navigate(['/home']);
+      },
+      error: err => {
+        console.error('Login failed ❌', err);
+        this.error = err.message || 'Invalid credentials! ❌';
+        alert(this.error);
+      }
+    });
   }
 }
