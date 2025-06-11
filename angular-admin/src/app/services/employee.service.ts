@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Employee } from '../model/employee';
+import { Employees } from '../model/employee';
 
 @Injectable({
   providedIn: 'root'
@@ -8,28 +8,28 @@ import { Employee } from '../model/employee';
 
 export class EmployeeService {
 
-  epapi: string = "http://localhost:3000/employee";
+  epapi: string = "http://localhost:3000/employees";
 
   constructor(private http: HttpClient){}
 
   //postdata
-  postData(data : Employee){
-    return this.http.post<Employee[]>(this.epapi, data);
+  postData(data : Employees){
+    return this.http.post<Employees[]>(this.epapi, data);
   }
 
   //get All Data
   getData(){
-    return this.http.get<Employee[]>(this.epapi)
+    return this.http.get<Employees[]>(this.epapi)
   }
 
   // update employeeData
-  updateEmployee(id: number, data: Employee){
+  updateEmployee(id: number, data: Employees){
     return this.http.put(`${this.epapi}/${id}`, data);
   }
 
   // employee profile 
   getDataByID(id: number){
-    return this.http.get<Employee>(`${this.epapi}/${id}`)
+    return this.http.get<Employees>(`${this.epapi}/${id}`)
   }
 
   // Delete Data

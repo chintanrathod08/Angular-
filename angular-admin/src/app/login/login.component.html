@@ -5,7 +5,6 @@
             class="h-[100%]">
     </div>
 
-
     <div class="w-full flex flex-col justify-center items-center ">
 
         <div class="w-[90%] lg:w-[60%]">
@@ -19,11 +18,28 @@
             </div>
 
             <div class="mt-3 py-8">
+                <!-- Role Tabs -->
                 <div class="flex justify-between mb-6">
-                    <button class="px-4 py-2 rounded-[50px] bg-[#1E8E14] text-white font-medium">Admin</button>
-                    <button class="px-4 py-2 rounded-[50px] bg-[#FD7E14] text-white font-medium">Employee</button>
-                    <button class="px-4 py-2 rounded-[50px] bg-[#2079FD] text-white font-medium">Client</button>
+                    <button type="button" (click)="selectRole('admin')" [ngClass]="{'bg-[#1E8E14] text-white': selectedRole === 'admin',
+                     'bg-gray-200 text-black': selectedRole !== 'admin'}" class="px-4 py-2 rounded-full font-medium cursor-pointer">
+                        Admin
+                    </button>
+
+                    <button type="button" (click)="selectRole('employee')" [ngClass]="{
+                      'bg-[#FD7E14] text-white': selectedRole === 'employee',
+                      'bg-gray-200 text-black': selectedRole !== 'employee'
+                      }" class="px-4 py-2 rounded-full font-medium cursor-pointer ">
+                        Employee
+                    </button>
+
+                    <button type="button" (click)="selectRole('client')" [ngClass]="{
+      'bg-[#2079FD] text-white': selectedRole === 'client',
+      'bg-gray-200 text-black': selectedRole !== 'client'
+    }" class="px-4 py-2 rounded-full font-medium cursor-pointer">
+                        Client
+                    </button>
                 </div>
+
 
                 <!-- form -->
                 <form class="mb-0 space-y-6 mt-2" [formGroup]="loginForm">

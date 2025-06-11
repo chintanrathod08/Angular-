@@ -2,7 +2,7 @@ import { CommonModule, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Employee } from '../../model/employee';
+import { Employees } from '../../model/employee';
 import { EmployeeService } from '../../services/employee.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { EmployeeService } from '../../services/employee.service';
 })
 export class EmployeeprofileComponent {
 
-  employeeData?: Employee;
+  employeeData?: Employees;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,5 +29,4 @@ export class EmployeeprofileComponent {
       }
     })
   }
-
 }

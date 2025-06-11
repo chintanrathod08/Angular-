@@ -1,15 +1,14 @@
 <section class="w-full min-h-[100vh] flex justify-center pt-5 pb-7">
-
     <section class="w-[96%]">
 
         <!-- section-1 -->
         <div class="w-full md:grid md:grid-cols-2 md:flex md:justify-between md:items-center md:mb-5">
-
             <div class="flex items-center">
                 <button routerLink="/home"
-                    class="p-2 text-[12px] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon
-                        class="me-1">keyboard_backspace</mat-icon>
-                    Go back</button>
+                    class="p-2 text-[12px] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center">
+                    <mat-icon class="me-1">keyboard_backspace</mat-icon>
+                    Go back
+                </button>
                 <h1 class="md:text-[1.3rem] text-[#767676] ms-3">Employee Attendance</h1>
             </div>
 
@@ -25,80 +24,96 @@
         <!-- section-2 -->
         <section class="w-full h-auto bg-white p-3 md:p-6 rounded-xl shadow-xl">
 
-            <h2 class="text-[#5B626B] mb-3">Employee Attendance</h2>
+            <!-- Header Section -->
+            <div class="w-full h-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-5">
+                <h2 class="text-[#5B626B] text-lg mb-2 md:mb-0">Employee Attendance</h2>
 
-            <!-- sec-1 -->
-            <div class="w-full h-auto grid grid-cols-5 gap-5 mt-4">
+                <div class="flex items-center gap-10">
+                    <div class="flex items-center text-[#6777EF] text-[18px] font-semibold bg-[#DAE1F3] p-1.5 px-2 rounded-md">
+                        <mat-icon class="mr-1" style="color: #6777EF;" >timer</mat-icon>
+                        {{ timerDisplay }}
+                    </div>
 
-                <div class="bg-[#ECF0F4] p-3 rounded-xl shadow-xl">
-                    <img src="" alt="Employee Img">
+                    <button (click)="toggleAttendance()"
+                        [ngClass]="{'bg-green-600 hover:bg-green-700' : !isCheckedIn, 'bg-red-600 hover:bg-red-700' : isCheckedIn }"
+                        class="p-1.5 text-white bg-[#6777EF] rounded-lg shadow hover:bg-[#5564c3] transition-all cursor-pointer flex justify-center gap-1">
+                        <mat-icon>{{ isCheckedIn ? 'not_interested' : 'check_circle_outline' }}</mat-icon>
+                        {{ isCheckedIn ? ' Check Out' : ' Check In' }}
+                    </button>
+
                 </div>
+            </div>
 
-                <div class="bg-[#ECF0F4] p-3 rounded-xl shadow-xl">
-                    <h1 class="text-[0.9rem] font-medium">Employee Name : </h1>
-                    <p></p>
-                </div>
+            <!-- Filter Bar -->
+            <div
+                class="w-full h-auto bg-[#DAE1F3] p-5 md:flex-row md:items-center flex flex-col items-start rounded-tl-xl rounded-tr-xl mb-3">
+                <h1 class="text-[1.2rem] text-[gray]">Estimate</h1>
 
-                <div class="bg-[#ECF0F4] p-3 rounded-xl shadow-xl">
-                    <h1 class="text-[0.9rem] font-medium">Employee ID :</h1>
-                    <p></p>
+                <div
+                    class="md:ms-5 mt-3 md:mt-0 bg-[white] rounded-[10px] flex justify-center items-center text-[gray]">
+                    <mat-icon class="ms-1">search</mat-icon>
+                    <input type="text" class="w-[200px] h-[40px] rounded-[10px] ps-2" placeholder="Search here..."
+                        [(ngModel)]="searchText">
                 </div>
+            </div>
 
-                <div class="bg-[#ECF0F4] p-3 rounded-xl shadow-xl">
-                    <h1 class="text-[0.9rem] font-medium">Joning Date :</h1>
-                    <p></p>
-                </div>
+            <!-- Table -->
+            <div class="w-full h-auto overflow-x-auto">
+                <table mat-table [dataSource]="filteredRecords" class="mat-elevation-z8 w-full">
 
-                <div class="bg-[#ECF0F4] p-3 rounded-xl shadow-xl">
-                    <h1 class="text-[0.9rem] font-medium">Department :</h1>
-                    <p></p>
-                </div>
+                    <ng-container matColumnDef="employeeId">
+                        <th mat-header-cell *matHeaderCellDef>Employee ID</th>
+                        <td mat-cell *matCellDef="let element">{{ element.employeeId }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="employeename">
+                        <th mat-header-cell *matHeaderCellDef>Employee Name</th>
+                        <td mat-cell *matCellDef="let element">{{ element.employeename }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>Date</th>
+                        <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="checkInTime">
+                        <th mat-header-cell *matHeaderCellDef>Check-In</th>
+                        <td mat-cell *matCellDef="let element">{{ element.checkInTime }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="checkOutTime">
+                        <th mat-header-cell *matHeaderCellDef>Check-Out</th>
+                        <td mat-cell *matCellDef="let element">{{ element.checkOutTime || '-' }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="totalWorkingHours">
+                        <th mat-header-cell *matHeaderCellDef>Working Hours</th>
+                        <td mat-cell *matCellDef="let element">{{ element.totalWorkingHours || '-' }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let element">
+                            <button (click)="onDelete(element.id)"
+                                class="ms-1.9 w-[35px] h-[35px] rounded-full flex justify-center items-center  hover:bg-[#dddddd] cursor-pointer">
+                                <mat-icon style="color: #F05206;">delete_forever</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{
+                      'text-green-600 font-semibold': !row.checkOutTime,
+                      'text-red-600': row.checkOutTime
+                    }" class="border-b border-dashed cursor-pointer">
+                    </tr>
+
+
+                </table>
 
             </div>
 
-
-            <!-- sec-2 -->
-             <div class="w-full mt-10 grid grid-cols-4 gap-10">
-
-                <div class="flex flex-col justify-center items-center gap-3 p-3 bg-[#6777EF] rounded-xl shadow-xl">
-                    <p class="text-[white] text-[1.7rem]">{{ checkInTime || '00 : 00' }}</p>
-                    <p class="text-[white]">Average In Time</p>
-                </div>
-
-                <div class="flex flex-col justify-center items-center gap-3 p-3 bg-[#6777EF] rounded-xl shadow-xl">
-                    <p class="text-[white] text-[1.7rem]">{{ checkOutTime || '00 : 00' }}</p>
-                    <p class="text-[white]">Average Out Time</p>
-                </div>
-
-                <div class="flex flex-col justify-center items-center gap-3 p-3 bg-[#6777EF] rounded-xl shadow-xl">
-                    <p class="text-[white] text-[1.7rem]">{{ totalWorkingHours || '00 : 00' }}</p>
-                    <p class="text-[white]">Total Working Hours</p>
-                </div>
-
-                <div class="flex flex-col justify-center items-center gap-3 p-3 bg-[#6777EF] rounded-xl shadow-xl">
-                    <p class="text-[white] text-[1.7rem]">{{ breakTime || '00 : 00' }}</p>
-                    <p class="text-[white]">Break Time</p>
-                </div>
-
-
-                <!-- check-in-out-btn -->
-                <div class="w-full flex gap-5">
-
-                    <button
-                        class="w-auto bg-green-600 text-white p-2 px-3 flex items-center justify-center gap-1   rounded-lg hover:bg-green-700 shadow-xl cursor-pointer"
-                        (click)="onCheckIn()" [disabled]="isCheckedIn">
-                        <mat-icon>check_circle_outline</mat-icon> Check In
-                    </button>
-
-                    <button class="bg-red-600 text-white p-2 px-3 flex items-center justify-center gap-1 rounded-lg hover:bg-red-700 shadow-xl cursor-pointer"
-                        (click)="onCheckOut()" [disabled]="!isCheckedIn">
-                        <mat-icon>not_interested</mat-icon> Check Out
-                    </button>
-
-                </div>
-
-            </div> 
-    
         </section>
 
     </section>

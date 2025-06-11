@@ -1,18 +1,23 @@
+<!-- Layout shown when NOT on login/signup -->
 <section class="w-full h-[100vh] flex flex-col" *ngIf="showLayout">
-
   <app-header (sidebarToggle)="drawer.toggle()"></app-header>
 
   <mat-drawer-container class="example-container" autosize>
 
     <mat-drawer #drawer class="example-sidenav" [mode]="drawerMode" [opened]="isSideOpen"
-      [style.width]="drawerMode === 'over' ? '100%' : '15%'"
-      style="font-family: poppins, sans-serif; border-radius: 0%;">
+      [style.width]="drawerMode === 'over' ? '100%' : '15%'" style="font-family: poppins, sans-serif;">
 
-      <!-- Sidebar Content -->
       <div class="bg-white h-full">
 
-        <!-- dashboard -->
         <mat-nav-list role="list">
+
+          <!-- role -->
+          <div class="px-4 py-5 flex flex-col items-center gap-2 border-b border-gray-200 cursor-pointer">
+            <div class="text-md font-semibold text-[#6777EF] capitalize">{{ username }}</div>
+            <div class="text-xs text-[#888] capitalize">{{ role }}</div>
+          </div>
+
+          <!-- Dashboard -->
           <mat-list-item class="px-3">
             <a routerLink="/home" class="flex items-center gap-3 text-[#767676]">
               <mat-icon>home</mat-icon>
@@ -20,28 +25,48 @@
             </a>
           </mat-list-item>
 
-          <!-- Project Dropdown -->
-          <mat-list-item class="px-3 cursor-pointer" (click)="toggleProjectMenu()">
-            <div class="flex items-center justify-between w-full text-[#767676]">
-              <div class="flex items-center gap-3">
-                <mat-icon>call_to_action</mat-icon>
-                <span>Projects</span>
-              </div>
-              <mat-icon>{{ isProjectMenuOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
-            </div>
-          </mat-list-item>
+          <!-- Projects (Admin Only) -->
+          <ng-container *ngIf="role === 'admin'">
 
-          <!-- Dropdown Links -->
-          <ng-container *ngIf="isProjectMenuOpen">
-            <!-- add-projects -->
-            <mat-list-item class="px-3">
-              <a routerLink="/addproject" class="flex items-center gap-3 text-[#767676]">
-                <mat-icon>create_new_folder</mat-icon>
-                <span>Add Project</span>
-              </a>
+            <mat-list-item class="px-3 cursor-pointer" (click)="toggleProjectMenu()">
+              <div class="flex items-center justify-between w-full text-[#767676]">
+                <div class="flex items-center gap-3">
+                  <mat-icon>call_to_action</mat-icon>
+                  <span>Projects</span>
+                </div>
+                <mat-icon>{{ isProjectMenuOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </div>
             </mat-list-item>
 
-            <!-- all-projects -->
+            <ng-container *ngIf="isProjectMenuOpen">
+              <mat-list-item class="pl-10">
+                <a routerLink="/addproject" class="flex items-center gap-3 text-[#767676]">
+                  <mat-icon>create_new_folder</mat-icon>
+                  <span>Add Project</span>
+                </a>
+              </mat-list-item>
+
+              <mat-list-item class="pl-10">
+                <a routerLink="/allproject" class="flex items-center gap-3 text-[#767676]">
+                  <mat-icon>folder</mat-icon>
+                  <span>All Projects</span>
+                </a>
+              </mat-list-item>
+
+              <mat-list-item class="pl-10">
+                <a routerLink="/estimate" class="flex items-center gap-3 text-[#767676]">
+                  <mat-icon>library_books</mat-icon>
+                  <span>Estimate</span>
+                </a>
+              </mat-list-item>
+
+            </ng-container>
+
+          </ng-container>
+
+          <!-- Projects (Employee Only) -->
+          <ng-container *ngIf="role === 'employee'">
+
             <mat-list-item class="px-3">
               <a routerLink="/allproject" class="flex items-center gap-3 text-[#767676]">
                 <mat-icon>folder</mat-icon>
@@ -49,50 +74,38 @@
               </a>
             </mat-list-item>
 
-            <!-- estimate -->
-            <mat-list-item class="px-3">
-              <a routerLink="/estimate" class="flex items-center gap-3 text-[#767676]">
-                <mat-icon>library_books</mat-icon>
-                <span>Estimate</span>
-              </a>
-            </mat-list-item>
-
           </ng-container>
 
+          <!-- Employee Section (Admin Only) -->
+          <ng-container *ngIf="role === 'admin'">
 
-
-          <!-- EMPLOYEE DROPDOWN -->
-          <mat-list-item class="px-3 cursor-pointer" (click)="toggleEmployeeMenu()">
-            <div class="flex items-center justify-between w-full text-[#767676]">
-              <div class="flex items-center gap-3">
-                <mat-icon>group</mat-icon>
-                <span>Employee</span>
+            <mat-list-item class="px-3 cursor-pointer" (click)="toggleEmployeeMenu()">
+              <div class="flex items-center justify-between w-full text-[#767676]">
+                <div class="flex items-center gap-3">
+                  <mat-icon>group</mat-icon>
+                  <span>Employee</span>
+                </div>
+                <mat-icon>{{ isEmployeeMenuOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
               </div>
-              <mat-icon>{{ isEmployeeMenuOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
-            </div>
-          </mat-list-item>
-
-          <!-- DROPDOWN LINKS -->
-          <ng-container *ngIf="isEmployeeMenuOpen">
-            <!-- add-employee -->
-            <mat-list-item class="pl-10">
-              <a routerLink="/addemployee" class="flex items-center gap-2 text-[#767676]">
-                <mat-icon class="text-sm">group_add</mat-icon>
-                <span>Add Employee</span>
-              </a>
             </mat-list-item>
 
-            <!-- all-employee -->
-            <mat-list-item class="pl-10">
-              <a routerLink="/allemployee" class="flex items-center gap-2 text-[#767676]">
-                <mat-icon class="text-sm">groups</mat-icon>
-                <span>All Employees</span>
-              </a>
-            </mat-list-item>
+            <ng-container *ngIf="isEmployeeMenuOpen">
+              <mat-list-item class="pl-10">
+                <a routerLink="/addemployee" class="flex items-center gap-3 text-[#767676]">
+                  <mat-icon>group_add</mat-icon>
+                  <span>Add Employee</span>
+                </a>
+              </mat-list-item>
+              <mat-list-item class="pl-10">
+                <a routerLink="/allemployee" class="flex items-center gap-3 text-[#767676]">
+                  <mat-icon>groups</mat-icon>
+                  <span>All Employees</span>
+                </a>
+              </mat-list-item>
+            </ng-container>
           </ng-container>
 
-
-          <!-- attendence -->
+          <!-- Attendance (Both Roles) -->
           <mat-list-item class="px-3">
             <a routerLink="/attendance" class="flex items-center gap-3 text-[#767676]">
               <mat-icon>border_color</mat-icon>
@@ -100,30 +113,28 @@
             </a>
           </mat-list-item>
 
-          <!-- attendence - list -->
-          <mat-list-item class="px-3">
-            <a routerLink="/attendance-list" class="flex items-center gap-3 text-[#767676]">
-              <mat-icon>event_note</mat-icon>
-              <span>Attendance List</span>
-            </a>
-          </mat-list-item>
-
+          <!-- Attendance List (Admin Only) -->
+          <ng-container *ngIf="role === 'admin'">
+            <mat-list-item class="px-3">
+              <a routerLink="/attendance-list" class="flex items-center gap-3 text-[#767676]">
+                <mat-icon>event_note</mat-icon>
+                <span>Attendance List</span>
+              </a>
+            </mat-list-item>
+          </ng-container>
 
         </mat-nav-list>
-
       </div>
-
     </mat-drawer>
 
     <mat-drawer-content>
       <router-outlet></router-outlet>
     </mat-drawer-content>
-
   </mat-drawer-container>
 
 </section>
 
-<!-- Login or Signup routes render here -->
+<!-- Login/Signup Layout -->
 <section *ngIf="!showLayout" class="w-full h-screen">
   <router-outlet></router-outlet>
 </section>

@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { ToastrModule } from 'ngx-toastr'
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -15,7 +15,7 @@ import { ToastrModule } from 'ngx-toastr'
     ReactiveFormsModule,
     MatIconModule,
     MatSidenavModule,
-    ToastrModule.forRoot()
+    HttpClientModule,
   ],    
   providers: [],
   // bootstrap: [AppComponent]

@@ -42,73 +42,77 @@
 
 
             <!-- table-section -->
+            <div class="w-full h-auto overflow-y-auto">
+                <table class="overflow-x-auto table-auto w-full" style="width: 120%; ">
+                    <thead>
+                        <tr class="h-[60px] border-b border-[gray]">
+                            <th class="text-center p-3 font-medium">No.</th>
+                            <th class="text-center p-3 font-medium">Name</th>
+                            <th class="text-center p-3 font-medium">Role</th>
+                            <th class="text-center p-3 font-medium">Department</th>
+                            <th class="text-center p-3 font-medium">Mobile</th>
+                            <th class="text-center p-3 font-medium">Joining Date</th>
+                            <th class="text-center p-3 font-medium">Email</th>
+                            <th class="text-center p-3 font-medium">Gender</th>
+                            <th class="text-center p-3 font-medium">Address</th>
+                            <th class="text-center p-3 font-medium">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-            <table class="overflow-x-auto table-auto w-full">
-                <thead>
-                    <tr class="h-[60px] border-b border-[gray]">
-                        <th class="text-center p-3 font-medium">No.</th>
-                        <th class="text-center p-3 font-medium">Name</th>
-                        <th class="text-center p-3 font-medium">Role</th>
-                        <th class="text-center p-3 font-medium">Department</th>
-                        <th class="text-center p-3 font-medium">Mobile</th>
-                        <th class="text-center p-3 font-medium">Joining Date</th>
-                        <th class="text-center p-3 font-medium">Email</th>
-                        <th class="text-center p-3 font-medium">Gender</th>
-                        <th class="text-center p-3 font-medium">Address</th>
-                        <th class="text-center p-3 font-medium">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
+                        <!--------------->
+                        <div *ngIf="epApiData.length === 0" class="w-full p-2 flex justify-center col-span-full">
+                            No employee data here! 😞
+                        </div>
 
-                    <!--------------->
-                    <div *ngIf="epApiData.length === 0" class="w-full p-2 flex justify-center col-span-full">
-                        No employee data here! 😞
-                    </div>
+                        <!--------------->
+                        <tr *ngFor="let data of epApiData, let i = index"
+                            class="w-full border-b border-dashed border-[gray] text-[#808080] hover:bg-[#DAE1F3]  cursor-pointer">
 
-                    <!---------------> 
-                    <tr *ngFor="let data of epApiData, let i = index"
-                        class="w-full border-b border-dashed border-[gray] text-[#808080] hover:bg-[#DAE1F3]  cursor-pointer">
-                        <td class="flex justify-center items-center p-2.5">{{ i + 1 }}</td>
-                        <td class="p-2.5">{{ data.firstName }}</td>
-                        <td class="p-2.5">{{ data.designation }}</td>
-                        <td class="p-2.5">{{ data.department }}</td>
-                        
-                        <td class="p-2.5">
-                            <mat-icon class="align-middle" style="color: #50B153; font-size: 19px; ">call</mat-icon>
-                            {{ data.mobile }}
-                        </td>
-                        
-                        <td class="p-2.5">{{ data.joindate | date: 'dd mmm yyyy' }}</td>
-                       
-                        <td class="p-2.5">{{ data.email }}</td>
-                       
-                        <td class="text-sm" [ngClass]="data.gender === 'Male' ? 'text-green-600 bg-green-100 p-1 rounded-[5px] flex justify-center items-center h-[32px]' : 'text-purple-600 bg-purple-100 p-1 rounded-[5px] flex justify-center items-center h-[32px]'">
-                            {{ data.gender }}
-                        </td>
-                       
-                        <td class="p-2.5">
-                             <mat-icon class="align-middle" style="color: #2196F3;font-size: 19px;" >room</mat-icon>
-                            {{ data.address }}
-                        </td>
-                       
-                        <td class="text-center p-2.5">
-                            <button matButton [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
-                            <mat-menu #menu="matMenu">
-                                <button mat-menu-item (click)="onUpdate(data.id)" style="color: #218B5A;"><mat-icon
-                                        style="color: #218B5A;">create</mat-icon> Edit</button>
-                                <button mat-menu-item (click)="onView(data.id)" style="color: #6777EF;"><mat-icon
-                                        style="color: #6777EF;">visibility</mat-icon> View</button>
-                                <button mat-menu-item (click)="onDelete(data.id)" style="color: #F05206;"><mat-icon
-                                        style="color: #F05206;">delete_forever</mat-icon> Delete</button>
-                            </mat-menu>
+                            <td class="flex justify-center items-center p-2.5">{{ i + 1 }}</td>
+                            <td class="p-2.5">{{ data.firstName }}</td>
+                            <td class="p-2.5">{{ data.designation }}</td>
+                            <td class="p-2.5">{{ data.department }}</td>
 
-                        </td>
+                            <td class="p-2.5">
+                                <mat-icon class="align-middle" style="color: #50B153; font-size: 19px; ">call</mat-icon>
+                                {{ data.mobile }}
+                            </td>
 
-                    </tr>
+                            <td class="p-2.5">{{ data.joindate | date: 'dd mmm yyyy' }}</td>
 
-                </tbody>
+                            <td class="p-2.5">{{ data.email }}</td>
 
-            </table>
+                            <td class="text-sm"
+                                [ngClass]="data.gender === 'Male' ? 'text-green-600 bg-green-100 p-1 rounded-[5px] flex justify-center items-center h-[32px]' : 'text-purple-600 bg-purple-100 p-1 rounded-[5px] flex justify-center items-center h-[32px]'">
+                                {{ data.gender }}
+                            </td>
+
+                            <td style="padding-left: 3%; padding-right: 3%; text-align: center;">
+                                <mat-icon class="align-middle" style="color: #2196F3;font-size: 19px;">room</mat-icon>
+                                {{ data.address }}
+                            </td>
+
+                            <td class="text-center p-2.5">
+                                <button matButton [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+                                <mat-menu #menu="matMenu">
+                                    <button mat-menu-item (click)="onUpdate(data.id)" style="color: #218B5A;"><mat-icon
+                                            style="color: #218B5A;">create</mat-icon> Edit</button>
+                                    <button mat-menu-item (click)="onView(data.id)" style="color: #6777EF;"><mat-icon
+                                            style="color: #6777EF;">visibility</mat-icon> View</button>
+                                    <button mat-menu-item (click)="onDelete(data.id)" style="color: #F05206;"><mat-icon
+                                            style="color: #F05206;">delete_forever</mat-icon> Delete</button>
+                                </mat-menu>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </section>
 

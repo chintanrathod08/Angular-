@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { Router, RouterLink } from '@angular/router';
-import { Employee } from '../../model/employee';
+import { Employees } from '../../model/employee';
 import { EmployeeService } from '../../services/employee.service';
 import { CommonModule, NgClass } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
@@ -25,7 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 export class AllemployeeComponent implements OnInit {
 
-  epApiData: Employee[] = [];
+  epApiData: Employees[] = [];
 
   constructor(private employeeService: EmployeeService, private router: Router) { }
 

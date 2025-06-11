@@ -8,6 +8,8 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { User } from '../model/user';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-signup',
@@ -22,6 +24,8 @@ import { User } from '../model/user';
     MatIconModule,
     MatButtonModule,
     RouterLink,
+    MatOptionModule,
+    MatSelectModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -39,8 +43,9 @@ export class SignupComponent {
     this.signupForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
+      role: ['admin', Validators.required],
     });
   }
 
@@ -58,14 +63,14 @@ export class SignupComponent {
       return;
     }
 
-    const { name, email, password, confirmPassword } = this.signupForm.value;
+    const { name, email, password, confirmPassword, role } = this.signupForm.value;
 
     if (password !== confirmPassword) {
       this.error = 'Passwords do not match!';
       return;
     }
 
-    const newUser: User = { name, email, password };
+    const newUser: User = { name, email, password, role };
 
     this.auth.signup(newUser).subscribe({
       next: () => {

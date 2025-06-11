@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../services/auth.service';
-import { User } from '../model/user';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -25,11 +24,11 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class LoginComponent {
   loginForm: FormGroup;
   hidePassword = true;
   error = '';
+  selectedRole: 'admin' | 'employee' | 'client' | '' = '';
 
   constructor(
     private fb: FormBuilder,
@@ -46,26 +45,57 @@ export class LoginComponent {
     this.hidePassword = !this.hidePassword;
   }
 
+  selectRole(role: 'admin' | 'employee' | 'client') {
+    this.selectedRole = role;
+  }
+
   onLogin(): void {
     if (this.loginForm.invalid) {
-      alert('Please enter valid email and password!');
+      this.error = 'Please enter valid credentials!';
+      return;
+    }
+
+    if (!this.selectedRole) {
+      this.error = 'Please select a role before logging in!';
       return;
     }
 
     const { email, password } = this.loginForm.value;
 
-    this.auth.login(email, password).subscribe({
-      next: (user: User) => {
-        console.log('Login successful ✅', user);
-        alert('Login Successful ✅');
-        localStorage.setItem('user', JSON.stringify(user));
-        this.router.navigate(['/home']);
-      },
-      error: err => {
-        console.error('Login failed ❌', err);
-        this.error = err.message || 'Invalid credentials! ❌';
-        alert(this.error);
-      }
-    });
+    if (this.selectedRole === 'employee') {
+      this.auth.loginEmployee(email, password).subscribe({
+        next: employee => {
+          if (employee.role !== 'employee') {
+            this.error = 'You are not registered as an employee.';
+            return;
+          }
+          this.error = '';
+          localStorage.setItem('user', JSON.stringify({ id: employee.id, name: employee.name, role: employee.role })); // ✅ Added here
+          alert('Login Successful ✅');
+          this.router.navigate(['/attendance']);
+        },
+        error: err => {
+          this.error = 'Login failed: ' + err.message;
+        }
+      });
+    } else {
+      this.auth.login(email, password).subscribe({
+        next: user => {
+          if (!user.role || user.role.toLowerCase() !== this.selectedRole) {
+            this.error = `You are not registered as ${this.selectedRole}.`;
+            return;
+          }
+          this.error = '';
+          localStorage.setItem('user', JSON.stringify({ id: user.id, name: user.name, role: user.role })); // ✅ Added here
+          alert('Login Successful ✅');
+
+          if (user.role === 'admin') this.router.navigate(['/home']);
+          else if (user.role === 'client') this.router.navigate(['/client-dashboard']);
+        },
+        error: err => {
+          this.error = 'Login failed: ' + err.message;
+        }
+      });
+    }
   }
 }

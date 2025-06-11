@@ -24,52 +24,7 @@
         </div>
 
         <!-- section-2 -->
-        <section class="w-full h-auto bg-white p-3 md:p-6 rounded-xl shadow-xl">
-
-            <div class="w-full h-auto bg-[#DAE1F3] p-5 md:flex-row md:items-center flex flex-col items-start  rounded-tl-xl rounded-tr-xl">
-                
-                <h1 class="text-[1.2rem] text-[gray]">Estimate</h1>
-                
-                <div class="md:ms-5 mt-3 md:mt-0 bg-[white] rounded-[10px] flex justify-center items-center text-[gray]">
-                    <mat-icon class="ms-1">search</mat-icon>
-                    <input type="text" class="w-[200px] h-[40px] rounded-[10px] ps-2" placeholder="Search here...">
-                </div>
-            </div>
-
-            <table mat-table [dataSource]="attendanceRecords" class="mat-elevation-z8 w-full">
-
-                <ng-container matColumnDef="employeeId">
-                    <th mat-header-cell *matHeaderCellDef>Employee ID</th>
-                    <td mat-cell *matCellDef="let element">{{ element.employeeId }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef>Date</th>
-                    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="checkInTime">
-                    <th mat-header-cell *matHeaderCellDef>Check-In</th>
-                    <td mat-cell *matCellDef="let element">{{ element.checkInTime }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="checkOutTime">
-                    <th mat-header-cell *matHeaderCellDef>Check-Out</th>
-                    <td mat-cell *matCellDef="let element">{{ element.checkOutTime || '-' }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="totalWorkingHours">
-                    <th mat-header-cell *matHeaderCellDef>Working Hours</th>
-                    <td mat-cell *matCellDef="let element">{{ element.totalWorkingHours || '-' }}</td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-               
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="border-b border-dashed"></tr>
-           
-            </table>
-
-        </section>
+        
 
     </section>
 

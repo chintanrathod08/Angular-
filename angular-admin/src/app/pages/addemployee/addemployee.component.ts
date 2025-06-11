@@ -8,8 +8,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Router } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { EmployeeService } from '../../services/employee.service';
 
 @Component({
@@ -34,60 +33,59 @@ import { EmployeeService } from '../../services/employee.service';
   styleUrl: './addemployee.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-
 export class AddEmployeeComponent implements OnInit {
-
   addemployeeForm!: FormGroup;
   isEditMode: boolean = false;
   editId: number | null = null;
+  genderList = ['Male', 'Female'];
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private route: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.addemployeeForm = this.fb.group({
       firstName: ['', Validators.required],
-      lastName: [''],
+      lastName: ['', Validators.required],
       gender: ['', Validators.required],
       mobile: ['', Validators.required],
       password: ['', Validators.required],
       rePassword: ['', Validators.required],
       department: ['', Validators.required],
-      designation: [''],
-      address: [''],
+      designation: ['', Validators.required],
+      address: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       dob: ['', Validators.required],
-      education: [''],
+      education: ['', Validators.required],
       joindate: ['', Validators.required],
       skills: ['', Validators.required],
       experience: ['', Validators.required],
       location: ['', Validators.required],
-      about: [''],
+      about: ['', Validators.required],
+      role: ['employee'],
       file: [null]
     });
 
-    // check if it's update modde
     this.route.queryParams.subscribe(params => {
       if (params['editId']) {
         this.isEditMode = true;
         this.editId = +params['editId'];
-        this.loadProject(this.editId)
+        this.loadEmployee(this.editId);
       }
-    })
+    });
   }
 
-  loadProject(id: number) {
+  loadEmployee(id: number): void {
     this.employeeService.getDataByID(id).subscribe(employee => {
       this.addemployeeForm.patchValue({
         ...employee,
         dob: new Date(employee.dob),
         joindate: new Date(employee.joindate)
-      })
-    })
+      });
+    });
   }
 
   onSubmit(): void {
@@ -98,42 +96,44 @@ export class AddEmployeeComponent implements OnInit {
 
     const data = this.addemployeeForm.value;
 
+    if (data.password !== data.rePassword) {
+      alert('Passwords do not match ❌');
+      return;
+    }
+
     if (this.isEditMode && this.editId !== null) {
       this.employeeService.updateEmployee(this.editId, data).subscribe(() => {
-        alert('Project update successfully ✅');
-        this.router.navigate(['/allemployee'])
+        alert('Employee updated successfully ✅');
+        this.router.navigate(['/allemployee']);
       });
     } else {
       this.employeeService.postData(data).subscribe(() => {
-        alert('Project added successfully ✅');
-        this.router.navigate(['/allemployee'])
-      })
+        alert('Employee added successfully ✅');
+        this.router.navigate(['/allemployee']);
+      });
     }
-
   }
 
-  onFileChange(event: any) {
+  onFileChange(event: any): void {
     const file = event.target.files[0];
-    if (file) {
+    if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = () => {
         this.addemployeeForm.patchValue({ file: reader.result as string });
       };
       reader.readAsDataURL(file);
+    } else {
+      alert('Please upload a valid image file ❌');
     }
   }
 
-  onCancel() {
+  onCancel(): void {
     this.addemployeeForm.reset();
   }
 
-  //gender
-
-  genderList = ['Male', 'Female'];
-
   getGenderClass(gender: string): string {
-    const select = this.addemployeeForm.get('gender')?.value;
-    if (select !== gender) return '';
+    const selected = this.addemployeeForm.get('gender')?.value;
+    if (selected !== gender) return '';
 
     switch (gender) {
       case 'Male': return 'text-green-600 bg-green-100 p-2 rounded-md';
@@ -141,5 +141,4 @@ export class AddEmployeeComponent implements OnInit {
       default: return '';
     }
   }
-
 }

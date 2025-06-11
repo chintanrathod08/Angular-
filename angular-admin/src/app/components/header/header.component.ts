@@ -3,7 +3,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +15,15 @@ import { RouterLink } from '@angular/router';
 export class HeaderComponent {
   @Output() sidebarToggle = new EventEmitter<void>();  
 
+  constructor(private auth: AuthService, private router: Router){}
+
   sideBarButtonClick() {
     this.sidebarToggle.emit();
   }
+
+  logout(){
+    this.auth.logout();
+    this.router.navigate(['/login'])
+  }
+
 }
