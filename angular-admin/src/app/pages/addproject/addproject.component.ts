@@ -12,7 +12,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { NgFor } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -32,6 +32,7 @@ import Swal from 'sweetalert2';
     MatButtonModule,
     RouterLink,
     NgFor,
+    CommonModule,
     MatIcon
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
