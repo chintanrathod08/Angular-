@@ -65,12 +65,12 @@
             <!-- Table Section -->
             <div class="w-full h-auto overflow-x-auto">
 
-                <!-- 🟡 Show message if no records at all -->
+                <!--  Show message if no records at all -->
                 <div *ngIf="attendanceRecords.length === 0" class="w-full p-2 flex justify-center">
                     No employee attendance data available! 😞
                 </div>
 
-                <!-- 🔵 Show message if search has no match -->
+                <!-- Show message if search has no match -->
                 <div *ngIf="attendanceRecords.length > 0 && filteredRecords.length === 0"
                     class="w-full p-2 flex justify-center">
                     No matching employee found! 😞

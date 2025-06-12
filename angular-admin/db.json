@@ -1,21 +1,6 @@
 {
   "projects": [
     {
-      "title": "Employee Management Project ",
-      "department": "Development",
-      "priority": "Medium",
-      "client": "Google Pvt. Ltd.",
-      "price": 5000,
-      "startDate": "2025-06-03T18:30:00.000Z",
-      "endDate": "2025-06-09T18:30:00.000Z",
-      "team": "Example 1",
-      "leader": "Paras sir",
-      "status": "Active",
-      "description": "Employee Management Project \n- Create Employee\n- Manage Employee Data\n- Edite Data\n- Delete Data\n- Show All Data",
-      "progress": 0,
-      "id": 1
-    },
-    {
       "title": "ERP Management Portal",
       "department": "Development",
       "priority": "High",
@@ -29,29 +14,37 @@
       "description": "There are many variations of passages of Lorem Ipsum available, but suffered alteration in some form, by injected humour.",
       "progress": 0,
       "id": 2
+    },
+    {
+      "title": "Attendance Management Project",
+      "department": "Designing",
+      "priority": "Medium",
+      "client": "Reliance Pvt. Ltd.",
+      "price": 2000,
+      "startDate": "2025-06-11T18:30:00.000Z",
+      "endDate": "2025-06-29T18:30:00.000Z",
+      "team": "Example 1",
+      "leader": "Ravi sir",
+      "status": "Not Started",
+      "description": "There are many variations of passages of Lorem Ipsum available, but suffered alteration in some form, by injected humour.",
+      "progress": 0,
+      "id": 3
     }
   ],
   "users": [
-    {
-      "name": "EliteInfotech",
-      "email": "elite@gmail.com",
-      "password": "chr@123",
-      "role": "admin",
-      "id": 1
-    },
-    {
-      "name": "EliteInfotech",
-      "email": "elite@gmail.com",
-      "password": "123456",
-      "role": "admin",
-      "id": 2
-    },
     {
       "name": "John Wick",
       "email": "john@gmail.com",
       "password": "john0803",
       "role": "employee",
       "id": 3
+    },
+    {
+      "name": "EliteInfotech",
+      "email": "elite@gmail.com",
+      "password": "123456",
+      "role": "admin",
+      "id": 5
     }
   ],
   "employees": [
@@ -102,15 +95,6 @@
   ],
   "attendance": [
     {
-      "employeeId": 1,
-      "employeename": "Chintan Rathod",
-      "date": "2025-06-12",
-      "checkInTime": "12:03 PM",
-      "checkOutTime": "",
-      "totalWorkingHours": "",
-      "id": 1
-    },
-    {
       "employeeId": 2,
       "employeename": "John Wick",
       "date": "2025-06-12",
@@ -118,6 +102,15 @@
       "checkOutTime": "12:05 PM",
       "totalWorkingHours": "-1:00",
       "id": 2
+    },
+    {
+      "employeeId": 1,
+      "employeename": "Chintan Rathod",
+      "date": "2025-06-12",
+      "checkInTime": "4:43 PM",
+      "checkOutTime": "4:43 PM",
+      "totalWorkingHours": "-1:00",
+      "id": 3
     }
   ]
 }

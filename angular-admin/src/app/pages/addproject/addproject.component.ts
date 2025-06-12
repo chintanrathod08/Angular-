@@ -12,7 +12,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import {  NgFor } from '@angular/common';
+import { NgFor } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   standalone: true,
@@ -89,7 +90,22 @@ export class AddprojectComponent implements OnInit {
 
   onSubmit(): void {
     if (this.addProjectForm.invalid) {
-      alert('Please fill all required fields ❌');
+      // sweetalert
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Please fill all required fields"
+      });
       return;
     }
 
@@ -97,12 +113,42 @@ export class AddprojectComponent implements OnInit {
 
     if (this.isEditMode && this.editId !== null) {
       this.projectService.updateProject(this.editId, data).subscribe(() => {
-        alert('Project updated successfully ✅');
+        // alert('Project updated successfully ✅');
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Project updated successfully"
+        });
         this.router.navigate(['/allproject']);
       });
     } else {
       this.projectService.postData(data).subscribe(() => {
-        alert('Project added successfully ✅');
+        // alert('Project added successfully ✅');
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Project added successfully"
+        });
         this.router.navigate(['/allproject']);
       });
     }
@@ -151,18 +197,18 @@ export class AddprojectComponent implements OnInit {
       default: return '';
     }
   }
-  
+
   // priority icon 
   getPriorityIcon(priority: string): string {
     const select = this.addProjectForm.get('priority')?.value;
     if (select !== priority) return '';
 
-   switch (priority) {
-    case 'Low': return '<mat-icon> keyboard_arrow_down </mat-icon> ';
-    case 'Medium': return '<mat-icon>code</mat-icon>';
-    case 'High': return '<mat-icon> keyboard_arrow_up </mat-icon> ';
-    default: return '';
+    switch (priority) {
+      case 'Low': return '<mat-icon> keyboard_arrow_down </mat-icon> ';
+      case 'Medium': return '<mat-icon>code</mat-icon>';
+      case 'High': return '<mat-icon> keyboard_arrow_up </mat-icon> ';
+      default: return '';
+    }
   }
-}
 
 }

@@ -8,7 +8,7 @@ import { CommonModule, NgClass } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-
+import Swal from 'sweetalert2';
 
 @Component({
   standalone: true,
@@ -55,18 +55,69 @@ export class AllemployeeComponent implements OnInit {
     this.router.navigate(['/addemployee'], { queryParams: { editId: id } });
   }
 
+  //delete
   onDelete(id: number) {
-    if (confirm('Are you sure you want to delete this employee? 🗑️')) {
-      this.employeeService.deleteEmployee(id).subscribe({
-        next: () => {
-          alert('Employee deleted successfully ✅');
-          this.getAllData();
-        },
-        error: (err) => {
-          console.log('Error deleting Employee', err);
-        }
-      })
-    }
+    // ✅ Confirmation dialog with SweetAlert2
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to delete this Elpoyee! This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, Delete it! 🗑️",
+      cancelButtonText: "Cancel",
+      reverseButtons: true
+    }).then((result) => {
+      // ✅ Only delete if user confirms
+      if (result.isConfirmed) {
+        // Show loading state
+        Swal.fire({
+          title: 'Deleting...',
+          text: 'Please wait while we delete the project.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        // ✅ Actual delete operation
+        this.employeeService.deleteEmployee(id).subscribe({
+          next: () => {
+            // ✅ Success toast notification
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
+            });
+
+            Toast.fire({
+              icon: "success",
+              title: "Employee deleted successfully!"
+            });
+
+            this.getAllData(); // Refresh list
+          },
+          error: (err) => {
+            console.error('Error deleting project', err);
+
+            // ❌ Error notification
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to delete Employee. Please try again.",
+              icon: "error",
+              confirmButtonText: "OK"
+            });
+          }
+        });
+      }
+    });
   }
 
   // gender
@@ -79,7 +130,7 @@ export class AllemployeeComponent implements OnInit {
   }
 
   //search
-  get filteredRecords(): Employees[]{
+  get filteredRecords(): Employees[] {
     if (!this.searchText) return this.epApiData;
     const search = this.searchText.toLowerCase();
     return this.epApiData.filter(record =>

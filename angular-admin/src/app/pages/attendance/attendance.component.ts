@@ -8,6 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { NgClass, NgIf } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-attendance',
@@ -26,7 +27,7 @@ import { NgClass, NgIf } from '@angular/common';
 })
 export class AttendanceComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['employeeId', 'employeename', 'date', 'checkInTime', 'checkOutTime', 'totalWorkingHours', 'action'];
- 
+
   searchText: string = '';
   attendanceRecords: Attendance[] = [];
 
@@ -69,6 +70,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     this.isCheckedIn ? this.onCheckOut() : this.onCheckIn();
   }
 
+  //---- checkin -----:
   private onCheckIn(): void {
     const now = new Date();
     const checkInFormatted = this.formatTime(now);
@@ -87,14 +89,47 @@ export class AttendanceComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.isCheckedIn = true;
         this.currentAttendanceId = response.id;
-        this.showSnackBar('Checked in successfully!');
+        // this.showSnackBar('Checked in successfully!');
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Checked in successfully!"
+        });
         this.startTimer(now);
         this.attendanceRecords = [...this.attendanceRecords, { ...attendanceData, id: response.id }];
       },
-      error: () => this.showSnackBar('Check-in failed!')
+      error: () => {
+        // this.showSnackBar('Check-in failed!')
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: "Check-in failed!"
+        });
+      }
     });
   }
 
+  //---- checkout -------:
   private onCheckOut(): void {
     if (!this.currentAttendanceId) return;
 
@@ -131,9 +166,42 @@ export class AttendanceComponent implements OnInit, OnDestroy {
           this.attendanceRecords[index] = { ...updateData, id: this.currentAttendanceId };
         }
 
-        this.showSnackBar('Checked out successfully!');
+        // this.showSnackBar('Checked out successfully! ✅');
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Checked out successfully!"
+        });
       },
-      error: () => this.showSnackBar('Check-out failed!')
+      error: () => {
+        // this.showSnackBar('Check-out failed! ❌')
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: "Check-out failed!"
+        });
+      }
+
     });
   }
 
@@ -202,11 +270,23 @@ export class AttendanceComponent implements OnInit, OnDestroy {
   }
 
   fetchAllRecords(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const role = user?.role;
+
     this.attendanceService.getAll().subscribe({
-      next: (records) => (this.attendanceRecords = records || []),
+      next: (records) => {
+        if (role === 'employee') {
+          // Only show logged-in employee's records
+          this.attendanceRecords = records.filter(record => record.employeeId === this.employeeId);
+        } else {
+          // Admin can see all
+          this.attendanceRecords = records || [];
+        }
+      },
       error: () => (this.attendanceRecords = [])
     });
   }
+
 
   // Search
   get filteredRecords(): Attendance[] {
@@ -221,17 +301,59 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
   // Delete
   onDelete(id: number): void {
-    if (confirm('Are you sure you want to delete this Attendance? 🗑️')) {
-      this.attendanceService.deleteAttendance(id).subscribe({
-        next: () => {
-          this.attendanceRecords = this.attendanceRecords.filter(r => r.id !== id);
-          this.showSnackBar('Attendance deleted successfully ✅');
-        },
-        error: (err) => {
-          this.showSnackBar('Error deleting Attendance');
-          console.error(err);
-        }
-      });
-    }
+    // ✅ SweetAlert2 confirmation dialog
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to delete this attendance record! This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, Delete it! 🗑️",
+      cancelButtonText: "Cancel",
+      reverseButtons: true
+    }).then((result) => {
+      // ✅ Only delete if user confirms
+      if (result.isConfirmed) {
+        // Show loading state
+        Swal.fire({
+          title: 'Deleting...',
+          text: 'Please wait while we delete the attendance record.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        // ✅ Actual delete operation
+        this.attendanceService.deleteAttendance(id).subscribe({
+          next: () => {
+            // Update local array
+            this.attendanceRecords = this.attendanceRecords.filter(r => r.id !== id);
+
+            // ✅ Success notification with SweetAlert2
+            Swal.fire({
+              title: "Deleted!",
+              text: "Attendance record has been deleted successfully.",
+              icon: "success",
+              timer: 2000,
+              showConfirmButton: false
+            });
+          },
+          error: (err) => {
+            console.error('Error deleting attendance', err);
+
+            // ✅ Error notification with SweetAlert2
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to delete attendance record. Please try again.",
+              icon: "error",
+              confirmButtonText: "OK"
+            });
+          }
+        });
+      }
+      // ✅ If cancelled, do nothing
+    });
   }
 }

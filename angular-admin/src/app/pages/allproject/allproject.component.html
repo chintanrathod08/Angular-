@@ -58,8 +58,7 @@
                 <div class="leading-[2.5rem]">
                     <span class="px-3 py-1 rounded-[5px] text-white text-[0.9rem]"
                         [ngClass]="getStatusClass(data.status)">{{data.status}}</span>
-                    <p class=""><span class="text-start">Created : </span> <span
-                            class="text-[gray] ms-3">{{data.startDate}}</span></p>
+                    <p class=""><span class="text-start">Created : </span> <span class="text-[gray] ms-3"><mat-icon class="align-middle" style="font-size: 17px;" >calendar_today</mat-icon> {{data.startDate}}</span></p>
                     <p class=""><span>Leader :</span> <span class="text-[gray] ms-3">{{data.leader}}</span></p>
                     <p class=""><span>Team :</span> <span class="text-[gray] ms-3">{{data.team}}</span></p>
 
@@ -72,7 +71,7 @@
                         </span>
                     </p>
 
-                    <p class=""><span>Deadline :</span> <span class="text-[gray] ms-3">{{data.endDate}}</span></p>
+                    <p class=""><span>Deadline :</span> <span class="text-[gray] ms-3"><mat-icon style="font-size: 17px" class="align-middle" >calendar_today</mat-icon> {{data.endDate}}</span></p>
                     <p class=""><span>Client : </span> <span class="text-[gray] ms-3">{{data.client}}</span></p>
                 </div>
             </div>

@@ -34,14 +34,29 @@
                 <div
                     class="md:ms-5 mt-3 md:mt-0 bg-[white] rounded-[10px] flex justify-center items-center text-[gray]">
                     <mat-icon class="ms-1">search</mat-icon>
-                    <input type="text" class="w-[200px] h-[40px] rounded-[10px] ps-2" placeholder="Search here..." [(ngModel)]="searchText" id="inputoutline" style="outline-width: 0px;" >
+                    <input type="text" class="w-[200px] h-[40px] rounded-[10px] ps-2" placeholder="Search here..."
+                        [(ngModel)]="searchText" id="inputoutline" style="outline-width: 0px;">
                 </div>
 
             </div>
 
+
+
             <!-- table-section -->
             <div class="w-full h-auto overflow-y-auto">
-                <table  class="overflow-x-auto table-auto w-full" style="width: 133%;">
+
+                <table class="overflow-x-auto table-auto w-full" style="width: 133%;">
+
+                    <!-- No data here -->
+                    <div *ngIf="epApiData.length === 0" class="w-full p-2 flex justify-center col-span-full">
+                        No employee data available! 😞
+                    </div>
+
+                    <!-- not found -->
+                    <div *ngIf="filteredRecords.length === 0" class="w-full p-2 flex justify-center col-span-full">
+                        No matching employee found! 😞
+                    </div>
+
                     <thead>
                         <tr class="h-[60px] border-b border-[gray]">
                             <th class="text-center p-3 font-medium">No.</th>
@@ -58,22 +73,12 @@
                     </thead>
                     <tbody>
 
-                        <!-- No data here -->
-                        <div *ngIf="epApiData.length === 0" class="w-full p-2 flex justify-center col-span-full">
-                            No Employee data here! 😞
-                        </div>
-
-                        <!-- not found -->
-                        <div *ngIf="filteredRecords.length === 0" class="w-full p-2 flex justify-center col-span-full">
-                            This Employee data not found! 😞
-                        </div>
-
                         <!--------------->
-                        <tr *ngFor="let data of epApiData && filteredRecords , let i = index" style="text-align: center;"
-                            class="w-full border-b border-dashed border-[gray] text-[#808080] hover:bg-[#DAE1F3]  cursor-pointer" >
+                        <tr *ngFor="let data of epApiData && filteredRecords , let i = index" style="text-align: start;"
+                            class="w-full border-b border-dashed border-[gray] text-[#808080] hover:bg-[#DAE1F3]  cursor-pointer">
 
                             <td class="flex justify-center items-center p-2.5">{{ i + 1 }}</td>
-                            <td class="p-2.5" style="color: #6777EF;"  >{{ data.firstName }}</td>
+                            <td class="p-2.5" style="color: #6777EF;">{{ data.firstName }}</td>
                             <td class="p-2.5">{{ data.designation }}</td>
                             <td class="p-2.5">{{ data.department }}</td>
 
@@ -85,8 +90,10 @@
                             <td class="p-2.5">{{ data.joindate | date: 'dd mmm yyyy' }}</td>
 
                             <td class="p-2.5">
-                                <mat-icon class="align-middle" style="color: #F05206; font-size: 23px;"  > mail_outline</mat-icon>
-                                {{ data.email }}</td>
+                                <mat-icon class="align-middle" style="color: #F05206; font-size: 23px;">
+                                    mail_outline</mat-icon>
+                                {{ data.email }}
+                            </td>
 
                             <td class="text-sm" style="display: flex;justify-content: center; align-items: center;"
                                 [ngClass]="data.gender === 'Male' ? 'text-green-600 bg-green-100 p-1 rounded-[5px] h-[32px]' : 'text-purple-600 bg-purple-100 p-1 rounded-[5px] h-[32px]'">

@@ -10,6 +10,7 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { EmployeeService } from '../../services/employee.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-employee',
@@ -44,7 +45,7 @@ export class AddEmployeeComponent implements OnInit {
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.addemployeeForm = this.fb.group({
@@ -90,25 +91,85 @@ export class AddEmployeeComponent implements OnInit {
 
   onSubmit(): void {
     if (this.addemployeeForm.invalid) {
-      alert('Please fill all required fields ❌');
+      // alert('Please fill all required fields ❌');
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Please fill all required fields"
+      });
       return;
     }
 
     const data = this.addemployeeForm.value;
 
     if (data.password !== data.rePassword) {
-      alert('Passwords do not match ❌');
+      // alert('Passwords do not match ❌');
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Passwords do not match"
+      });
       return;
     }
 
     if (this.isEditMode && this.editId !== null) {
       this.employeeService.updateEmployee(this.editId, data).subscribe(() => {
-        alert('Employee updated successfully ✅');
+        // alert('Employee updated successfully ✅');
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Employee updated successfully"
+        });
         this.router.navigate(['/allemployee']);
       });
     } else {
       this.employeeService.postData(data).subscribe(() => {
-        alert('Employee added successfully ✅');
+        // alert('Employee added successfully ✅');
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Employee added successfully"
+        });
         this.router.navigate(['/allemployee']);
       });
     }
@@ -123,7 +184,22 @@ export class AddEmployeeComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     } else {
-      alert('Please upload a valid image file ❌');
+      // alert('Please upload a valid image file ❌');
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Please upload a valid image file"
+      });
     }
   }
 

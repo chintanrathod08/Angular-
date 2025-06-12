@@ -10,6 +10,7 @@ import { AuthService } from '../services/auth.service';
 import { User } from '../model/user';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-signup',
@@ -74,11 +75,23 @@ export class SignupComponent {
 
     this.auth.signup(newUser).subscribe({
       next: () => {
-        alert('Sign Up Successful ✅');
+        // alert('Sign Up Successful ✅');
+        Swal.fire({
+          title: "Sign Up Successful!",
+          text: "Welcome",
+          icon: "success",
+          confirmButtonText: 'Continue'
+        })
         this.router.navigate(['/login']);
       },
       error: err => {
-        console.error('Signup failed ❌', err);
+        // console.error('Signup failed ❌', err);
+        Swal.fire({
+          title: "Sign Up Failed!",
+          text: this.error,
+          icon: "error",
+          confirmButtonText: 'Try Again'
+        });
         this.error = err.message || 'Something went wrong during sign up.';
       },
     });
