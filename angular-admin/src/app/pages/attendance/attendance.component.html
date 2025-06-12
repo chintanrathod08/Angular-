@@ -29,8 +29,9 @@
                 <h2 class="text-[#5B626B] text-lg mb-2 md:mb-0">Employee Attendance</h2>
 
                 <div class="flex items-center gap-10">
-                    <div class="flex items-center text-[#6777EF] text-[18px] font-semibold bg-[#DAE1F3] p-1.5 px-2 rounded-md">
-                        <mat-icon class="mr-1" style="color: #6777EF;" >timer</mat-icon>
+                    <div
+                        class="flex items-center text-[#6777EF] text-[18px] font-semibold bg-[#DAE1F3] p-1.5 px-2 rounded-md">
+                        <mat-icon class="mr-1" style="color: #6777EF;">timer</mat-icon>
                         {{ timerDisplay }}
                     </div>
 
@@ -53,65 +54,91 @@
                     class="md:ms-5 mt-3 md:mt-0 bg-[white] rounded-[10px] flex justify-center items-center text-[gray]">
                     <mat-icon class="ms-1">search</mat-icon>
                     <input type="text" class="w-[200px] h-[40px] rounded-[10px] ps-2" placeholder="Search here..."
-                        [(ngModel)]="searchText">
+                        [(ngModel)]="searchText" style="outline-width: 0px;">
                 </div>
+
             </div>
 
+
+
             <!-- Table -->
+            <!-- Table Section -->
             <div class="w-full h-auto overflow-x-auto">
-                <table mat-table [dataSource]="filteredRecords" class="mat-elevation-z8 w-full">
+
+                <!-- 🟡 Show message if no records at all -->
+                <div *ngIf="attendanceRecords.length === 0" class="w-full p-2 flex justify-center">
+                    No employee attendance data available! 😞
+                </div>
+
+                <!-- 🔵 Show message if search has no match -->
+                <div *ngIf="attendanceRecords.length > 0 && filteredRecords.length === 0"
+                    class="w-full p-2 flex justify-center">
+                    No matching employee found! 😞
+                </div>
+
+                <!-- ✅ Table only visible when data exists -->
+                <table *ngIf="filteredRecords.length > 0" mat-table [dataSource]="filteredRecords"
+                    class="mat-elevation-z8 w-full">
+
+                    <!-- Columns -->
 
                     <ng-container matColumnDef="employeeId">
-                        <th mat-header-cell *matHeaderCellDef>Employee ID</th>
-                        <td mat-cell *matCellDef="let element">{{ element.employeeId }}</td>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">Employee ID</th>
+                        <td mat-cell *matCellDef="let element" class="text-center">{{ element.employeeId }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="employeename">
-                        <th mat-header-cell *matHeaderCellDef>Employee Name</th>
-                        <td mat-cell *matCellDef="let element">{{ element.employeename }}</td>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">Employee Name</th>
+                        <td mat-cell *matCellDef="let element" class="text-center text-[#6777EF]">
+                            {{ element.employeename }}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="date">
-                        <th mat-header-cell *matHeaderCellDef>Date</th>
-                        <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+                        <td mat-cell *matCellDef="let element" class="text-center">{{ element.date }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="checkInTime">
-                        <th mat-header-cell *matHeaderCellDef>Check-In</th>
-                        <td mat-cell *matCellDef="let element">{{ element.checkInTime }}</td>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">Check-In</th>
+                        <td mat-cell *matCellDef="let element" class="text-center text-green-600">
+                            {{ element.checkInTime }}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="checkOutTime">
-                        <th mat-header-cell *matHeaderCellDef>Check-Out</th>
-                        <td mat-cell *matCellDef="let element">{{ element.checkOutTime || '-' }}</td>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">Check-Out</th>
+                        <td mat-cell *matCellDef="let element" class="text-center text-red-500">
+                            {{ element.checkOutTime || '-' }}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="totalWorkingHours">
-                        <th mat-header-cell *matHeaderCellDef>Working Hours</th>
-                        <td mat-cell *matCellDef="let element">{{ element.totalWorkingHours || '-' }}</td>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">Working Hours</th>
+                        <td mat-cell *matCellDef="let element" class="text-center text-orange-500">
+                            {{ element.totalWorkingHours || '-' }}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="action">
-                        <th mat-header-cell *matHeaderCellDef>Action</th>
-                        <td mat-cell *matCellDef="let element">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">Action</th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
                             <button (click)="onDelete(element.id)"
-                                class="ms-1.9 w-[35px] h-[35px] rounded-full flex justify-center items-center  hover:bg-[#dddddd] cursor-pointer">
-                                <mat-icon style="color: #F05206;">delete_forever</mat-icon>
+                                class="w-[35px] h-[35px] rounded-full hover:bg-[#dddddd] cursor-pointer">
+                                <mat-icon style="color: #F05206">delete_forever</mat-icon>
                             </button>
                         </td>
                     </ng-container>
 
+                    <!-- Table rows -->
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{
-                      'text-green-600 font-semibold': !row.checkOutTime,
-                      'text-red-600': row.checkOutTime
-                    }" class="border-b border-dashed cursor-pointer">
+                     'text-green-600 font-semibold': !row.checkOutTime,
+                     'text-red-600': row.checkOutTime
+                     }" class="border-b border-dashed cursor-pointer">
                     </tr>
 
-
                 </table>
-
             </div>
 
         </section>

@@ -7,6 +7,8 @@ import { EmployeeService } from '../../services/employee.service';
 import { CommonModule, NgClass } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   standalone: true,
@@ -18,7 +20,9 @@ import { MatButtonModule } from '@angular/material/button';
     CommonModule,
     MatMenuModule,
     MatButtonModule,
+    FormsModule
   ],
+
   templateUrl: './allemployee.component.html',
   styleUrl: './allemployee.component.scss'
 })
@@ -26,6 +30,9 @@ import { MatButtonModule } from '@angular/material/button';
 export class AllemployeeComponent implements OnInit {
 
   epApiData: Employees[] = [];
+
+  searchText: string = '';
+  firstName!: string;
 
   constructor(private employeeService: EmployeeService, private router: Router) { }
 
@@ -39,7 +46,7 @@ export class AllemployeeComponent implements OnInit {
     })
   }
 
-  onView(id: number){
+  onView(id: number) {
     console.log("Viewing employee with ID :", id);
     this.router.navigate(['employeeprofile', id])
   }
@@ -63,12 +70,21 @@ export class AllemployeeComponent implements OnInit {
   }
 
   // gender
-  getGenderClass(gender: string): string{
-     switch (gender) {
+  getGenderClass(gender: string): string {
+    switch (gender) {
       case 'Male': return 'text-green-600 bg-green-100 p-2 rounded-md';
       case 'Female': return 'text-purple-600 bg-purple-100 p-2 rounded-md';
       default: return '';
     }
+  }
+
+  //search
+  get filteredRecords(): Employees[]{
+    if (!this.searchText) return this.epApiData;
+    const search = this.searchText.toLowerCase();
+    return this.epApiData.filter(record =>
+      record.firstName.toLowerCase().includes(search)
+    );
   }
 
 }

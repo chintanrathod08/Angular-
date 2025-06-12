@@ -29,18 +29,18 @@
 
             <!-- left - section -->
 
-            <div class="h-auto w-full flex flex-col justify-center items-center gap-6">
+            <div class="h-auto w-full flex flex-col justify-start items-start gap-6">
 
                 <!-- photo-section -->
                 <div
                     class="h-[18rem] w-full rounded-xl overflow-hidden shadow-xl relative flex flex-col justify-between items-center bg-[#ECF0F4]">
 
                     <!-- div-1 -->
-                    <div class="w-full h-[35%] bg-[#212529]"></div>
+                    <div class="w-full h-[35%] bg-[#303134]"></div>
 
                     <!-- div-2 -->
                     <div
-                        class="shadow-xl w-[8rem] h-[8rem] rounded-[50%] absolute top-[2.5rem] left-[8rem] flex justify-center items-center overflow-hidden bg-[white]" style="z-index: 1;">
+                        class="shadow-xl w-[8rem] h-[8rem] rounded-[50%] border-b-3 border-l-3 border-r-3 border-[white]  absolute top-[2.5rem] left-[8rem] flex justify-center items-center overflow-hidden bg-[#ECF0F4]" style="z-index: 1;">
                         <img [src]="employeeData.file" alt="Employee Image" class="w-full h-full object-cover">
                      </div>
 
@@ -67,7 +67,7 @@
                     </div>
 
                     <!-- info -->
-                    <div class="w-full h-auto flex flex-col leading-10">
+                    <div class="w-full h-auto flex flex-col gap-6">
 
                         <div class="flex items-center border-b border-dashed ps-2">
                             <mat-icon style="font-size: 1.3rem"> call</mat-icon> <span

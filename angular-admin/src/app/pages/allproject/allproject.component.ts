@@ -7,6 +7,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Router, RouterLink } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
@@ -19,7 +20,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatProgressBarModule,
     MatMenuModule,
     MatButtonModule,
-    NgClass
+    NgClass,
+    FormsModule
   ],
   templateUrl: './allproject.component.html',
   styleUrl: './allproject.component.scss'
@@ -101,5 +103,14 @@ export class AllprojectComponent implements OnInit {
     }
 
   }
+
+  //search
+  // get filteredRecords(): Project[]{
+  //   if(!this.searchText) return this.apiData;
+  //   const search = this.searchText.toLowerCase();
+  //   return this.apiData.filter(record =>{
+  //     record.title.toLowerCase().includes(search)
+  //   })
+  // }
 
 }

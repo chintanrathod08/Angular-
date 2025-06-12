@@ -22,18 +22,16 @@
         </div>
 
         <!-- section-2 -->
-        <div
-            class="w-full h-auto bg-white p-3 md:p-6 rounded-xl shadow-xl grid grid-cols-1 gap-8  md:grid md:grid-cols-2 md:gap-5  md:flex md:justify-evenly xl:grid xl:grid-cols-3 xl:gap-5 xl:flex xl:justify-evenly 2xl:grid 2xl:grid-cols-3 2xl:gap-5 2xl:flex 2xl:justify-evenly">
+
+           <div class="w-full h-auto bg-white p-3 md:p-6 rounded-xl shadow-xl grid grid-cols-1 gap-8  md:grid md:grid-cols-2 md:gap-5  md:flex md:justify-evenly xl:grid xl:grid-cols-3 xl:gap-5 xl:flex xl:justify-evenly 2xl:grid 2xl:grid-cols-3 2xl:gap-5 2xl:flex 2xl:justify-evenly">
 
             <!-- smg-no-job-available -->
             <div *ngIf="apiData.length === 0" class="text-center text-gray-500 text-lg col-span-full">
                 No projects available! 😞
-            </div>
-
+            </div>  
 
             <!-- main-contant-div -->
             <div class="h-auto shadow-xl rounded-[8px] p-5 bg-[#ECF0F4] cursor-pointer"
-                
                 *ngFor="let data of apiData; let i = index">
 
                 <!-- div-1 -->
@@ -42,13 +40,16 @@
                     <h1 class="flex items-center text-[1.1rem] text-[#F68C1F]"><mat-icon
                             class="me-2">check_circle_outline</mat-icon> {{ i + 1 }} - {{data.title}}</h1>
 
-                    <button matButton [matMenuTriggerFor]="menu"
-                        class="flex items-center cursor-pointer" style="color: #6F6F6F;"><mat-icon>more_vert</mat-icon></button>
+                    <button matButton [matMenuTriggerFor]="menu" class="flex items-center cursor-pointer"
+                        style="color: #6F6F6F;"><mat-icon>more_vert</mat-icon></button>
 
                     <mat-menu #menu="matMenu" class="cursor-pointer">
-                        <button mat-menu-item (click)="onUpdate(data.id)" style="color: #218B5A;" ><mat-icon style="color: #218B5A;">create</mat-icon> Edit</button>
-                        <button mat-menu-item (click)="onView(data.id)" style="color: #6777EF;" ><mat-icon style="color: #6777EF;">visibility</mat-icon> View</button>
-                        <button mat-menu-item (click)="onDelete(data.id)" style="color: #F05206;" ><mat-icon style="color: #F05206;">delete_forever</mat-icon>
+                        <button mat-menu-item (click)="onUpdate(data.id)" style="color: #218B5A;"><mat-icon
+                                style="color: #218B5A;">create</mat-icon> Edit</button>
+                        <button mat-menu-item (click)="onView(data.id)" style="color: #6777EF;"><mat-icon
+                                style="color: #6777EF;">visibility</mat-icon> View</button>
+                        <button mat-menu-item (click)="onDelete(data.id)" style="color: #F05206;"><mat-icon
+                                style="color: #F05206;">delete_forever</mat-icon>
                             Delete</button>
                     </mat-menu>
                 </div>
@@ -73,9 +74,9 @@
 
                     <p class=""><span>Deadline :</span> <span class="text-[gray] ms-3">{{data.endDate}}</span></p>
                     <p class=""><span>Client : </span> <span class="text-[gray] ms-3">{{data.client}}</span></p>
-                        </div>
+                </div>
             </div>
-        
+
         </div>
 
     </section>

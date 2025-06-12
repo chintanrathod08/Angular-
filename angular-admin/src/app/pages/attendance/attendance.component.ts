@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-attendance',
@@ -20,12 +20,15 @@ import { NgClass } from '@angular/common';
     MatTableModule,
     RouterLink,
     MatButtonModule,
-    NgClass
+    NgClass,
+    NgIf
   ]
 })
 export class AttendanceComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['employeeId', 'employeename', 'date', 'checkInTime', 'checkOutTime', 'totalWorkingHours', 'action'];
+ 
   searchText: string = '';
+  attendanceRecords: Attendance[] = [];
 
   employeeId!: number;
   employeename!: string;
@@ -39,8 +42,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
   private timerInterval: any;
   currentAttendanceId?: number;
 
-  attendanceRecords: Attendance[] = [];
-
   constructor(
     private attendanceService: AttendanceService,
     private snackBar: MatSnackBar
@@ -48,8 +49,11 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (!user?.id || !user?.name) {
+      this.showSnackBar('Login required');
+      return;
+    }
 
-    // Assign employeeId and name from logged-in user
     this.employeeId = user.id;
     this.employeename = user.name;
 
@@ -85,7 +89,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         this.currentAttendanceId = response.id;
         this.showSnackBar('Checked in successfully!');
         this.startTimer(now);
-        this.attendanceRecords.push({ ...attendanceData, id: response.id });
+        this.attendanceRecords = [...this.attendanceRecords, { ...attendanceData, id: response.id }];
       },
       error: () => this.showSnackBar('Check-in failed!')
     });
@@ -101,7 +105,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     const checkInDate = new Date(`${this.date} ${this.convertTo24Hour(this.checkInTime)}`);
     const checkOutDate = new Date(`${this.date} ${this.convertTo24Hour(checkOutFormatted)}`);
     let diffMs = checkOutDate.getTime() - checkInDate.getTime();
-
     diffMs -= 1 * 60 * 60 * 1000; // Subtract 1hr break
 
     const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
@@ -205,6 +208,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Search
   get filteredRecords(): Attendance[] {
     if (!this.searchText) return this.attendanceRecords;
     const search = this.searchText.toLowerCase();
@@ -215,6 +219,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Delete
   onDelete(id: number): void {
     if (confirm('Are you sure you want to delete this Attendance? 🗑️')) {
       this.attendanceService.deleteAttendance(id).subscribe({
