@@ -164,47 +164,43 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         const index = this.attendanceRecords.findIndex(r => r.id === this.currentAttendanceId);
         if (index !== -1) {
           this.attendanceRecords[index] = { ...updateData, id: this.currentAttendanceId };
+          // ✅ This will force Angular to re-render the updated table row
+          this.attendanceRecords = [...this.attendanceRecords];
         }
 
-        // this.showSnackBar('Checked out successfully! ✅');
-        const Toast = Swal.mixin({
+        Swal.fire({
           toast: true,
           position: "top",
+          icon: "success",
+          title: "Checked out successfully!",
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
-          didOpen: (toast) => {
+          didOpen: toast => {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
           }
-        });
-        Toast.fire({
-          icon: "success",
-          title: "Checked out successfully!"
         });
       },
       error: () => {
-        // this.showSnackBar('Check-out failed! ❌')
-        const Toast = Swal.mixin({
+        Swal.fire({
           toast: true,
           position: "top",
+          icon: "error",
+          title: "Check-out failed!",
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
-          didOpen: (toast) => {
+          didOpen: toast => {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
           }
         });
-        Toast.fire({
-          icon: "error",
-          title: "Check-out failed!"
-        });
       }
-
     });
   }
 
+  // ---------
   private startTimer(startTime: Date): void {
     this.stopTimer();
     this.timerInterval = setInterval(() => {
