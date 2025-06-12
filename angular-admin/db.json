@@ -45,6 +45,13 @@
       "password": "123456",
       "role": "admin",
       "id": 5
+    },
+    {
+      "name": "Micheal",
+      "email": "micheal@gmail.com",
+      "password": "m@123456",
+      "role": "employee",
+      "id": 6
     }
   ],
   "employees": [

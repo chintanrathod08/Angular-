@@ -61,6 +61,21 @@ export class SignupComponent {
   onSignUp(): void {
     if (this.signupForm.invalid) {
       this.error = 'Please fill all fields correctly!';
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Please fill all fields correctly!"
+      });
       return;
     }
 
@@ -68,6 +83,21 @@ export class SignupComponent {
 
     if (password !== confirmPassword) {
       this.error = 'Passwords do not match!';
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Passwords do not match!"
+      });
       return;
     }
 

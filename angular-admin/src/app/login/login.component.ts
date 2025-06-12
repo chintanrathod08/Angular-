@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
-import Swal from 'sweetalert2'; 
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -53,11 +53,41 @@ export class LoginComponent {
   onLogin(): void {
     if (this.loginForm.invalid) {
       this.error = 'Please enter valid credentials!';
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Please enter valid credentials!"
+      });
       return;
     }
 
     if (!this.selectedRole) {
       this.error = 'Please select a role before logging in!';
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "warning",
+        title: "Please select a role before logging in!"
+      });
       return;
     }
 
@@ -68,15 +98,30 @@ export class LoginComponent {
         next: employee => {
           if (employee.role !== 'employee') {
             this.error = 'You are not registered as an employee.';
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
+            });
+            Toast.fire({
+              icon: "error",
+              title: "You are not registered as an employee."
+            });
             return;
           }
           this.error = '';
-          localStorage.setItem('user', JSON.stringify({ 
-            id: employee.id, 
-            name: employee.name, 
-            role: employee.role 
+          localStorage.setItem('user', JSON.stringify({
+            id: employee.id,
+            name: employee.name,
+            role: employee.role
           }));
-          
+
           // ✅ Correct SweetAlert2 usage
           Swal.fire({
             title: "Login Successful!",
@@ -111,14 +156,14 @@ export class LoginComponent {
             });
             return;
           }
-          
+
           this.error = '';
-          localStorage.setItem('user', JSON.stringify({ 
-            id: user.id, 
-            name: user.name, 
-            role: user.role 
+          localStorage.setItem('user', JSON.stringify({
+            id: user.id,
+            name: user.name,
+            role: user.role
           }));
-          
+
           // Success alert with role-specific message
           Swal.fire({
             title: "Login Successful!",
