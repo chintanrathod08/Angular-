@@ -12,6 +12,8 @@ import { AttendanceListComponent } from './pages/attendance-list/attendance-list
 import { AddEmployeeComponent } from './pages/addemployee/addemployee.component';
 import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
 import { EmployeeprofileComponent } from './pages/employeeprofile/employeeprofile.component';
+import { TaskComponent } from './pages/task/task.component';
+import { MytaskComponent } from './pages/mytask/mytask.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,13 +28,17 @@ export const routes: Routes = [
   { path: 'projectdetails/:id', component: ProjectDetailsComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'estimate', component: EstimatesComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'addemployee', component: AddEmployeeComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
-  { path: 'employeeprofile/:id', component: EmployeeprofileComponent, canActivate: [AuthGuard], data: { role: ['admin'] } },
+  { path: 'employeeprofile/:id', component: EmployeeprofileComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
+  { path: 'task', component : TaskComponent, canActivate: [AuthGuard], data: {roles: ['admin'] } }, 
 
   // Admin + Employee
   { path: 'allproject', component: AllprojectComponent, canActivate: [AuthGuard], data: { roles: ['admin', 'employee'] } },
   { path: 'attendance', component: AttendanceComponent, canActivate: [AuthGuard], data: { roles: ['admin', 'employee'] } },
   { path: 'attendance-list', component: AttendanceListComponent, canActivate: [AuthGuard], data: { roles: ['admin', 'employee'] } },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: { roles: ['admin', 'employee'] } },
+
+  // Eployee only
+  {path: 'mytask', component: MytaskComponent, canActivate: [AuthGuard], data: { roles: ['employee'] } },
 
   { path: '**', redirectTo: 'login' }
 ];

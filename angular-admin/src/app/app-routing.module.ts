@@ -16,6 +16,8 @@ import { EmployeeprofileComponent } from './pages/employeeprofile/employeeprofil
 import { AttendanceListComponent } from './pages/attendance-list/attendance-list.component';
 
 import { AuthGuard } from './guards/auth.guard';
+import { TaskComponent } from './pages/task/task.component';
+import { MytaskComponent } from './pages/mytask/mytask.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -66,6 +68,20 @@ const routes: Routes = [
     component: AttendanceListComponent,
     canActivate: [AuthGuard],
     data: { roles: ['admin'] }
+  },
+  {
+    path: 'task',
+    component: TaskComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['admin'] }
+  },
+
+  // employee only routes
+  {
+    path: 'mytask',
+    component: MytaskComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['mytask'] }
   },
 
   // Routes accessible by admin and employee
