@@ -45,7 +45,7 @@
             <!-- table-section -->
             <div class="w-full h-auto overflow-y-auto">
 
-                <table class="overflow-x-auto table-auto w-full" style="width: 133%;">
+                <table class="overflow-x-auto table-auto w-full" style="width: 120%; text-align: center;">
 
                     <!-- No data here -->
                     <div *ngIf="epApiData.length === 0" class="w-full p-2 flex justify-center col-span-full">
@@ -59,22 +59,22 @@
 
                     <thead>
                         <tr class="h-[60px] border-b border-[gray]">
-                            <th class="text-center p-3 font-medium">No.</th>
-                            <th class="text-center p-3 font-medium">Name</th>
-                            <th class="text-center p-3 font-medium">Role</th>
-                            <th class="text-center p-3 font-medium">Department</th>
-                            <th class="text-center p-3 font-medium">Mobile</th>
-                            <th class="text-center p-3 font-medium">Joining Date</th>
-                            <th class="text-center p-3 font-medium">Email</th>
-                            <th class="text-center p-3 font-medium">Gender</th>
-                            <th class="text-center p-3 font-medium">Address</th>
-                            <th class="text-center p-3 font-medium">Action</th>
+                            <th class="p-3 font-medium">No.</th>
+                            <th class="p-3 font-medium">Name</th>
+                            <th class="p-3 font-medium">Role</th>
+                            <th class="p-3 font-medium">Department</th>
+                            <th class="p-3 font-medium">Mobile</th>
+                            <th class="p-3 font-medium">Joining Date</th>
+                            <th class="p-3 font-medium">Email</th>
+                            <th class="p-3 font-medium">Gender</th>
+                            <th class="p-3 font-medium">Address</th>
+                            <th class="p-3 font-medium">Action</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         <!--------------->
-                        <tr *ngFor="let data of epApiData && filteredRecords , let i = index" style="text-align: start;"
+                        <tr *ngFor="let data of epApiData && filteredRecords , let i = index" 
                             class="w-full border-b border-dashed border-[gray] text-[#808080] hover:bg-[#DAE1F3]  cursor-pointer">
 
                             <td class="flex justify-center items-center p-2.5">{{ i + 1 }}</td>
@@ -87,7 +87,7 @@
                                 {{ data.mobile }}
                             </td>
 
-                            <td class="p-2.5">{{ data.joindate | date: 'dd mmm yyyy' }}</td>
+                            <td class="p-2.5">{{ data.joindate }}</td>
 
                             <td class="p-2.5">
                                 <mat-icon class="align-middle" style="color: #F05206; font-size: 23px;">
@@ -100,7 +100,7 @@
                                 {{ data.gender }}
                             </td>
 
-                            <td style="padding-left: 3%; padding-right: 3%; text-align: center;">
+                            <td class="p-2.5">
                                 <mat-icon class="align-middle" style="color: #2196F3;font-size: 19px;">room</mat-icon>
                                 {{ data.address }}
                             </td>

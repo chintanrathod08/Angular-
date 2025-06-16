@@ -3,16 +3,38 @@
   <app-header (sidebarToggle)="drawer.toggle()"></app-header>
 
   <mat-drawer-container class="example-container" autosize>
-
     <mat-drawer #drawer class="example-sidenav" [mode]="drawerMode" [opened]="isSideOpen"
-      [style.width]="drawerMode === 'over' ? '100%' : '15%'" style="font-family: poppins, sans-serif;">
-
+      [style.width]="drawerMode === 'over' ? '100%' : '15%'" style="border-radius: 0px;">
       <div class="bg-white h-full">
-
         <mat-nav-list role="list">
 
-          <!-- role -->
+          <!-- Role Display -->
           <div class="px-4 py-5 flex flex-col items-center gap-2 border-b border-gray-200 cursor-pointer">
+
+            <!-- Profile Image Section -->
+            <div class="w-full flex flex-col items-center py-4 relative group cursor-pointer">
+              <!-- Employee (editable image) -->
+              <label *ngIf="role === 'employee'" for="profileImageInput"
+                class="relative w-20 h-20 rounded-full overflow-hidden border border-gray-300 group-hover:opacity-80">
+                <img [src]="profileImageUrl || defaultImageUrl" alt="Profile" class="w-full h-full object-cover" />
+                <div
+                  class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-200">
+                  <mat-icon class="text-white">edit</mat-icon>
+                </div>
+              </label>
+
+              <!-- Admin (non-editable image) -->
+              <div *ngIf="role === 'admin'"
+                class="relative w-20 h-20 rounded-full overflow-hidden border border-gray-300">
+                <img [src]="profileImageUrl || defaultImageUrl" alt="Profile" class="w-full h-full object-cover" />
+              </div>
+
+              <!-- Image input (only for employee) -->
+              <input *ngIf="role === 'employee'" type="file" id="profileImageInput" accept="image/*"
+                (change)="onImageSelected($event)" hidden />
+            </div>
+
+            <!-- Username and Role -->
             <div class="text-md font-semibold text-[#6777EF] capitalize">{{ username }}</div>
             <div class="text-xs text-[#888] capitalize">{{ role }}</div>
           </div>
@@ -27,7 +49,6 @@
 
           <!-- Projects (Admin Only) -->
           <ng-container *ngIf="role === 'admin'">
-
             <mat-list-item class="px-3 cursor-pointer" (click)="toggleProjectMenu()">
               <div class="flex items-center justify-between w-full text-[#767676]">
                 <div class="flex items-center gap-3">
@@ -39,46 +60,47 @@
             </mat-list-item>
 
             <ng-container *ngIf="isProjectMenuOpen">
-              <mat-list-item class="pl-10">
-                <a routerLink="/addproject" class="flex items-center gap-3 text-[#767676]">
-                  <mat-icon>create_new_folder</mat-icon>
-                  <span>Add Project</span>
-                </a>
+              <mat-list-item>
+                <div class="ml-6 w-full">
+                  <a routerLink="/addproject" class="flex items-center gap-2 text-sm text-[#888]">
+                    <mat-icon class="text-[18px]">create_new_folder</mat-icon>
+                    <span>Add Project</span>
+                  </a>
+                </div>
               </mat-list-item>
 
-              <mat-list-item class="pl-10">
-                <a routerLink="/allproject" class="flex items-center gap-3 text-[#767676]">
-                  <mat-icon>folder</mat-icon>
-                  <span>All Projects</span>
-                </a>
+              <mat-list-item>
+                <div class="ml-6 w-full">
+                  <a routerLink="/allproject" class="flex items-center gap-2 text-sm text-[#888]">
+                    <mat-icon class="text-[18px]">folder</mat-icon>
+                    <span>All Projects</span>
+                  </a>
+                </div>
               </mat-list-item>
 
-              <mat-list-item class="pl-10">
-                <a routerLink="/estimate" class="flex items-center gap-3 text-[#767676]">
-                  <mat-icon>library_books</mat-icon>
-                  <span>Estimate</span>
-                </a>
+              <mat-list-item>
+                <div class="ml-6 w-full">
+                  <a routerLink="/estimate" class="flex items-center gap-2 text-sm text-[#888]">
+                    <mat-icon class="text-[18px]">library_books</mat-icon>
+                    <span>Estimate</span>
+                  </a>
+                </div>
               </mat-list-item>
-
             </ng-container>
-
           </ng-container>
 
           <!-- Projects (Employee Only) -->
           <ng-container *ngIf="role === 'employee'">
-
             <mat-list-item class="px-3">
               <a routerLink="/allproject" class="flex items-center gap-3 text-[#767676]">
                 <mat-icon>folder</mat-icon>
                 <span>All Projects</span>
               </a>
             </mat-list-item>
-
           </ng-container>
 
           <!-- Employee Section (Admin Only) -->
           <ng-container *ngIf="role === 'admin'">
-
             <mat-list-item class="px-3 cursor-pointer" (click)="toggleEmployeeMenu()">
               <div class="flex items-center justify-between w-full text-[#767676]">
                 <div class="flex items-center gap-3">
@@ -90,17 +112,22 @@
             </mat-list-item>
 
             <ng-container *ngIf="isEmployeeMenuOpen">
-              <mat-list-item class="pl-10">
-                <a routerLink="/addemployee" class="flex items-center gap-3 text-[#767676]">
-                  <mat-icon>group_add</mat-icon>
-                  <span>Add Employee</span>
-                </a>
+              <mat-list-item>
+                <div class="ml-6 w-full">
+                  <a routerLink="/addemployee" class="flex items-center gap-2 text-sm text-[#888]">
+                    <mat-icon class="text-[18px]">group_add</mat-icon>
+                    <span>Add Employee</span>
+                  </a>
+                </div>
               </mat-list-item>
-              <mat-list-item class="pl-10">
-                <a routerLink="/allemployee" class="flex items-center gap-3 text-[#767676]">
-                  <mat-icon>groups</mat-icon>
-                  <span>All Employees</span>
-                </a>
+
+              <mat-list-item>
+                <div class="ml-6 w-full">
+                  <a routerLink="/allemployee" class="flex items-center gap-2 text-sm text-[#888]">
+                    <mat-icon class="text-[18px]">groups</mat-icon>
+                    <span>All Employees</span>
+                  </a>
+                </div>
               </mat-list-item>
             </ng-container>
           </ng-container>
@@ -113,16 +140,6 @@
             </a>
           </mat-list-item>
 
-          <!-- Attendance List (Admin Only) -->
-          <ng-container *ngIf="role === 'admin'">
-            <mat-list-item class="px-3">
-              <a routerLink="/attendance-list" class="flex items-center gap-3 text-[#767676]">
-                <mat-icon>event_note</mat-icon>
-                <span>Attendance List</span>
-              </a>
-            </mat-list-item>
-          </ng-container>
-
         </mat-nav-list>
       </div>
     </mat-drawer>
@@ -131,7 +148,6 @@
       <router-outlet></router-outlet>
     </mat-drawer-content>
   </mat-drawer-container>
-
 </section>
 
 <!-- Login/Signup Layout -->

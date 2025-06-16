@@ -35,7 +35,7 @@ Chart.register(
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
-  imports: [MatCardModule, MatIcon, MatProgressBarModule, TableComponent, BaseChartDirective],
+  imports: [MatCardModule, MatIcon, MatProgressBarModule, TableComponent, BaseChartDirective,  ],
 })
 export class HomeComponent {
   public barChartLegend = true;

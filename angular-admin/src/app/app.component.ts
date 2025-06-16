@@ -1,4 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  Inject,
+  PLATFORM_ID
+} from '@angular/core';
 import {
   Router,
   NavigationEnd,
@@ -11,7 +17,7 @@ import {
   Breakpoints,
   LayoutModule
 } from '@angular/cdk/layout';
-import { NgIf } from '@angular/common';
+import { NgIf, isPlatformBrowser } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,41 +42,44 @@ import { filter } from 'rxjs';
     MatIconModule,
     MatButtonModule,
     HeaderComponent
-  ],
+  ]
 })
 export class AppComponent implements OnInit {
   showLayout = true;
-  isSideOpen: boolean = true;
+  isSideOpen = true;
   drawerMode: 'side' | 'over' = 'side';
-  role: string = '';
-  username: string = '';
+  role = '';
+  username = '';
+  email = '';
   isProjectMenuOpen = false;
   isEmployeeMenuOpen = false;
+  defaultImageUrl = 'https://via.placeholder.com/150';
+  profileImageUrl: string | null = null;
 
   breakpointObserver = inject(BreakpointObserver);
 
   constructor(
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    // Layout hide/show logic on route change
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         const path = event.urlAfterRedirects;
         this.showLayout = !(path === '/login' || path === '/signup');
-
-        // Auto-close sidenav on small screens
         if (this.drawerMode === 'over') this.isSideOpen = false;
       });
   }
 
   ngOnInit(): void {
-    // Subscribe to current user data
     this.auth.user$.subscribe(user => {
       if (!user) return;
 
       this.role = user.role || '';
 
+      // Set username
       if ('name' in user && user.name) {
         this.username = user.name;
       } else if ('firstName' in user && 'lastName' in user) {
@@ -78,15 +87,59 @@ export class AppComponent implements OnInit {
       } else {
         this.username = 'User';
       }
+
+      // Profile image logic
+      if ('image' in user && user.image) {
+        this.profileImageUrl = user.image;
+
+        if (isPlatformBrowser(this.platformId) && this.role === 'employee') {
+          localStorage.setItem('profileImage', this.profileImageUrl);
+        }
+      } else if (this.role === 'admin') {
+        // ✅ Hardcoded image for admin if no backend image
+        this.profileImageUrl = 'https://www.pngmart.com/files/21/Admin-Profile-Vector-PNG-File.png'; // any static image URL
+      } else if (isPlatformBrowser(this.platformId) && this.role === 'employee') {
+        const savedImage = localStorage.getItem('profileImage');
+        if (savedImage) {
+          this.profileImageUrl = savedImage;
+        } else {
+          this.profileImageUrl = null;
+        }
+      }
     });
 
-    // Adjust sidebar layout based on screen size
+    // Responsive sidenav
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe(result => {
         this.drawerMode = result.matches ? 'over' : 'side';
         this.isSideOpen = !result.matches;
       });
+  }
+
+
+  // Optional image upload handler for employee only
+  onImageSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.profileImageUrl = reader.result as string;
+
+        // Save ONLY for Employee
+        if (isPlatformBrowser(this.platformId) && this.role === 'employee') {
+          localStorage.setItem('profileImage', this.profileImageUrl);
+        }
+
+        // Update local AuthService user image (temporary session)
+        const user = this.auth.getUser();
+        if (user && 'image' in user) {
+          user.image = this.profileImageUrl;
+          (this.auth as any)['safeSetUser']?.(user); // Optional helper
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   toggleProjectMenu(): void {

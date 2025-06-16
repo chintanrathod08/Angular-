@@ -9,13 +9,13 @@ export interface Employees {
   designation: string;
   address: string;
   email: string;
-  dob: string;
+  dob: Date | string;
   education: string;
-  joindate: string;
+  joindate: Date | string;
   skills: string;
   experience: string;
   location: string;
   about: string;
-  file: string;
+  file?: string;
   role: string;
 }

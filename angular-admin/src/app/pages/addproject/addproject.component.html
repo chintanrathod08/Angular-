@@ -1,190 +1,171 @@
 <section class="w-full min-h-[100vh] flex justify-center pt-5 pb-7">
+  <section class="w-[96%]">
+    <!-- Section -1 -->
+    <div class="w-full flex flex-col md:flex-row md:justify-between md:items-center mb-5">
+      <div class="flex items-center mb-4 md:mb-0">
+        <button
+          routerLink="/allproject"
+          class="p-2 text-[12px] md:text-[16px] text-white cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"
+        >
+          <mat-icon class="me-1">keyboard_backspace</mat-icon>
+          Go back
+        </button>
+        <h1 class="md:text-[1.3rem] text-[#767676] ms-3">Add Project</h1>
+      </div>
+      <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100 items-center">
+        <mat-icon>home</mat-icon>
+        <mat-icon>chevron_right</mat-icon>
+        <span class="ps-2">Projects</span>
+        <mat-icon>chevron_right</mat-icon>
+        <span class="ps-2">Add Projects</span>
+      </div>
+    </div>
 
-    <section class="w-[96%]">
+    <!-- Section -2 -->
+    <section class="w-full bg-white p-6 rounded-xl shadow-xl">
+      <h2 class="text-[#5B626B] mb-6 font-semibold">Add Projects</h2>
 
-        <!--  Section -1  -->
-        <div class="w-full md:grid md:grid-cols-2 md:flex md:justify-between  md:items-center md:mb-5">
+      <form class="space-y-6" [formGroup]="addProjectForm" (ngSubmit)="onSubmit()">
+        <!-- Grid Fields -->
+        <div class="w-full md:grid md:grid-cols-2 gap-6">
+          <!-- Project Title -->
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Project Title</mat-label>
+            <input matInput placeholder="Enter project title" formControlName="title" required />
+            <mat-error *ngIf="addProjectForm.get('title')?.hasError('required')">
+              Project title is required
+            </mat-error>
+          </mat-form-field>
 
-            <div class="flex items-center">
-                <button routerLink="/allproject"
-                    class="p-2 text-[12px] text-[white] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon
-                        class="me-1">keyboard_backspace</mat-icon>
-                    Go back</button>
-                <h1 class="md:text-[1.3rem] text-[#767676] ms-3">Add Project</h1>
-            </div>
+          <!-- Department -->
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Department</mat-label>
+            <mat-select formControlName="department" required>
+              <mat-option *ngFor="let dept of ['Designing','Development','Testing','Marketing']" [value]="dept">
+                {{ dept }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addProjectForm.get('department')?.hasError('required')">
+              Department is required
+            </mat-error>
+          </mat-form-field>
 
-            <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100">
-                <mat-icon>home</mat-icon>
-                <mat-icon>chevron_right</mat-icon>
-                <span class="ps-2">Projects</span>
-                <mat-icon>chevron_right</mat-icon>
-                <span class="ps-2">Add Projects</span>
-            </div>
+          <!-- Priority -->
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Project Priority</mat-label>
+            <mat-select formControlName="priority" required>
+              <mat-option *ngFor="let priority of priorityList" [value]="priority">
+                {{ priority }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addProjectForm.get('priority')?.hasError('required')">
+              Project Priority is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Client -->
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Client</mat-label>
+            <input matInput placeholder="Client Name" formControlName="client" required />
+            <mat-error *ngIf="addProjectForm.get('client')?.hasError('required')">
+              Client name is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Price -->
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Price</mat-label>
+            <input matInput type="number" placeholder="₹" formControlName="price" required />
+            <mat-error *ngIf="addProjectForm.get('price')?.hasError('required')">
+              Price is required
+            </mat-error>
+            <mat-error *ngIf="addProjectForm.get('price')?.hasError('min')">
+              Price must be positive
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Start Date -->
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate" required />
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+            <mat-error *ngIf="addProjectForm.get('startDate')?.hasError('required')">
+              Start date is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- End Date -->
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate" required />
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+            <mat-error *ngIf="addProjectForm.get('endDate')?.hasError('required')">
+              End date is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Leader -->
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Leader</mat-label>
+            <mat-select formControlName="leader" required>
+              <mat-option *ngFor="let leader of ['Paras sir','Ravi sir','Urmila Madam','Devangi Madam']" [value]="leader">
+                {{ leader }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addProjectForm.get('leader')?.hasError('required')">
+              Leader is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Team -->
+          <mat-form-field appearance="outline" class="col-span-2" style="width: 100%">
+            <mat-label>Team</mat-label>
+            <mat-select formControlName="team" required>
+              <mat-option *ngFor="let team of ['Example 1','Example 2','Example 3','Example 4']" [value]="team">
+                {{ team }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addProjectForm.get('team')?.hasError('required')">
+              Team is required
+            </mat-error>
+          </mat-form-field>
         </div>
 
-        <!-- Section -2  -->
-        <section class="w-full bg-white p-6 rounded-xl shadow-xl">
-            <h2 class="text-[#5B626B] mb-6">Add Projects</h2>
+        <!-- Work Status -->
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Work Status:</label>
+          <mat-radio-group formControlName="status" class="w-full flex flex-wrap gap-4">
+            <mat-radio-button *ngFor="let status of statusList" [value]="status">
+              {{ status }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
 
+        <!-- Description -->
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Description:</label>
+          <textarea
+            rows="6"
+            placeholder="Type here..."
+            formControlName="description"
+            class="w-full border p-4 rounded-md"
+          ></textarea>
+        </div>
 
-            <!-- add-project-form -->
+        <!-- Upload Image (You can handle in TS via change event) -->
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Upload Image</label>
+          <input type="file" class="border border-dashed p-4 w-full rounded-md" />
+        </div>
 
-            <form class="space-y-6" [formGroup]="addProjectForm" (ngSubmit)="onSubmit()">
-
-                <div class="w-full md:grid md:grid-cols-2 gap-6">
-
-                    <!-- project-title -->
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-label>Project Title</mat-label>
-                        <input matInput placeholder="Enter project title" required formControlName="title" />
-                        <mat-error *ngIf="addProjectForm.get('title')?.hasError('required')">
-                            Project title is required
-                        </mat-error>
-                    </mat-form-field>
-
-                    <!-- Department -->
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-label>Department</mat-label>
-                        <mat-select required formControlName="department">
-                            <mat-option value="Designing">Designing</mat-option>
-                            <mat-option value="Development">Development</mat-option>
-                            <mat-option value="Testing">Testing</mat-option>
-                            <mat-option value="Marketing">Marketing</mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="addProjectForm.get('department')?.hasError('required')">
-                            Department is required
-                        </mat-error>
-                    </mat-form-field>
-
-                    <!-- priority -->
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-label>Project Priority</mat-label>
-                        <mat-select required formControlName="priority">
-
-                            <mat-option *ngFor="let priority of priorityList" [value]="priority"
-                                class="flex items-center gap-2">
-                                <mat-icon>{{priority}}</mat-icon>
-                                {{ priority }}
-                            </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="addProjectForm.get('priority')?.hasError('required')">
-                            Project Priority is required
-                        </mat-error>
-                    </mat-form-field>
-
-                    <!-- client -->
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-label>Client</mat-label>
-                        <input matInput placeholder="Client Name" required formControlName="client" />
-                        <mat-error *ngIf="addProjectForm.get('client')?.hasError('required')">
-                            Client name is required
-                        </mat-error>
-                    </mat-form-field>
-
-                    <!-- price -->
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-label>Price</mat-label>
-                        <input matInput type="number" placeholder="$" required formControlName="price" />
-                        <mat-error *ngIf="addProjectForm.get('price')?.hasError('required')">
-                            Project Price is required
-                        </mat-error>
-                    </mat-form-field>
-
-                    <!-- start-date -->
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-label>Project Start Date</mat-label>
-                        <input matInput [matDatepicker]="startPicker" required formControlName="startDate" />
-                        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-                        <mat-datepicker #startPicker></mat-datepicker>
-                        <mat-error *ngIf="addProjectForm.get('startDate')?.hasError('required')">
-                            Project start date is required
-                        </mat-error>
-                    </mat-form-field>
-
-                    <!-- end-date -->
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-label>Project End Date</mat-label>
-                        <input matInput [matDatepicker]="endPicker" required formControlName="endDate" />
-                        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-                        <mat-datepicker #endPicker></mat-datepicker>
-                        <mat-error *ngIf="addProjectForm.get('endDate')?.hasError('required')">
-                            Project end date is required
-                        </mat-error>
-                    </mat-form-field>
-
-                    <!-- leader -->
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-label>Leader</mat-label>
-                        <mat-select required formControlName="leader">
-                            <mat-option value="Paras sir">Paras sir</mat-option>
-                            <mat-option value="Ravi sir">Ravi sir</mat-option>
-                            <mat-option value="Urmila Madam">Urmila Madam</mat-option>
-                            <mat-option value="Devangi Madam">Devangi Madam</mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="addProjectForm.get('leader')?.hasError('required')">
-                            Project's leader name is required
-                        </mat-error>
-                    </mat-form-field>
-
-                    <!-- team -->
-                    <mat-form-field appearance="outline" class="col-span-2" style="width: 100%;">
-                        <mat-label>Team</mat-label>
-                        <mat-select required formControlName="team">
-                            <mat-option value="Example 1">Example 1</mat-option>
-                            <mat-option value="Example 2">Example 2</mat-option>
-                            <mat-option value="Example 3">Example 3</mat-option>
-                            <mat-option value="Example 4">Example 4</mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="addProjectForm.get('team')?.hasError('required')">
-                            Project's team name is required
-                        </mat-error>
-                    </mat-form-field>
-
-
-                </div>
-
-                <!-- Work Status -->
-                <div>
-                    <label class="block text-gray-700 font-medium mb-2">Work Status :</label>
-
-                    <mat-radio-group formControlName="status" class="w-full flex flex-wrap gap-4">
-
-                        <mat-radio-button *ngFor="let status of statusList" [value]="status">
-                            {{ status }}
-                        </mat-radio-button>
-                        <mat-error *ngIf="addProjectForm.get('status')?.hasError('required')">
-                            Project status is required
-                        </mat-error>
-                    </mat-radio-group>
-
-                </div>
-
-                <!-- Description -->
-                <div>
-                    <label class="block text-gray-700 font-medium mb-2">Descriptions:</label>
-                    <textarea rows="6" placeholder="Type here..." formControlName="description"
-                        class="w-full border p-4 rounded-md"></textarea>
-                    <mat-error *ngIf="addProjectForm.get('description')?.hasError('required')">
-                        Project's description name is required
-                    </mat-error>
-                </div>
-
-                <!-- Upload Image -->
-                <div>
-                    <label class="block text-gray-700 font-medium mb-2">Upload Image</label>
-                    <input type="file" class="border border-dashed p-4 w-full rounded-md" formControlName="" />
-                </div>
-
-                <!-- Buttons -->
-                <div class="flex justify-end gap-4">
-                    <button type="submit" mat-flat-button color="primary">Submit</button>
-                    <button mat-flat-button color="warn" (click)="onCancel()">Cancel</button>
-                </div>
-
-            </form>
-
-        </section>
-
+        <!-- Action Buttons -->
+        <div class="flex justify-end gap-4">
+          <button type="submit" mat-flat-button color="primary">Submit</button>
+          <button type="button" mat-flat-button color="warn" (click)="onCancel()">Cancel</button>
+        </div>
+      </form>
     </section>
-
+  </section>
 </section>

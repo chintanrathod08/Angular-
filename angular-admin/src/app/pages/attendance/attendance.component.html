@@ -1,14 +1,16 @@
-<section class="w-full min-h-[100vh] flex justify-center pt-5 pb-7">
+<section class="w-full min-h-[100vh] flex justify-center items-start pt-5 pb-7">
+
     <section class="w-[96%]">
 
+
         <!-- section-1 -->
-        <div class="w-full md:grid md:grid-cols-2 md:flex md:justify-between md:items-center md:mb-5">
+        <div class="w-full md:grid md:grid-cols-2  md:flex  md:justify-between md:items-center md:mb-5">
+
             <div class="flex items-center">
                 <button routerLink="/home"
-                    class="p-2 text-[12px] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center">
-                    <mat-icon class="me-1">keyboard_backspace</mat-icon>
-                    Go back
-                </button>
+                    class="p-2 text-[12px] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"><mat-icon
+                        class="me-1">keyboard_backspace</mat-icon>
+                    Go back</button>
                 <h1 class="md:text-[1.3rem] text-[#767676] ms-3">Employee Attendance</h1>
             </div>
 
@@ -19,130 +21,111 @@
                 <mat-icon>chevron_right</mat-icon>
                 <span class="ps-2">Employee Attendance</span>
             </div>
+
         </div>
 
-        <!-- section-2 -->
-        <section class="w-full h-auto bg-white p-3 md:p-6 rounded-xl shadow-xl">
 
-            <!-- Header Section -->
-            <div class="w-full h-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-5">
-                <h2 class="text-[#5B626B] text-lg mb-2 md:mb-0">Employee Attendance</h2>
+        <!-- Search & Check-in Section -->
+        <div class="w-[96%] flex justify-between items-center mb-4 flex-wrap gap-4">
+            <input type="text" [(ngModel)]="searchText" placeholder="Search by name, ID, or date"
+                class="w-[250px] h-[40px] px-3 text-[gray] rounded-md border border-gray-300 focus:outline-none" />
 
-                <div class="flex items-center gap-10">
-                    <div
-                        class="flex items-center text-[#6777EF] text-[18px] font-semibold bg-[#DAE1F3] p-1.5 px-2 rounded-md">
-                        <mat-icon class="mr-1" style="color: #6777EF;">timer</mat-icon>
-                        {{ timerDisplay }}
-                    </div>
+            <div class="flex gap-3 items-center">
 
-                    <button (click)="toggleAttendance()"
-                        [ngClass]="{'bg-green-600 hover:bg-green-700' : !isCheckedIn, 'bg-red-600 hover:bg-red-700' : isCheckedIn }"
-                        class="p-1.5 text-white bg-[#6777EF] rounded-lg shadow hover:bg-[#5564c3] transition-all cursor-pointer flex justify-center gap-1">
-                        <mat-icon>{{ isCheckedIn ? 'not_interested' : 'check_circle_outline' }}</mat-icon>
-                        {{ isCheckedIn ? ' Check Out' : ' Check In' }}
+                <span *ngIf="isCheckedIn" class="text-md bg-[#6777EF] text-[white] px-3 py-2 rounded-md shadow-xl ">
+                    Timer: {{ timerDisplay }}
+                </span>
+
+                <button (click)="toggleAttendance()" [ngClass]="{
+                'bg-green-600 hover:bg-green-700 text-[white]': !isCheckedIn,
+                'bg-red-600 hover:bg-red-700 text-white': isCheckedIn
+                 }" class="flex items-center gap-2 px-4 py-2 rounded-md transition ms-3 shadow-xl">
+                    <mat-icon>
+                        {{ isCheckedIn ? 'not_interested' : 'check_circle_outline' }}
+                    </mat-icon>
+                    {{ isCheckedIn ? 'Check Out' : 'Check In' }}
+                </button>
+
+            </div>
+        </div>
+
+
+
+        <!-- Records Count -->
+        <div class="w-[96%] mb-4 flex justify-between items-center text-sm text-gray-600">
+            <div>Total Records: {{ filteredRecords.length }}</div>
+            <div *ngIf="todaySessionsCount > 0">
+                Today Sessions: {{ todaySessionsCount }} |
+                Working Hours: {{ todayTotalWorkingHours }}
+            </div>
+        </div>
+
+        <!-- Attendance Table -->
+        <table *ngIf="filteredRecords.length > 0" mat-table [dataSource]="filteredRecords"
+            class="mat-elevation-z8 w-full shadow-xl" style="background-color: white;" >
+
+            <!-- Columns -->
+            <ng-container matColumnDef="employeeId">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Employee ID</th>
+                <td mat-cell *matCellDef="let element" class="text-center">{{ element.employeeId }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="employeename">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Employee Name</th>
+                <td mat-cell *matCellDef="let element" class="text-center text-[#6777EF]">
+                    {{ element.employeename }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+                <td mat-cell *matCellDef="let element" class="text-center">{{ element.date }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="checkInTime">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Check-In</th>
+                <td mat-cell *matCellDef="let element" class="text-center text-green-600">
+                    {{ element.checkInTime }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="checkOutTime">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Check-Out</th>
+                <td mat-cell *matCellDef="let element" class="text-center text-red-500">
+                    {{ element.checkOutTime || '-' }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="totalWorkingHours">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Working Hours</th>
+                <td mat-cell *matCellDef="let element" class="text-center text-orange-500">
+                    {{ element.totalWorkingHours || '' }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Action</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                    <button (click)="onDelete(element.id)"
+                        class="w-[35px] h-[35px] rounded-full hover:bg-gray-200 cursor-pointer">
+                        <mat-icon style="color: #FB2C3C;">delete_forever</mat-icon>
                     </button>
+                </td>
+            </ng-container>
 
-                </div>
-            </div>
+            <!-- Table Rows -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" [ngClass]="{
+        'text-green-600 font-semibold': !row.checkOutTime,
+        'text-red-600': row.checkOutTime
+      }" class="border-b border-dashed cursor-pointer"></tr>
+        </table>
 
-            <!-- Filter Bar -->
-            <div
-                class="w-full h-auto bg-[#DAE1F3] p-5 md:flex-row md:items-center flex flex-col items-start rounded-tl-xl rounded-tr-xl mb-3">
-                <h1 class="text-[1.2rem] text-[gray]">Estimate</h1>
-
-                <div
-                    class="md:ms-5 mt-3 md:mt-0 bg-[white] rounded-[10px] flex justify-center items-center text-[gray]">
-                    <mat-icon class="ms-1">search</mat-icon>
-                    <input type="text" class="w-[200px] h-[40px] rounded-[10px] ps-2" placeholder="Search here..."
-                        [(ngModel)]="searchText" style="outline-width: 0px;">
-                </div>
-
-            </div>
-
-
-
-            <!-- Table -->
-            <!-- Table Section -->
-            <div class="w-full h-auto overflow-x-auto">
-
-                <!--  Show message if no records at all -->
-                <div *ngIf="attendanceRecords.length === 0" class="w-full p-2 flex justify-center">
-                    No employee attendance data available! 😞
-                </div>
-
-                <!-- Show message if search has no match -->
-                <div *ngIf="attendanceRecords.length > 0 && filteredRecords.length === 0"
-                    class="w-full p-2 flex justify-center">
-                    No matching employee found! 😞
-                </div>
-
-                <!-- ✅ Table only visible when data exists -->
-                <table *ngIf="filteredRecords.length > 0" mat-table [dataSource]="filteredRecords"
-                    class="mat-elevation-z8 w-full">
-
-                    <!-- Columns -->
-
-                    <ng-container matColumnDef="employeeId">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Employee ID</th>
-                        <td mat-cell *matCellDef="let element" class="text-center">{{ element.employeeId }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="employeename">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Employee Name</th>
-                        <td mat-cell *matCellDef="let element" class="text-center text-[#6777EF]">
-                            {{ element.employeename }}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="date">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
-                        <td mat-cell *matCellDef="let element" class="text-center">{{ element.date }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="checkInTime">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Check-In</th>
-                        <td mat-cell *matCellDef="let element" class="text-center text-green-600">
-                            {{ element.checkInTime }}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="checkOutTime">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Check-Out</th>
-                        <td mat-cell *matCellDef="let element" class="text-center text-red-500">
-                            {{ element.checkOutTime || '-' }}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="totalWorkingHours">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Working Hours</th>
-                        <td mat-cell *matCellDef="let element" class="text-center text-orange-500">
-                            {{ element.totalWorkingHours || '-' }}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="action">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">Action</th>
-                        <td mat-cell *matCellDef="let element" class="text-center">
-                            <button (click)="onDelete(element.id)"
-                                class="w-[35px] h-[35px] rounded-full hover:bg-[#dddddd] cursor-pointer">
-                                <mat-icon style="color: #F05206">delete_forever</mat-icon>
-                            </button>
-                        </td>
-                    </ng-container>
-
-                    <!-- Table rows -->
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{
-                     'text-green-600 font-semibold': !row.checkOutTime,
-                     'text-red-600': row.checkOutTime
-                     }" class="border-b border-dashed cursor-pointer">
-                    </tr>
-
-                </table>
-            </div>
-
-        </section>
+        <div *ngIf="filteredRecords.length === 0" class="text-gray-500 mt-10">
+            No attendance records found.
+        </div>
 
     </section>
+
 
 </section>

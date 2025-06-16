@@ -76,6 +76,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     const checkInFormatted = this.formatTime(now);
     this.checkInTime = checkInFormatted;
 
+    // ✅ Always create a new entry for each check-in
     const attendanceData: Attendance = {
       employeeId: this.employeeId,
       employeename: this.employeename,
@@ -89,41 +90,28 @@ export class AttendanceComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.isCheckedIn = true;
         this.currentAttendanceId = response.id;
-        // this.showSnackBar('Checked in successfully!');
-        const Toast = Swal.mixin({
+
+        Swal.fire({
           toast: true,
           position: "top",
+          icon: "success",
+          title: "Checked in successfully!",
           showConfirmButton: false,
           timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          }
+          timerProgressBar: true
         });
-        Toast.fire({
-          icon: "success",
-          title: "Checked in successfully!"
-        });
+
         this.startTimer(now);
         this.attendanceRecords = [...this.attendanceRecords, { ...attendanceData, id: response.id }];
       },
       error: () => {
-        // this.showSnackBar('Check-in failed!')
-        const Toast = Swal.mixin({
+        Swal.fire({
           toast: true,
           position: "top",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          }
-        });
-        Toast.fire({
           icon: "error",
-          title: "Check-in failed!"
+          title: "Check-in failed!",
+          showConfirmButton: false,
+          timer: 3000
         });
       }
     });
@@ -139,12 +127,21 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
     const checkInDate = new Date(`${this.date} ${this.convertTo24Hour(this.checkInTime)}`);
     const checkOutDate = new Date(`${this.date} ${this.convertTo24Hour(checkOutFormatted)}`);
+
     let diffMs = checkOutDate.getTime() - checkInDate.getTime();
-    diffMs -= 1 * 60 * 60 * 1000; // Subtract 1hr break
+    const breakMs = 1 * 60 * 60 * 1000;
+
+    if (diffMs > breakMs) {
+      diffMs -= breakMs;
+    }
 
     const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
     const totalMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
     const totalWorkingHours = `${totalHours.toString().padStart(2, '0')}:${totalMinutes.toString().padStart(2, '0')}`;
+
+    const hoursText = totalHours > 0 ? `${totalHours} hour${totalHours > 1 ? 's' : ''}` : '';
+    const minutesText = totalMinutes > 0 ? `${totalMinutes} minute${totalMinutes > 1 ? 's' : ''}` : '';
+    const totalWorkingText = [hoursText, minutesText].filter(Boolean).join(' ') || '0 minutes';
 
     const updateData: Attendance = {
       employeeId: this.employeeId,
@@ -161,20 +158,31 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         this.isCheckedIn = false;
         this.stopTimer();
 
+        // ✅ Update existing record in the array
+        // Update local record before clearing ID
         const index = this.attendanceRecords.findIndex(r => r.id === this.currentAttendanceId);
         if (index !== -1) {
           this.attendanceRecords[index] = { ...updateData, id: this.currentAttendanceId };
-          // ✅ This will force Angular to re-render the updated table row
-          this.attendanceRecords = [...this.attendanceRecords];
+          this.attendanceRecords = [...this.attendanceRecords]; // Force re-render
         }
+
+        this.totalWorkingHours = totalWorkingHours;
+        this.isCheckedIn = false;
+        this.stopTimer();
+        this.currentAttendanceId = undefined;
+
+
+        // ✅ Then clear the ID
+        this.currentAttendanceId = undefined;
 
         Swal.fire({
           toast: true,
           position: "top",
           icon: "success",
-          title: "Checked out successfully!",
+          title: `Checked out successfully!`,
+          text: `Session: ${totalWorkingText} | Today Total: ${this.calculateTodayTotalHours()}`,
           showConfirmButton: false,
-          timer: 3000,
+          timer: 5000,
           timerProgressBar: true,
           didOpen: toast => {
             toast.onmouseenter = Swal.stopTimer;
@@ -198,6 +206,33 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+
+  // ✅ Calculate total working hours for today from all sessions
+  private calculateTodayTotalHours(): string {
+    const todayRecords = this.attendanceRecords.filter(record =>
+      record.date === this.date &&
+      record.employeeId === this.employeeId &&
+      record.checkOutTime &&
+      record.totalWorkingHours
+    );
+
+    let totalMinutes = 0;
+
+    todayRecords.forEach(record => {
+      if (record.totalWorkingHours) {
+        const [hours, minutes] = record.totalWorkingHours.split(':').map(Number);
+        totalMinutes += (hours * 60) + minutes;
+      }
+    });
+
+    const totalHours = Math.floor(totalMinutes / 60);
+    const remainingMinutes = totalMinutes % 60;
+
+    const hoursText = totalHours > 0 ? `${totalHours} hour${totalHours > 1 ? 's' : ''}` : '';
+    const minutesText = remainingMinutes > 0 ? `${remainingMinutes} minute${remainingMinutes > 1 ? 's' : ''}` : '';
+    return [hoursText, minutesText].filter(Boolean).join(' ') || '0 minutes';
   }
 
   // ---------
@@ -252,18 +287,30 @@ export class AttendanceComponent implements OnInit, OnDestroy {
   checkTodayAttendance(): void {
     this.attendanceService.getTodayByEmployee(this.employeeId).subscribe({
       next: (records) => {
-        const record = records[0];
-        if (record && record.checkInTime && !record.checkOutTime) {
-          this.isCheckedIn = true;
-          this.checkInTime = record.checkInTime;
-          this.currentAttendanceId = record.id;
-          const checkInDate = new Date(`${record.date} ${this.convertTo24Hour(record.checkInTime)}`);
-          this.startTimer(checkInDate);
+        const activeRecord = records.find(record => record.checkInTime && !record.checkOutTime);
+        console.log('Active Record:', activeRecord);
+
+        if (activeRecord && activeRecord.checkInTime) {
+          try {
+            this.isCheckedIn = true;
+            this.checkInTime = activeRecord.checkInTime;
+            this.currentAttendanceId = activeRecord.id;
+
+            const checkIn24 = this.convertTo24Hour(activeRecord.checkInTime);
+            const checkInDate = new Date(`${activeRecord.date} ${checkIn24}`);
+            this.startTimer(checkInDate);
+          } catch (e) {
+            console.error('checkTodayAttendance Error:', e);
+          }
         }
       },
-      error: () => (this.isCheckedIn = false)
+      error: (err) => {
+        console.error('Error fetching today\'s attendance:', err);
+        this.isCheckedIn = false;
+      }
     });
   }
+
 
   fetchAllRecords(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -283,7 +330,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     });
   }
 
-
   // Search
   get filteredRecords(): Attendance[] {
     if (!this.searchText) return this.attendanceRecords;
@@ -293,6 +339,19 @@ export class AttendanceComponent implements OnInit, OnDestroy {
       record.employeeId.toString().includes(search) ||
       record.date.includes(search)
     );
+  }
+
+  // ✅ Get today's total sessions count
+  get todaySessionsCount(): number {
+    return this.attendanceRecords.filter(record =>
+      record.date === this.date &&
+      record.employeeId === this.employeeId
+    ).length;
+  }
+
+  // ✅ Get today's total working hours
+  get todayTotalWorkingHours(): string {
+    return this.calculateTodayTotalHours();
   }
 
   // Delete
@@ -328,12 +387,21 @@ export class AttendanceComponent implements OnInit, OnDestroy {
             this.attendanceRecords = this.attendanceRecords.filter(r => r.id !== id);
 
             // ✅ Success notification with SweetAlert2
-            Swal.fire({
-              title: "Deleted!",
-              text: "Attendance record has been deleted successfully.",
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
+            });
+
+            Toast.fire({
               icon: "success",
-              timer: 2000,
-              showConfirmButton: false
+              title: "Delete attendance record successfully!"
             });
           },
           error: (err) => {

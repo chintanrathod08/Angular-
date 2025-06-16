@@ -79,13 +79,27 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 
+
+  // Date formatting for backend
+  formatDate(date: Date | null): string | null {
+    if (!date) return null;
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  }
+
+
+  // load project and convert 
   loadEmployee(id: number): void {
     this.employeeService.getDataByID(id).subscribe(employee => {
-      this.addemployeeForm.patchValue({
+      const parsedEmployee = {
         ...employee,
-        dob: new Date(employee.dob),
-        joindate: new Date(employee.joindate)
-      });
+        joindate: employee.joindate ? new Date(employee.joindate) : null,
+        dob: employee.dob ? new Date(employee.dob) : null,
+      };
+
+      this.addemployeeForm.patchValue(parsedEmployee);
     });
   }
 
@@ -112,6 +126,12 @@ export class AddEmployeeComponent implements OnInit {
 
     const data = this.addemployeeForm.value;
 
+    const rawData = {
+      ...data,
+      joindate: this.formatDate(data.joindate),
+      dob: this.formatDate(data.dob)
+    };
+
     if (data.password !== data.rePassword) {
       // alert('Passwords do not match ❌');
       const Toast = Swal.mixin({
@@ -133,7 +153,7 @@ export class AddEmployeeComponent implements OnInit {
     }
 
     if (this.isEditMode && this.editId !== null) {
-      this.employeeService.updateEmployee(this.editId, data).subscribe(() => {
+      this.employeeService.updateEmployee(this.editId, rawData).subscribe(() => {
         // alert('Employee updated successfully ✅');
         const Toast = Swal.mixin({
           toast: true,
@@ -153,7 +173,7 @@ export class AddEmployeeComponent implements OnInit {
         this.router.navigate(['/allemployee']);
       });
     } else {
-      this.employeeService.postData(data).subscribe(() => {
+      this.employeeService.postData(rawData).subscribe(() => {
         // alert('Employee added successfully ✅');
         const Toast = Swal.mixin({
           toast: true,

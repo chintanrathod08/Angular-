@@ -2,14 +2,14 @@ export interface Project {
   id: number;
   title: string;
   department: string;
-  priority: string;
+  priority: 'Low' | 'Medium' | 'High';
   client: string;
   price: number;
-  startDate: string;
-  endDate: string;
+  startDate: Date | string ; 
+  endDate: Date | string;
   team: string;
   leader: string;
-  status: string;
-  description: string;    
-  progress: 0;
+  status: 'Active' | 'Completed' | 'Running' | 'Pending' | 'Not Started' | 'Cancelled';
+  description: string;
+  progress: number;
 }

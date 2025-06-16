@@ -37,19 +37,21 @@
                 </p>
 
                 <div class="w-full h-auto sm:grid sm:grid-cols-2 mt-3 gap-10">
-                    <div class="leading-10">
+                    <div class="flex flex-col gap-3">
                         <p><span class="text-[#555555] me-2">Leader :</span> {{projectData.leader}}</p>
                         <p><span class="text-[#555555] me-2">Team :</span> {{projectData.team}}</p>
                         <p><span class="text-[#555555] me-2">Department :</span> {{projectData.department}}</p>
+                       
                         <p class="flex items-center">
-                            <span>Priority :</span>
+                            <span class="text-[#555555]" >Priority :</span>
                             <span class="text-[#555555] ms-3 flex items-center gap-1"
                                 [ngClass]="getPriorityClass(projectData.priority)">
                                 <mat-icon>{{ getPriorityIcon(projectData.priority) }}</mat-icon>
                                 {{ projectData.priority }}
                             </span>
                         </p>
-                        <p><span class="text-[#555555] me-2">Description :</span> {{projectData.description}}</p>
+                       
+                        <p><span class="text-[#555555] me-2 leading-2">Description :</span> {{projectData.description}}</p>
                     </div>
                     <div class="leading-10">
                         <p><span class="text-[#555555] me-2">Client :</span> {{projectData.client}}</p>
