@@ -156,13 +156,5 @@ export class AllprojectComponent implements OnInit {
 
   }
 
-  //search
-  // get filteredRecords(): Project[]{
-  //   if(!this.searchText) return this.apiData;
-  //   const search = this.searchText.toLowerCase();
-  //   return this.apiData.filter(record =>{
-  //     record.title.toLowerCase().includes(search)
-  //   })
-  // }
-
+ 
 }

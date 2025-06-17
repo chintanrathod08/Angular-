@@ -1,11 +1,12 @@
 <section class="w-full min-h-[100vh] flex justify-center pt-5 pb-7">
     <section class="w-[96%]">
-        <!-- Section -1 -->
+        <!-- Section 1 - Heading & Add Button -->
         <div class="w-full flex flex-col md:flex-row md:justify-between md:items-center mb-5">
             <div class="flex items-center mb-4 md:mb-0">
                 <h1 class="md:text-[1.3rem] text-[#767676] ms-3">Task</h1>
             </div>
-            <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100 items-center">
+
+            <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100">
                 <mat-icon>home</mat-icon>
                 <mat-icon>chevron_right</mat-icon>
                 <span class="ps-2">Home</span>
@@ -13,30 +14,171 @@
                 <span class="ps-2">Task</span>
             </div>
         </div>
-        <!-- section-2 -->
-        <section class="w-full bg-[white] p-6 rounded-xl shadow-xl">
-            <!-- sec-1 -->
-            <div class="w-full h-auto">
-                <h1 class="text-[#5B626B] text-[1.7rem] font-medium">Tasks</h1>
-                <p class="text-[#5B626B]">Total task</p>
+
+        <!-- Section 2 -->
+        <section class="w-full bg-white p-6 rounded-xl shadow-xl">
+
+            <!-- Header -->
+            <div class="w-full h-auto grid grid-cols-2">
+
+                <div>
+                    <h1 class="text-[#5B626B] text-[1.7rem] font-medium">Tasks</h1>
+                    <p class="text-[#5B626B]">Total Task : {{taskRecord.length}}</p>
+                </div>
+
+                <div class="flex justify-end items-center">
+                    <button
+                        class="p-2 text-[12px] md:text-[16px] text-white cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"
+                        (click)="toggleTaskMenu()">
+                        <mat-icon class="me-1">add</mat-icon>
+                        Add Task
+                    </button>
+                </div>
+
+
             </div>
-            <!-- sec-2 -->
-            <div class="w-full h-auto mt-5 ">
-                <mat-tab-group dynamicHeight>
-                    <mat-tab label="All Tasks">
-                        <div class="example-small-box mat-elevation-z4">
-                            Small content
+
+            <!-- Grid Layout -->
+            <section class="w-full h-[29rem] mt-3 grid gap-3 transition-all duration-[1.5s] ease-in-out"
+                [ngClass]="isTaskMenuOpen ? 'grid-cols-3' : 'grid-cols-1'">
+
+                <!-- Task List -->
+                <div class="w-full h-full rounded-md overflow-auto flex flex-col gap-3" 
+                    [ngClass]="isTaskMenuOpen ? 'col-span-2' : 'col-span-full'">
+
+                    <!-- smg-no-task-available -->
+                    <div *ngIf="taskRecord.length === 0"
+                        class="w-full border border-[#CCCCCC] p-5 rounded-md shadow-md flex items-center justify-center">
+                        <p>No task available! 😞</p>
+                    </div>
+
+                    <!-- task-div -->
+                    <div class="w-full border border-[#CCCCCC] p-4 rounded-md flex items-center justify-between shadow-md cursor-pointer" id="taskdiv"
+                        *ngFor="let data of taskRecord; let i = index">
+
+                        <!-- div-1 --> 
+                        <div class="h-full flex items-center z-10">
+                            <p>{{ i + 1}}.</p>
+                            <mat-checkbox [checked]="data.completed" (change)="toggleCompletion(data)">
+                                <span [ngClass]="{ 'line-through decoration-overline text-[#9D9D9D]': data.completed }">
+                                    {{ data.title }}
+                                </span>
+                            </mat-checkbox>
                         </div>
-                    </mat-tab>
-                    <mat-tab label="Add Task">
-                        <div class="example-large-box mat-elevation-z4">
-                            <form action="">
-                                
-                            </form>
+
+                        <!-- div-2 -->
+                        <div class="h-full flex items-center gap-7 z-10">
+                           
+                            <p class="text-md text-[#FF9800]">{{ data.assignedname }}</p>
+                           
+                            <p class="text-sm text-gray-600 flex items-center gap-1" [ngClass]="getPriorityClass(data.priority)">
+                                <mat-icon>{{getPriorityIcon(data.priority)}}</mat-icon>
+                                {{ data.priority }}</p>
+                           
+                            <div class="h-full flex items-center gap-1">
+                                <p class="text-sm text-gray-600">{{ data.duedate}}</p>
+
+                                <button matButton [matMenuTriggerFor]="menu" class="flex items-center cursor-pointer"
+                                    style="color: #6F6F6F;"><mat-icon>more_vert</mat-icon></button>
+
+                                <mat-menu #menu="matMenu" class="cursor-pointer">
+                                    <button mat-menu-item style="color: #218B5A;" (click)="onEdit(data.id)"><mat-icon
+                                            style="color: #218B5A;">create</mat-icon> Edit</button>
+                                    <button mat-menu-item style="color: #F05206;" (click)="onDelete(data.id)"><mat-icon
+                                            style="color: #F05206;">delete_forever</mat-icon>
+                                        Delete</button>
+                                </mat-menu>
+                            </div>
+                        
                         </div>
-                    </mat-tab>
-                </mat-tab-group>
-            </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Task Form -->
+                <div class="w-full h-full border border-[1.5px] border-[#CCCCCC] transition-all duration-[1.5s] ease-in-out transform overflow-auto rounded-md shadow-lg"
+                    *ngIf="isTaskMenuOpen" @slideInOut>
+
+                    <section class="w-full max-w-xl p-5 bg-white rounded-lg shadow-md">
+                        <form [formGroup]="addTaskForm" (ngSubmit)="onSubmit()">
+                            <!-- Form Header -->
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-lg font-medium">New Task</h2>
+                                <div class="space-x-2">
+                                    <button mat-icon-button type="submit">
+                                        <mat-icon>save</mat-icon>
+                                    </button>
+                                    <button mat-icon-button type="button" (click)="toggleTaskMenu()">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Title -->
+                            <mat-form-field appearance="outline" class="w-full mb-2">
+                                <mat-label>Title</mat-label>
+                                <input matInput placeholder="Task Title" formControlName="title" required />
+                                <button mat-icon-button matSuffix>
+                                    <mat-icon>bookmark_border</mat-icon>
+                                </button>
+                                <mat-error *ngIf="addTaskForm.get('title')?.hasError('required')">
+                                    Task title is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            <!-- Checkbox -->
+                            <div class="flex items-center mb-4">
+                                <mat-checkbox>Mark as complete</mat-checkbox>
+                            </div>
+
+                            <!-- Assigned Name -->
+                            <mat-form-field appearance="outline" class="w-full mb-4">
+                                <mat-label>Assigned Name</mat-label>
+                                <mat-select formControlName="assignedname" required>
+                                    <mat-option value="John">John</mat-option>
+                                    <mat-option value="Jane">Jane</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="addTaskForm.get('assignedname')?.hasError('required')">
+                                    Assigned name is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            <!-- Priority & Due Date -->
+                            <div class="lg:flex gap-4 mb-4">
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Priority</mat-label>
+                                    <mat-select formControlName="priority" required >
+                                        <mat-option *ngFor="let priority of priorityList" [value]="priority">
+                                            {{ priority }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="addTaskForm.get('priority')?.hasError('required')">
+                                        Priority is required
+                                    </mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Due Date</mat-label>
+                                    <input matInput [matDatepicker]="picker" formControlName="duedate" />
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <mat-error *ngIf="addTaskForm.get('duedate')?.hasError('required')">
+                                        Due date is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Event Details -->
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Event Details</mat-label>
+                                <textarea matInput rows="4" formControlName="eventdetails"></textarea>
+                            </mat-form-field>
+                        </form>
+                    </section>
+
+                </div>
+            </section>
         </section>
     </section>
 </section>

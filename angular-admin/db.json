@@ -77,9 +77,47 @@
       "employeename": "Chintan Rathod",
       "date": "2025-06-16",
       "checkInTime": "4:20 PM",
+      "checkOutTime": "7:01 PM",
+      "totalWorkingHours": "01:41",
+      "id": 1
+    },
+    {
+      "employeeId": 1,
+      "employeename": "Chintan Rathod",
+      "date": "2025-06-17",
+      "checkInTime": "10:15 AM",
       "checkOutTime": "",
       "totalWorkingHours": "",
+      "id": 2
+    }
+  ],
+  "Tasks": [
+    {
+      "title": "HR Portal Project",
+      "assignedname": "John",
+      "priority": "High",
+      "duedate": "17/06/2025",
+      "eventdetails": "NA",
+      "completed": false,
       "id": 1
+    },
+    {
+      "title": "Task feature in HR portal",
+      "assignedname": "Jane",
+      "priority": "Normal",
+      "duedate": "17/06/2025",
+      "eventdetails": "NA",
+      "completed": false,
+      "id": 2
+    },
+    {
+      "title": "ERP Management",
+      "assignedname": "John",
+      "priority": "Low",
+      "duedate": "30/06/2025",
+      "eventdetails": "NA",
+      "completed": false,
+      "id": 3
     }
   ]
 }
