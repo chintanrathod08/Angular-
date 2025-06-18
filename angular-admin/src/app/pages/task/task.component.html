@@ -1,5 +1,7 @@
 <section class="w-full min-h-[100vh] flex justify-center pt-5 pb-7">
+    
     <section class="w-[96%]">
+
         <!-- Section 1 - Heading & Add Button -->
         <div class="w-full flex flex-col md:flex-row md:justify-between md:items-center mb-5">
             <div class="flex items-center mb-4 md:mb-0">
@@ -19,14 +21,28 @@
         <section class="w-full bg-white p-6 rounded-xl shadow-xl">
 
             <!-- Header -->
-            <div class="w-full h-auto grid grid-cols-2">
+            <div class="w-full h-auto grid grid-cols-1 gap-3 md:grid md:grid-cols-3">
 
+                <!-- total-task -->
                 <div>
                     <h1 class="text-[#5B626B] text-[1.7rem] font-medium">Tasks</h1>
                     <p class="text-[#5B626B]">Total Task : {{taskRecord.length}}</p>
                 </div>
 
-                <div class="flex justify-end items-center">
+                <!-- search-task  -->
+                <div class="flex items-center md:justify-center">
+
+                    <div
+                        class="md:ms-5 mt-3 md:mt-0 border border-[#CCCCCC] rounded-full bg-[#F0F3FB] flex  items-center text-[gray] shadow-lg">
+                        <mat-icon class="ms-2">search</mat-icon>
+                        <input type="text" class="w-[200px] h-[40px] rounded-[10px] ps-2" placeholder="Search here..."
+                            [(ngModel)]="searchText" id="inputoutline" style="outline-width: 0px;">
+                    </div>
+
+                </div>
+
+                <!-- add-task -->
+                <div class="flex md:justify-end items-center mt-1 md:mt-0">
                     <button
                         class="p-2 text-[12px] md:text-[16px] text-white cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center"
                         (click)="toggleTaskMenu()">
@@ -35,15 +51,14 @@
                     </button>
                 </div>
 
-
             </div>
 
-            <!-- Grid Layout -->
-            <section class="w-full h-[29rem] mt-3 grid gap-3 transition-all duration-[1.5s] ease-in-out"
-                [ngClass]="isTaskMenuOpen ? 'grid-cols-3' : 'grid-cols-1'">
+            <!-- section - 3 -->
+            <section class="w-full h-auto md:h-[29rem]  mt-3 grid gap-3 transition-all duration-[1.5s] ease-in-out pt-3"
+                [ngClass]="isTaskMenuOpen ? 'lg:grid-cols-3' : 'grid-cols-1'">
 
                 <!-- Task List -->
-                <div class="w-full h-full rounded-md overflow-auto flex flex-col gap-3" 
+                <div class="w-full h-full rounded-md overflow-auto flex flex-col gap-3"
                     [ngClass]="isTaskMenuOpen ? 'col-span-2' : 'col-span-full'">
 
                     <!-- smg-no-task-available -->
@@ -52,11 +67,17 @@
                         <p>No task available! 😞</p>
                     </div>
 
-                    <!-- task-div -->
-                    <div class="w-full border border-[#CCCCCC] p-4 rounded-md flex items-center justify-between shadow-md cursor-pointer" id="taskdiv"
-                        *ngFor="let data of taskRecord; let i = index">
+                    <!-- smg-no-task-available -->
+                    <div *ngIf="taskRecord.length > 0 && filteredRecords.length === 0 "
+                        class="w-full border border-[#CCCCCC] p-5 rounded-md shadow-md flex items-center justify-center">
+                        <p>No matching task found! 😞</p>
+                    </div>
 
-                        <!-- div-1 --> 
+                    <!-- task-div -->
+                    <div class="w-full border border-[#CCCCCC] p-3 md:p-4 rounded-md flex flex-col gap-2  md:flex md:flex-row md:items-center md:justify-between shadow-md cursor-pointer overflow-auto"
+                        id="taskdiv" *ngFor="let data of taskRecord && filteredRecords ; let i = index">
+
+                        <!-- div-1 -->
                         <div class="h-full flex items-center z-10">
                             <p>{{ i + 1}}.</p>
                             <mat-checkbox [checked]="data.completed" (change)="toggleCompletion(data)">
@@ -67,14 +88,16 @@
                         </div>
 
                         <!-- div-2 -->
-                        <div class="h-full flex items-center gap-7 z-10">
-                           
+                        <div class="h-full flex items-center justify-between md:gap-7 z-10">
+
                             <p class="text-md text-[#FF9800]">{{ data.assignedname }}</p>
-                           
-                            <p class="text-sm text-gray-600 flex items-center gap-1" [ngClass]="getPriorityClass(data.priority)">
+
+                            <p class="text-sm text-gray-600 flex items-center gap-1"
+                                [ngClass]="getPriorityClass(data.priority)">
                                 <mat-icon>{{getPriorityIcon(data.priority)}}</mat-icon>
-                                {{ data.priority }}</p>
-                           
+                                {{ data.priority }}
+                            </p>
+
                             <div class="h-full flex items-center gap-1">
                                 <p class="text-sm text-gray-600">{{ data.duedate}}</p>
 
@@ -89,7 +112,7 @@
                                         Delete</button>
                                 </mat-menu>
                             </div>
-                        
+
                         </div>
 
                     </div>
@@ -97,10 +120,10 @@
                 </div>
 
                 <!-- Task Form -->
-                <div class="w-full h-full border border-[1.5px] border-[#CCCCCC] transition-all duration-[1.5s] ease-in-out transform overflow-auto rounded-md shadow-lg"
+                <div class="w-full h-[25rem] md:h-full border border-[1.5px] border-[#CCCCCC] transition-all duration-[1.5s] ease-in-out transform overflow-auto rounded-md shadow-lg"
                     *ngIf="isTaskMenuOpen" @slideInOut>
 
-                    <section class="w-full max-w-xl p-5 bg-white rounded-lg shadow-md">
+                    <section class="w-full p-5 bg-white rounded-lg shadow-md">
                         <form [formGroup]="addTaskForm" (ngSubmit)="onSubmit()">
                             <!-- Form Header -->
                             <div class="flex justify-between items-center mb-4">
@@ -136,8 +159,8 @@
                             <mat-form-field appearance="outline" class="w-full mb-4">
                                 <mat-label>Assigned Name</mat-label>
                                 <mat-select formControlName="assignedname" required>
+                                    <mat-option value="Chintan">Chintan</mat-option>
                                     <mat-option value="John">John</mat-option>
-                                    <mat-option value="Jane">Jane</mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="addTaskForm.get('assignedname')?.hasError('required')">
                                     Assigned name is required
@@ -145,10 +168,10 @@
                             </mat-form-field>
 
                             <!-- Priority & Due Date -->
-                            <div class="lg:flex gap-4 mb-4">
+                            <div class="xl:flex gap-4 mb-4">
                                 <mat-form-field appearance="outline" class="w-full">
                                     <mat-label>Priority</mat-label>
-                                    <mat-select formControlName="priority" required >
+                                    <mat-select formControlName="priority" required>
                                         <mat-option *ngFor="let priority of priorityList" [value]="priority">
                                             {{ priority }}
                                         </mat-option>
@@ -176,7 +199,6 @@
                             </mat-form-field>
                         </form>
                     </section>
-
                 </div>
             </section>
         </section>

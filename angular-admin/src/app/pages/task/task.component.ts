@@ -3,7 +3,8 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  FormsModule
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -20,6 +21,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgClass, NgIf, NgFor } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
+import { serialize } from 'node:v8';
 
 @Component({
   selector: 'app-task',
@@ -39,7 +41,9 @@ import { MatMenuModule } from '@angular/material/menu';
     NgFor,
     MatError,
     MatMenuModule,
+    FormsModule
   ],
+
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss'],
   animations: [
@@ -70,7 +74,14 @@ export class TaskComponent implements OnInit, AfterViewInit {
   isEditMode = false;
   editId: number | null = null;
   taskRecord: Tasks[] = [];
-  priorityList = ['Low', 'Normal', 'High']
+  priorityList = ['Low', 'Normal', 'High'];
+
+  searchText: string = '';
+  title!: string;
+  assignedname!: string;
+  priority!: string;
+  duedate!: string;
+  
 
   constructor(
     private fb: FormBuilder,
@@ -282,6 +293,16 @@ export class TaskComponent implements OnInit, AfterViewInit {
       (field as any)._control?.ngControl?.control?.markAsTouched?.();
       (field as any)._control?.ngControl?.control?.updateValueAndValidity?.();
     });
+  }
+
+  //search 
+  get filteredRecords(): Tasks[] {
+    if (!this.searchText) return this.taskRecord;
+    const search = this.searchText.toLowerCase();
+    return this.taskRecord.filter(record =>     
+      record.title.toLowerCase().includes(search) ||
+      record.assignedname.toLowerCase().includes(search)
+    ) 
   }
 
 }
