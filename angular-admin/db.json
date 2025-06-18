@@ -45,6 +45,13 @@
       "password": "99919012",
       "role": "admin",
       "id": 7
+    },
+    {
+      "name": "John",
+      "email": "john@gmail.com",
+      "password": "john@123",
+      "role": "employee",
+      "id": 8
     }
   ],
   "employees": [
@@ -69,6 +76,28 @@
       "role": "employee",
       "file": null,
       "id": 1
+    },
+    {
+      "firstName": "John",
+      "lastName": "Wick",
+      "gender": "Male",
+      "mobile": 8000900010,
+      "password": "john@123",
+      "rePassword": "john@123",
+      "department": "Engineering",
+      "designation": "Full-Stack Developer",
+      "address": "New York - 2A0488, USA",
+      "email": "john@gmail.com",
+      "dob": "2025/06/04",
+      "education": "B-Tech",
+      "joindate": "2025/06/18",
+      "skills": "HTML",
+      "experience": "NA",
+      "location": "USA",
+      "about": "NA",
+      "role": "employee",
+      "file": null,
+      "id": 2
     }
   ],
   "attendance": [

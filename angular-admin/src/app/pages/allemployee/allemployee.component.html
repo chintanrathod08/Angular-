@@ -53,7 +53,7 @@
                     </div>
 
                     <!-- not found -->
-                    <div *ngIf="filteredRecords.length === 0" class="w-full p-2 flex justify-center col-span-full">
+                    <div *ngIf="epApiData.length > 0 && filteredRecords.length === 0" class="w-full p-2 flex justify-center col-span-full">
                         No matching employee found! 😞
                     </div>
 
