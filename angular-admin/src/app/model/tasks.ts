@@ -1,9 +1,10 @@
-export interface Tasks{
+export interface Tasks {
     id: number;
     title: string;
-    assignedname: string;
+    assignedTo: number;
+    assignedName: string;
     priority: 'Low' | 'Normal' | 'High';
     duedate: Date | string;
     eventdetails: string;
-     completed: boolean;
+    completed: boolean;
 }

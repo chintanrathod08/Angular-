@@ -127,17 +127,43 @@
       "checkOutTime": "",
       "totalWorkingHours": "",
       "id": 3
+    },
+    {
+      "employeeId": 2,
+      "employeename": "John Wick",
+      "date": "2025-06-18",
+      "checkInTime": "5:30 PM",
+      "checkOutTime": "5:30 PM",
+      "totalWorkingHours": "00:00",
+      "id": 4
     }
   ],
   "Tasks": [
     {
-      "title": "Hr Portal ",
-      "assignedname": "Chintan",
-      "priority": "Normal",
-      "duedate": "18/06/2025",
+      "title": "HR Portal ",
+      "assignedTo": 1,
+      "assignedName": "Chintan Rathod",
+      "priority": "High",
+      "duedate": "2025-06-30",
       "eventdetails": "NA",
       "completed": false,
       "id": 1
+    },
+    {
+      "position": 2,
+      "id": 2,
+      "title": "Particular Employee Task Feature ",
+      "priority": "High",
+      "duedate": "2025-06-19T00:00:00.000Z",
+      "completed": false
+    },
+    {
+      "position": 3,
+      "id": 3,
+      "title": "Attendance",
+      "priority": "High",
+      "duedate": "2025-06-24T00:00:00.000Z",
+      "completed": false
     }
   ]
 }

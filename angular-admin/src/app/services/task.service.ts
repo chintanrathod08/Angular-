@@ -1,21 +1,33 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Tasks } from "../model/tasks";
+import { AuthService } from './auth.service';
+import { Observable, of } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
-  taskApi = 'http://localhost:3000/Tasks'; 
+  taskApi = 'http://localhost:3000/Tasks';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
-  postData(data: Tasks) {
-    return this.http.post<Tasks>(this.taskApi, data);
+  getTasks(): Observable<Tasks[]> {
+    const user = this.authService.getUser();
+    if (user?.role === 'admin') {
+      return this.http.get<Tasks[]>(this.taskApi);
+    } else if (user?.role === 'employee') {
+      return this.http.get<Tasks[]>(`${this.taskApi}?assignedTo=${user.id}`);
+    }
+    return of([]);
   }
 
-  getData() {
-    return this.http.get<Tasks[]>(this.taskApi);
+  // Keep other methods the same...
+  postData(data: Tasks) {
+    return this.http.post<Tasks>(this.taskApi, data);
   }
 
   getTaskById(id: number) {

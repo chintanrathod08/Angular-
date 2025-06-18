@@ -18,7 +18,7 @@ export class EmployeeService {
   }
 
   //get All Data
-  getData(){
+  getAllEmployee(){
     return this.http.get<Employees[]>(this.epapi)
   }
 

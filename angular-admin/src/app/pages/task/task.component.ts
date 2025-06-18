@@ -1,16 +1,12 @@
 import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  FormsModule
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import Swal from 'sweetalert2';
 import { TaskService } from '../../services/task.service';
 import { Tasks } from '../../model/tasks';
+import { Employees } from '../../model/employee';
+import { EmployeeService } from '../../services/employee.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatError, MatFormField, MatFormFieldModule } from '@angular/material/form-field';
@@ -19,9 +15,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { NgClass, NgIf, NgFor } from '@angular/common';
+import { NgClass, NgIf, NgFor, DatePipe } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
-import { serialize } from 'node:v8';
 
 @Component({
   selector: 'app-task',
@@ -41,9 +36,8 @@ import { serialize } from 'node:v8';
     NgFor,
     MatError,
     MatMenuModule,
-    FormsModule
+    FormsModule,
   ],
-
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss'],
   animations: [
@@ -58,16 +52,8 @@ import { serialize } from 'node:v8';
     ])
   ]
 })
-
-
 export class TaskComponent implements OnInit, AfterViewInit {
-
   @ViewChildren(MatFormField) matFormFields!: QueryList<MatFormField>;
-
-  ngAfterViewInit() {
-    // Trigger appearance updates on all mat-form-fields after view init
-    this.updateMaterialFormFieldAppearance();
-  }
 
   isTaskMenuOpen = false;
   addTaskForm!: FormGroup;
@@ -75,25 +61,22 @@ export class TaskComponent implements OnInit, AfterViewInit {
   editId: number | null = null;
   taskRecord: Tasks[] = [];
   priorityList = ['Low', 'Normal', 'High'];
-
+  employees: Employees[] = [];
   searchText: string = '';
-  title!: string;
-  assignedname!: string;
-  priority!: string;
-  duedate!: string;
-  
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private employeeService: EmployeeService
   ) { }
 
   ngOnInit(): void {
     this.addTaskForm = this.fb.group({
       title: ['', Validators.required],
-      assignedname: ['', Validators.required],
+      assignedTo: ['', Validators.required],
+      assignedName: [''],
       priority: ['', Validators.required],
       duedate: ['', Validators.required],
       eventdetails: ['', Validators.required],
@@ -101,6 +84,7 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
 
     this.getTaskList();
+    this.loadEmployees();
 
     this.route.queryParams.subscribe((params) => {
       if (params['editId']) {
@@ -114,11 +98,25 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.updateMaterialFormFieldAppearance();
+  }
+
+  loadEmployees() {
+    this.employeeService.getAllEmployee().subscribe(employees => {
+      this.employees = employees.map(emp => ({
+        ...emp,
+        name: `${emp.firstName} ${emp.lastName}`
+      }));
+    });
+  }
+
+  //date formate
   formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
-    return `${day}/${month}/${year}`;
+    return `${year}-${month}-${day}`; // Now returns YYYY-MM-DD format
   }
 
   onSubmit(): void {
@@ -135,8 +133,12 @@ export class TaskComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    const selectedEmployee = this.employees.find(emp => emp.id === this.addTaskForm.value.assignedTo);
+
     const formData = {
       ...this.addTaskForm.value,
+      assignedTo: selectedEmployee?.id,
+      assignedName: selectedEmployee ? `${selectedEmployee.firstName} ${selectedEmployee.lastName}` : '',
       duedate: this.formatDate(this.addTaskForm.value.duedate),
     };
 
@@ -166,7 +168,7 @@ export class TaskComponent implements OnInit, AfterViewInit {
   }
 
   getTaskList() {
-    this.taskService.getData().subscribe((data) => {
+    this.taskService.getTasks().subscribe((data) => {
       this.taskRecord = data.map(task => ({
         ...task,
         completed: task.completed ?? false
@@ -181,12 +183,9 @@ export class TaskComponent implements OnInit, AfterViewInit {
       this.editId = null;
       this.addTaskForm.reset();
     }
-
-    // Wait for DOM render and trigger field updates
     setTimeout(() => {
       this.updateMaterialFormFieldAppearance();
     });
-
   }
 
   onEdit(id: number) {
@@ -194,24 +193,26 @@ export class TaskComponent implements OnInit, AfterViewInit {
     this.editId = id;
     this.taskService.getTaskById(id).subscribe((task) => {
       let dueDateValue: Date;
-
-      // Check if duedate is already a Date object or a string
-      if (typeof task.duedate === 'string' && task.duedate.includes('/')) {
-        const [day, month, year] = task.duedate.split('/');
-        dueDateValue = new Date(+year, +month - 1, +day); // convert to Date
+      if (typeof task.duedate === 'string') {
+        if (task.duedate.includes('/')) {
+          // Handle DD/MM/YYYY format
+          const [day, month, year] = task.duedate.split('/');
+          dueDateValue = new Date(+year, +month - 1, +day);
+        } else {
+          // Handle YYYY-MM-DD format
+          dueDateValue = new Date(task.duedate);
+        }
       } else {
-        dueDateValue = new Date(task.duedate); // fallback
+        dueDateValue = new Date(task.duedate);
       }
 
       this.addTaskForm.patchValue({
         ...task,
         duedate: dueDateValue
       });
-
       this.toggleTaskMenu();
     });
   }
-
 
   onDelete(id: number) {
     Swal.fire({
@@ -267,7 +268,6 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
-  //priority
   getPriorityClass(priority: string): string {
     switch (priority) {
       case 'Low': return 'text-green-500';
@@ -277,7 +277,6 @@ export class TaskComponent implements OnInit, AfterViewInit {
     }
   }
 
-  //priority icon
   getPriorityIcon(priority: string): string {
     switch (priority) {
       case 'Low': return 'arrow_downward';
@@ -289,20 +288,18 @@ export class TaskComponent implements OnInit, AfterViewInit {
 
   updateMaterialFormFieldAppearance(): void {
     this.matFormFields?.forEach(field => {
-      (field as any)._elementRef.nativeElement.classList.remove('mat-form-field-appearance-outline'); // Force refresh
+      (field as any)._elementRef.nativeElement.classList.remove('mat-form-field-appearance-outline');
       (field as any)._control?.ngControl?.control?.markAsTouched?.();
       (field as any)._control?.ngControl?.control?.updateValueAndValidity?.();
     });
   }
 
-  //search 
   get filteredRecords(): Tasks[] {
     if (!this.searchText) return this.taskRecord;
     const search = this.searchText.toLowerCase();
-    return this.taskRecord.filter(record =>     
+    return this.taskRecord.filter(record =>
       record.title.toLowerCase().includes(search) ||
-      record.assignedname.toLowerCase().includes(search)
-    ) 
+      (record.assignedName && record.assignedName.toLowerCase().includes(search))
+    );
   }
-
 }

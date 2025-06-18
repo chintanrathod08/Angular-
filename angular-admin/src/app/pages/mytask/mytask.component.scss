@@ -1,0 +1,29 @@
+/* Task title style */
+.task-title {
+  &.completed {
+    text-decoration: line-through;
+    color: #9D9D9D;  /* Gray for completed task text */
+  }
+}
+
+/* Status colors */
+.text-green-500 {
+  color: #4CAF50;  /* Green for completed status */
+}
+
+.text-gray-500 {
+  color: #9E9E9E;  /* Gray for pending status */
+}
+
+/* Checkbox styling */
+mat-checkbox {
+  .mat-checkbox-frame {
+    border-color: #9E9E9E; /* Gray border for unchecked */
+  }
+  
+  &.mat-checkbox-checked {
+    .mat-checkbox-background {
+      background-color: #4CAF50; /* Green background for checked */
+    }
+  }
+}

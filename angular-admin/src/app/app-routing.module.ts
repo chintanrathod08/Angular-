@@ -81,7 +81,7 @@ const routes: Routes = [
     path: 'mytask',
     component: MytaskComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['mytask'] }
+    data: { roles: ['employee'] }
   },
 
   // Routes accessible by admin and employee

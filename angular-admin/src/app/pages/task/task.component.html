@@ -1,5 +1,5 @@
 <section class="w-full min-h-[100vh] flex justify-center pt-5 pb-7">
-    
+
     <section class="w-[96%]">
 
         <!-- Section 1 - Heading & Add Button -->
@@ -90,7 +90,7 @@
                         <!-- div-2 -->
                         <div class="h-full flex items-center justify-between md:gap-7 z-10">
 
-                            <p class="text-md text-[#FF9800]">{{ data.assignedname }}</p>
+                            <p class="text-md text-[#FF9800]">{{ data.assignedName }}</p>
 
                             <p class="text-sm text-gray-600 flex items-center gap-1"
                                 [ngClass]="getPriorityClass(data.priority)">
@@ -157,13 +157,14 @@
 
                             <!-- Assigned Name -->
                             <mat-form-field appearance="outline" class="w-full mb-4">
-                                <mat-label>Assigned Name</mat-label>
-                                <mat-select formControlName="assignedname" required>
-                                    <mat-option value="Chintan">Chintan</mat-option>
-                                    <mat-option value="John">John</mat-option>
+                                <mat-label>Assign To</mat-label>
+                                <mat-select formControlName="assignedTo" required>
+                                    <mat-option *ngFor="let employee of employees" [value]="employee.id">
+                                        {{ employee.firstName }} {{ employee.lastName }} ({{ employee.department }})
+                                    </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="addTaskForm.get('assignedname')?.hasError('required')">
-                                    Assigned name is required
+                                <mat-error *ngIf="addTaskForm.get('assignedTo')?.hasError('required')">
+                                    Employee assignment is required
                                 </mat-error>
                             </mat-form-field>
 

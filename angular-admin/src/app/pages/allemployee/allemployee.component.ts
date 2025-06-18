@@ -41,7 +41,7 @@ export class AllemployeeComponent implements OnInit {
   }
 
   getAllData() {
-    this.employeeService.getData().subscribe(res => {
+    this.employeeService.getAllEmployee().subscribe(res => {
       this.epApiData = res;
     })
   }
