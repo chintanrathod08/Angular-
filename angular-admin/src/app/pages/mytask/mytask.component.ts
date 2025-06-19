@@ -6,6 +6,10 @@ import { TaskService } from '../../services/task.service';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule, NgModelGroup } from '@angular/forms';
+import { Tasks } from '../../model/tasks';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-mytask',
@@ -16,6 +20,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatPaginatorModule,
     MatTableModule,
     MatCheckboxModule,
+    FormsModule,
+    MatButtonModule,
+    MatMenuModule,
     DatePipe // This is the critical addition
   ],
   templateUrl: './mytask.component.html',
@@ -25,6 +32,8 @@ export class MytaskComponent implements AfterViewInit {
   displayedColumns: string[] = ['position', 'title', 'priority', 'duedate', 'status'];
   dataSource = new MatTableDataSource<any>();
   currentUser: any;
+  searchText: string = '';
+
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -79,6 +88,7 @@ export class MytaskComponent implements AfterViewInit {
     return new Date(); // Fallback
   }
 
+   // priority - color
   getPriorityClass(priority: string): string {
     switch (priority) {
       case 'Low': return 'text-green-500';
@@ -88,6 +98,15 @@ export class MytaskComponent implements AfterViewInit {
     }
   }
 
+  // priority - icon
+  getPriorityIcon(priority: string): string{
+    switch(priority){
+      case 'Low': return 'arrow_downward';
+      case 'Normal': return 'remove';
+      case 'High': return 'arrow_upward';
+      default: return '';
+    }
+  }
 
 
   // Add this method to properly toggle task completion
@@ -122,6 +141,40 @@ export class MytaskComponent implements AfterViewInit {
 
   get completedTasks(): number {
     return this.dataSource?.data?.filter(task => task.completed)?.length || 0;
+  }
+
+  //search 
+  get filteredRecords(): any[] {
+    const data = this.dataSource?.data || [];
+
+    if (!this.searchText) return data;
+
+    const search = this.searchText.toLowerCase();
+
+    return data.filter(record =>
+      record.title.toLowerCase().includes(search)||
+      record.priority.toLowerCase().includes(search)
+    );
+  }
+
+
+  // sorting 
+  sortByPriority(priority: 'High' | 'Normal' | 'Low') {
+    const priorityOrder: Record<string, number> = {
+      High: 3,
+      Normal: 2,
+      Low: 1
+    };
+
+    const isAscending = priority === 'Low'; // Low → High, others → High → Low
+
+    const sorted = [...this.dataSource.data].sort((a, b) =>
+      isAscending
+        ? priorityOrder[a.priority] - priorityOrder[b.priority]
+        : priorityOrder[b.priority] - priorityOrder[a.priority]
+    );
+
+    this.dataSource.data = sorted;
   }
 
 }

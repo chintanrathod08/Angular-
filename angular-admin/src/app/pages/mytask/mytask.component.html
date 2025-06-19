@@ -19,25 +19,61 @@
         <div class="mat-elevation-z8 w-full shadow-xl">
 
             <!-- search-no of task -->
-            <div class="w-full p-5  rounded-t-lg bg-[#F0F3FB] grid grid-cols-2">
+            <div class="w-full p-5  rounded-t-lg bg-[#F0F3FB] grid grid-cols-3">
 
-                <!-- no task -->
-                <div class="w-full h-full items-center">
-                    <p class="flex gap-2">
-                        <span class="text-[#6777EF]">Total My Task : {{totalTasks}}</span>
+                <!-- no of task -->
+                <div class="w-full h-full flex items-center">
+                    <p class="flex gap-3">
+                        <span class="text-[#6777EF]">Total My Task : {{totalTasks}}</span> |
                         <span class="text-[#4CAF68]">(Completed : {{completedTasks}})</span>
                     </p>
                 </div>
 
                 <!-- search -->
-                <div>
+                <div class="w-full h-full flex justify-center items-center">
+                    <div
+                        class="md:ms-5 mt-3 md:mt-0 border border-[#CCCCCC] rounded-full bg-[white] flex  items-center text-[gray] shadow-lg">
+                        <mat-icon class="ms-2">search</mat-icon>
+                        <input type="text" class="w-[200px] h-[40px] rounded-[10px] ps-2" placeholder="Search here..."
+                            [(ngModel)]="searchText" id="inputoutline" style="outline-width: 0px;">
+                    </div>
+                </div>
+
+                <!-- sorting  -->
+                <div class="flex justify-end items-center">
+
+                    <button matButton [matMenuTriggerFor]="menu"
+                        class="flex justify-center items-center p-2 pe-3 rounded-lg text-[white] bg-[#6777EF] shadow-lg cursor-pointer"><mat-icon>swap_vert</mat-icon>
+                        Sorting</button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="sortByPriority('High')" style="color: #FB2C36;">
+                            <mat-icon style="color: #FB2C36;">arrow_upward</mat-icon>High
+                        </button>
+                        <button mat-menu-item (click)="sortByPriority('Normal')" style="color: #2B7FFF;">
+                            <mat-icon style="color: #2B7FFF;">remove</mat-icon>Normal
+                        </button>
+                        <button mat-menu-item (click)="sortByPriority('Low')" style="color: #198754;">
+                            <mat-icon style="color: #198754;">arrow_downward</mat-icon>Low
+                        </button>
+                    </mat-menu>
 
                 </div>
 
             </div>
 
+            <!-- No task available -->
+            <div *ngIf="filteredRecords.length === 0 && dataSource.data.length === 0" class="w-full text-center p-3">
+                <p>No task available! 😞</p>
+            </div>
+
+            <!-- No matching task -->
+            <div *ngIf="dataSource.data.length > 0 && filteredRecords.length === 0" class="w-full text-center p-3">
+                <p>No matching task found! 😞</p>
+            </div>
+
             <!-- table -->
-            <table mat-table [dataSource]="dataSource" style="background-color: white;">
+            <table *ngIf="filteredRecords.length > 0" mat-table [dataSource]="filteredRecords" class="mat-elevation-z8"
+                style="background-color: white;">
 
                 <!-- Position Column -->
                 <ng-container matColumnDef="position">
@@ -62,7 +98,9 @@
                 <ng-container matColumnDef="priority">
                     <th mat-header-cell *matHeaderCellDef>Priority</th>
                     <td mat-cell *matCellDef="let element">
-                        <span [ngClass]="getPriorityClass(element.priority)">
+                        <span class="flex items-center gap-1"  
+                        [ngClass]="getPriorityClass(element.priority)">
+                            <mat-icon>{{getPriorityIcon(element.priority)}}</mat-icon>
                             {{element.priority}}
                         </span>
                     </td>

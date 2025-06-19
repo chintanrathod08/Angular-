@@ -26,7 +26,11 @@
                 <!-- total-task -->
                 <div>
                     <h1 class="text-[#5B626B] text-[1.7rem] font-medium">Tasks</h1>
-                    <p class="text-[#5B626B]">Total Task : {{taskRecord.length}}</p>
+                    <div class="flex gap-3">
+                        <p class="text-[#6777EF]">Total Task : {{ totalTasks }}</p> | 
+                        <p class="text-[#4CAF68]">(Completed Task : {{ completedTasks }})</p>
+                    </div>
+
                 </div>
 
                 <!-- search-task  -->
@@ -50,6 +54,27 @@
                         Add Task
                     </button>
                 </div>
+
+                <!-- sorting  -->
+                <div class="w-full col-span-3 flex justify-start items-center">
+
+                    <button matButton [matMenuTriggerFor]="menu"
+                        class="flex justify-center items-center p-2 pe-3 rounded-lg text-[white] bg-[#6777EF] shadow-lg cursor-pointer"><mat-icon>swap_vert</mat-icon>
+                        Sorting</button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="sortByPriority('High')" style="color: #FB2C36;">
+                            <mat-icon style="color: #FB2C36;">arrow_upward</mat-icon>High
+                        </button>
+                        <button mat-menu-item (click)="sortByPriority('Normal')" style="color: #2B7FFF;">
+                            <mat-icon style="color: #2B7FFF;">remove</mat-icon>Normal
+                        </button>
+                        <button mat-menu-item (click)="sortByPriority('Low')" style="color: #198754;">
+                            <mat-icon style="color: #198754;">arrow_downward</mat-icon>Low
+                        </button>
+                    </mat-menu>
+
+                </div>  
+
 
             </div>
 
@@ -92,7 +117,7 @@
 
                             <p class="text-md text-[#FF9800]">{{ data.assignedName }}</p>
 
-                            <p class="text-sm text-gray-600 flex items-center gap-1"
+                            <p class="text-sm flex items-center gap-1"
                                 [ngClass]="getPriorityClass(data.priority)">
                                 <mat-icon>{{getPriorityIcon(data.priority)}}</mat-icon>
                                 {{ data.priority }}

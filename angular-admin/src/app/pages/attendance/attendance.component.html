@@ -53,13 +53,13 @@
 
         <!-- Records Count -->
         <div class="w-[96%] mb-5 flex justify-between items-center text-sm text-gray-600 mt-10">
-            <div>Total Records: {{ filteredRecords.length }}</div>
-            <div *ngIf="todaySessionsCount > 0">
-                Today Sessions: {{ todaySessionsCount }} |
-                Working Hours: {{ todayTotalWorkingHours }}
+            <div class="text-[#6777EF]" >Total Records : {{ filteredRecords.length }}</div>
+            <div *ngIf="todaySessionsCount > 0" class="flex gap-2" >
+                <span class="text-[#29a63e]">Today Sessions : {{ todaySessionsCount }}</span> |
+                <span class="text-[#FF6900]">Working Hours : {{ todayTotalWorkingHours }}</span>
             </div>
         </div>
-
+        
         <!-- Attendance Table -->
         <table *ngIf="filteredRecords.length > 0" mat-table [dataSource]="filteredRecords"
             class="mat-elevation-z8 w-full shadow-xl" style="background-color: white;" >

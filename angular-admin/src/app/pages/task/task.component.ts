@@ -268,6 +268,7 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // priority - color
   getPriorityClass(priority: string): string {
     switch (priority) {
       case 'Low': return 'text-green-500';
@@ -277,6 +278,7 @@ export class TaskComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // priority - icon
   getPriorityIcon(priority: string): string {
     switch (priority) {
       case 'Low': return 'arrow_downward';
@@ -294,12 +296,43 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
+  //search 
   get filteredRecords(): Tasks[] {
     if (!this.searchText) return this.taskRecord;
     const search = this.searchText.toLowerCase();
     return this.taskRecord.filter(record =>
       record.title.toLowerCase().includes(search) ||
+      record.priority.toLowerCase().includes(search) ||
       (record.assignedName && record.assignedName.toLowerCase().includes(search))
     );
   }
+
+  //no of task
+  get totalTasks(): number {
+    return this.taskRecord.length;
+  }
+
+  get completedTasks(): number {
+    return this.taskRecord.filter(task => task.completed).length;
+  }
+
+  //sorting
+  sortByPriority(priority: 'High' | 'Normal' | 'Low') {
+    const priorityOrder: Record<string, number> = {
+      High: 3,
+      Normal: 2,
+      Low: 1
+    };
+
+    const isAscending = priority === 'Low'; // Low → High, others → High → Low
+
+    const sorted = [...this.taskRecord].sort((a, b) =>
+      isAscending
+        ? priorityOrder[a.priority] - priorityOrder[b.priority]
+        : priorityOrder[b.priority] - priorityOrder[a.priority]
+    );
+
+    this.taskRecord = sorted;
+  }
+
 }

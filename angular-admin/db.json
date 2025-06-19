@@ -136,6 +136,24 @@
       "checkOutTime": "5:30 PM",
       "totalWorkingHours": "00:00",
       "id": 4
+    },
+    {
+      "employeeId": 1,
+      "employeename": "Chintan Rathod",
+      "date": "2025-06-19",
+      "checkInTime": "10:18 AM",
+      "checkOutTime": "",
+      "totalWorkingHours": "",
+      "id": 5
+    },
+    {
+      "employeeId": 2,
+      "employeename": "John Wick",
+      "date": "2025-06-19",
+      "checkInTime": "10:28 AM",
+      "checkOutTime": "",
+      "totalWorkingHours": "",
+      "id": 6
     }
   ],
   "Tasks": [
@@ -144,26 +162,40 @@
       "assignedTo": 1,
       "assignedName": "Chintan Rathod",
       "priority": "High",
-      "duedate": "2025-06-30",
+      "duedate": "2025-06-23",
       "eventdetails": "NA",
       "completed": false,
       "id": 1
     },
     {
-      "position": 2,
-      "id": 2,
-      "title": "Particular Employee Task Feature ",
-      "priority": "High",
-      "duedate": "2025-06-19T00:00:00.000Z",
-      "completed": false
+      "title": "TO DO List ",
+      "assignedTo": 1,
+      "assignedName": "Chintan Rathod",
+      "priority": "Normal",
+      "duedate": "2025-06-24",
+      "eventdetails": "NA",
+      "completed": null,
+      "id": 2
     },
     {
-      "position": 3,
-      "id": 3,
-      "title": "Attendance",
-      "priority": "High",
-      "duedate": "2025-06-24T00:00:00.000Z",
-      "completed": false
+      "title": "Task Search Function",
+      "assignedTo": 1,
+      "assignedName": "Chintan Rathod",
+      "priority": "Low",
+      "duedate": "2025-06-25",
+      "eventdetails": "NA",
+      "completed": false,
+      "id": 3
+    },
+    {
+      "title": "Sorting Task Function",
+      "assignedTo": 1,
+      "assignedName": "Chintan Rathod",
+      "priority": "Normal",
+      "duedate": "2025-06-25",
+      "eventdetails": "NA",
+      "completed": null,
+      "id": 4
     }
   ]
 }

@@ -21,21 +21,21 @@
                 <!-- Role Tabs -->
                 <div class="flex justify-between mb-6">
                     <button type="button" (click)="selectRole('admin')" [ngClass]="{'bg-[#1E8E14] text-white': selectedRole === 'admin',
-                     'bg-gray-200 text-black': selectedRole !== 'admin'}" class="px-4 py-2 rounded-full font-medium cursor-pointer">
+                     'bg-gray-200 text-black': selectedRole !== 'admin'}" class="px-4 py-2 rounded-full font-medium cursor-pointer shadow-lg">
                         Admin
                     </button>
 
                     <button type="button" (click)="selectRole('employee')" [ngClass]="{
                       'bg-[#FD7E14] text-white': selectedRole === 'employee',
                       'bg-gray-200 text-black': selectedRole !== 'employee'
-                      }" class="px-4 py-2 rounded-full font-medium cursor-pointer ">
+                      }" class="px-4 py-2 rounded-full font-medium cursor-pointer shadow-lg">
                         Employee
                     </button>
 
                     <button type="button" (click)="selectRole('client')" [ngClass]="{
       'bg-[#2079FD] text-white': selectedRole === 'client',
       'bg-gray-200 text-black': selectedRole !== 'client'
-    }" class="px-4 py-2 rounded-full font-medium cursor-pointer">
+    }" class="px-4 py-2 rounded-full font-medium cursor-pointer shadow-lg">
                         Client
                     </button>
                 </div>
