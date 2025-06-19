@@ -153,7 +153,8 @@ export class MytaskComponent implements AfterViewInit {
 
     return data.filter(record =>
       record.title.toLowerCase().includes(search)||
-      record.priority.toLowerCase().includes(search)
+      record.priority.toLowerCase().includes(search)||
+      record.duedate.toLowerCase().includes(search)
     );
   }
 

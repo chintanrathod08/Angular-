@@ -120,15 +120,6 @@
       "id": 2
     },
     {
-      "employeeId": 1,
-      "employeename": "Chintan Rathod",
-      "date": "2025-06-18",
-      "checkInTime": "10:08 AM",
-      "checkOutTime": "",
-      "totalWorkingHours": "",
-      "id": 3
-    },
-    {
       "employeeId": 2,
       "employeename": "John Wick",
       "date": "2025-06-18",
@@ -156,46 +147,5 @@
       "id": 6
     }
   ],
-  "Tasks": [
-    {
-      "title": "HR Portal ",
-      "assignedTo": 1,
-      "assignedName": "Chintan Rathod",
-      "priority": "High",
-      "duedate": "2025-06-23",
-      "eventdetails": "NA",
-      "completed": false,
-      "id": 1
-    },
-    {
-      "title": "TO DO List ",
-      "assignedTo": 1,
-      "assignedName": "Chintan Rathod",
-      "priority": "Normal",
-      "duedate": "2025-06-24",
-      "eventdetails": "NA",
-      "completed": null,
-      "id": 2
-    },
-    {
-      "title": "Task Search Function",
-      "assignedTo": 1,
-      "assignedName": "Chintan Rathod",
-      "priority": "Low",
-      "duedate": "2025-06-25",
-      "eventdetails": "NA",
-      "completed": false,
-      "id": 3
-    },
-    {
-      "title": "Sorting Task Function",
-      "assignedTo": 1,
-      "assignedName": "Chintan Rathod",
-      "priority": "Normal",
-      "duedate": "2025-06-25",
-      "eventdetails": "NA",
-      "completed": null,
-      "id": 4
-    }
-  ]
+  "Tasks": []
 }

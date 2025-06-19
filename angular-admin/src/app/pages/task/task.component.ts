@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { trigger, transition, style, animate } from '@angular/animations';
 import Swal from 'sweetalert2';
 import { TaskService } from '../../services/task.service';
 import { Tasks } from '../../model/tasks';
@@ -40,17 +39,6 @@ import { MatMenuModule } from '@angular/material/menu';
   ],
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss'],
-  animations: [
-    trigger('slideInOut', [
-      transition(':enter', [
-        style({ transform: 'translateX(100%)', opacity: 0 }),
-        animate('1.5s ease-in-out', style({ transform: 'translateX(0)', opacity: 1 })),
-      ]),
-      transition(':leave', [
-        animate('1.5s ease-in-out', style({ transform: 'translateX(100%)', opacity: 0 }))
-      ]),
-    ])
-  ]
 })
 export class TaskComponent implements OnInit, AfterViewInit {
   @ViewChildren(MatFormField) matFormFields!: QueryList<MatFormField>;
@@ -73,29 +61,77 @@ export class TaskComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
+    this.initializeForm();
+    this.getTaskList();
+    this.loadEmployees();
+    this.handleEditMode();
+  }
+
+  initializeForm(): void {
     this.addTaskForm = this.fb.group({
       title: ['', Validators.required],
       assignedTo: ['', Validators.required],
       assignedName: [''],
+      clientname: ['', Validators.required],
       priority: ['', Validators.required],
-      duedate: ['', Validators.required],
+      taskdate: [new Date(), Validators.required],
+      duedate: ['', [Validators.required, this.validateDueDate.bind(this)]],
       eventdetails: ['', Validators.required],
       completed: [false]
     });
+  }
 
-    this.getTaskList();
-    this.loadEmployees();
-
+  handleEditMode(): void {
     this.route.queryParams.subscribe((params) => {
       if (params['editId']) {
         this.isEditMode = true;
         this.editId = +params['editId'];
         this.taskService.getTaskById(this.editId).subscribe((task) => {
-          this.addTaskForm.patchValue(task);
+          const formattedTask = {
+            ...task,
+            taskdate: this.parseDate(task.taskdate),
+            duedate: this.parseDate(task.duedate)
+          };
+          this.addTaskForm.patchValue(formattedTask);
           this.toggleTaskMenu();
         });
       }
     });
+  }
+
+  validateDueDate(control: AbstractControl): ValidationErrors | null {
+    const taskDate = this.addTaskForm?.get('taskdate')?.value;
+    const dueDate = control.value;
+    
+    if (taskDate && dueDate && new Date(dueDate) < new Date(taskDate)) {
+      return { invalidDueDate: true };
+    }
+    return null;
+  }
+
+  parseDate(dateValue: string | Date): Date {
+    if (!dateValue) return new Date();
+    if (dateValue instanceof Date) return dateValue;
+
+    if (typeof dateValue === 'string') {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        const [year, month, day] = dateValue.split('-');
+        return new Date(+year, +month - 1, +day);
+      }
+      else if (dateValue.includes('/')) {
+        const [day, month, year] = dateValue.split('/');
+        return new Date(+year, +month - 1, +day);
+      }
+    }
+    return new Date(dateValue);
+  }
+
+  formatDate(date: Date | string): string {
+    const dateObj = this.parseDate(date);
+    const year = dateObj.getFullYear();
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   ngAfterViewInit() {
@@ -111,59 +147,75 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
-  //date formate
-  formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`; // Now returns YYYY-MM-DD format
-  }
-
   onSubmit(): void {
     if (this.addTaskForm.invalid) {
-      Swal.fire({
-        toast: true,
-        icon: 'error',
-        title: 'Please fill all required fields',
-        position: 'top',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
+      this.showError('Please fill all required fields');
       return;
     }
 
-    const selectedEmployee = this.employees.find(emp => emp.id === this.addTaskForm.value.assignedTo);
-
-    const formData = {
-      ...this.addTaskForm.value,
-      assignedTo: selectedEmployee?.id,
-      assignedName: selectedEmployee ? `${selectedEmployee.firstName} ${selectedEmployee.lastName}` : '',
-      duedate: this.formatDate(this.addTaskForm.value.duedate),
-    };
-
+    const formData = this.prepareFormData();
     const request$ = this.isEditMode && this.editId !== null
       ? this.taskService.updateTask(this.editId, formData)
       : this.taskService.postData(formData);
 
+    request$.subscribe({
+      next: () => this.handleSuccess(),
+      error: (err) => this.handleError(err)
+    });
+  }
+
+  prepareFormData(): any {
+    const selectedEmployee = this.employees.find(emp => emp.id === this.addTaskForm.value.assignedTo);
+    
+    return {
+      ...this.addTaskForm.value,
+      assignedTo: selectedEmployee?.id,
+      assignedName: selectedEmployee ? `${selectedEmployee.firstName} ${selectedEmployee.lastName}` : '',
+      taskdate: this.formatDate(this.addTaskForm.value.taskdate),
+      duedate: this.formatDate(this.addTaskForm.value.duedate),
+    };
+  }
+
+  showError(message: string): void {
+    Swal.fire({
+      toast: true,
+      icon: 'error',
+      title: message,
+      position: 'top',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+    });
+  }
+
+  handleSuccess(): void {
     const successMessage = this.isEditMode ? 'Task updated successfully' : 'Task added successfully';
+    Swal.fire({
+      toast: true,
+      icon: 'success',
+      title: successMessage,
+      position: 'top',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+    });
 
-    request$.subscribe(() => {
-      Swal.fire({
-        toast: true,
-        icon: 'success',
-        title: successMessage,
-        position: 'top',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
+    this.getTaskList();
+    this.addTaskForm.reset({
+      taskdate: new Date()
+    });
+    this.isEditMode = false;
+    this.editId = null;
+    this.isTaskMenuOpen = false;
+  }
 
-      this.getTaskList();
-      this.addTaskForm.reset();
-      this.isEditMode = false;
-      this.editId = null;
-      this.isTaskMenuOpen = false;
+  handleError(error: any): void {
+    console.error('Error:', error);
+    Swal.fire({
+      title: 'Error!',
+      text: 'An error occurred. Please try again.',
+      icon: 'error',
+      confirmButtonText: 'OK'
     });
   }
 
@@ -181,7 +233,9 @@ export class TaskComponent implements OnInit, AfterViewInit {
     if (!this.isTaskMenuOpen) {
       this.isEditMode = false;
       this.editId = null;
-      this.addTaskForm.reset();
+      this.addTaskForm.reset({
+        taskdate: new Date()
+      });
     }
     setTimeout(() => {
       this.updateMaterialFormFieldAppearance();
@@ -192,23 +246,10 @@ export class TaskComponent implements OnInit, AfterViewInit {
     this.isEditMode = true;
     this.editId = id;
     this.taskService.getTaskById(id).subscribe((task) => {
-      let dueDateValue: Date;
-      if (typeof task.duedate === 'string') {
-        if (task.duedate.includes('/')) {
-          // Handle DD/MM/YYYY format
-          const [day, month, year] = task.duedate.split('/');
-          dueDateValue = new Date(+year, +month - 1, +day);
-        } else {
-          // Handle YYYY-MM-DD format
-          dueDateValue = new Date(task.duedate);
-        }
-      } else {
-        dueDateValue = new Date(task.duedate);
-      }
-
       this.addTaskForm.patchValue({
         ...task,
-        duedate: dueDateValue
+        taskdate: this.parseDate(task.taskdate),
+        duedate: this.parseDate(task.duedate)
       });
       this.toggleTaskMenu();
     });
@@ -261,6 +302,11 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
+  onView(id: number){
+    console.log("Viewing task with ID :", id);
+    this.router.navigate(['viewtask', id])
+  }
+
   toggleCompletion(task: Tasks) {
     task.completed = !task.completed;
     this.taskService.updateTask(task.id!, task).subscribe(() => {
@@ -268,7 +314,6 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // priority - color
   getPriorityClass(priority: string): string {
     switch (priority) {
       case 'Low': return 'text-green-500';
@@ -278,7 +323,6 @@ export class TaskComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // priority - icon
   getPriorityIcon(priority: string): string {
     switch (priority) {
       case 'Low': return 'arrow_downward';
@@ -296,7 +340,6 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
-  //search 
   get filteredRecords(): Tasks[] {
     if (!this.searchText) return this.taskRecord;
     const search = this.searchText.toLowerCase();
@@ -307,7 +350,6 @@ export class TaskComponent implements OnInit, AfterViewInit {
     );
   }
 
-  //no of task
   get totalTasks(): number {
     return this.taskRecord.length;
   }
@@ -316,7 +358,6 @@ export class TaskComponent implements OnInit, AfterViewInit {
     return this.taskRecord.filter(task => task.completed).length;
   }
 
-  //sorting
   sortByPriority(priority: 'High' | 'Normal' | 'Low') {
     const priorityOrder: Record<string, number> = {
       High: 3,
@@ -324,7 +365,7 @@ export class TaskComponent implements OnInit, AfterViewInit {
       Low: 1
     };
 
-    const isAscending = priority === 'Low'; // Low → High, others → High → Low
+    const isAscending = priority === 'Low';
 
     const sorted = [...this.taskRecord].sort((a, b) =>
       isAscending
@@ -334,5 +375,4 @@ export class TaskComponent implements OnInit, AfterViewInit {
 
     this.taskRecord = sorted;
   }
-
 }

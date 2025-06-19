@@ -14,6 +14,7 @@ import { ProjectDetailsComponent } from './pages/project-details/project-details
 import { EmployeeprofileComponent } from './pages/employeeprofile/employeeprofile.component';
 import { TaskComponent } from './pages/task/task.component';
 import { MytaskComponent } from './pages/mytask/mytask.component';
+import { ViewtaskComponent } from './pages/viewtask/viewtask.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -36,6 +37,7 @@ export const routes: Routes = [
   { path: 'attendance', component: AttendanceComponent, canActivate: [AuthGuard], data: { roles: ['admin', 'employee'] } },
   { path: 'attendance-list', component: AttendanceListComponent, canActivate: [AuthGuard], data: { roles: ['admin', 'employee'] } },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: { roles: ['admin', 'employee'] } },
+  { path: 'viewtask/:id', component: ViewtaskComponent, canActivate: [AuthGuard], data: { roles: ['admin', 'employee'] } },
 
   // Eployee only
   {path: 'mytask', component: MytaskComponent, canActivate: [AuthGuard], data: { roles: ['employee'] } },
