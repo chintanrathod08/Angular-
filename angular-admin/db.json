@@ -133,8 +133,8 @@
       "employeename": "Chintan Rathod",
       "date": "2025-06-19",
       "checkInTime": "10:18 AM",
-      "checkOutTime": "",
-      "totalWorkingHours": "",
+      "checkOutTime": "6:57 PM",
+      "totalWorkingHours": "07:39",
       "id": 5
     },
     {
@@ -142,10 +142,73 @@
       "employeename": "John Wick",
       "date": "2025-06-19",
       "checkInTime": "10:28 AM",
+      "checkOutTime": "6:57 PM",
+      "totalWorkingHours": "07:29",
+      "id": 6
+    },
+    {
+      "employeeId": 1,
+      "employeename": "Chintan Rathod",
+      "date": "2025-06-20",
+      "checkInTime": "10:17 AM",
       "checkOutTime": "",
       "totalWorkingHours": "",
-      "id": 6
+      "id": 7
+    },
+    {
+      "employeeId": 2,
+      "employeename": "John Wick",
+      "date": "2025-06-20",
+      "checkInTime": "10:17 AM",
+      "checkOutTime": "",
+      "totalWorkingHours": "",
+      "id": 8
     }
   ],
-  "Tasks": []
+  "Tasks": [
+    {
+      "title": "To Do List ",
+      "assignedTo": 1,
+      "assignedName": "Chintan Rathod",
+      "clientname": "Google ",
+      "priority": "High",
+      "taskdate": "2025-06-20",
+      "duedate": "2025-06-21",
+      "eventdetails": "- Create To Do List \n- CRUD \n- Searchinig - Filtering - Task",
+      "completed": false,
+      "id": 1
+    },
+    {
+      "title": "Sorting Function",
+      "assignedTo": 1,
+      "assignedName": "Chintan Rathod",
+      "clientname": "Google ",
+      "priority": "Normal",
+      "taskdate": "2025-06-20",
+      "duedate": "2025-06-21",
+      "eventdetails": "Sorting Function In Task Features ",
+      "completed": false,
+      "id": 2
+    },
+    {
+      "position": 3,
+      "id": 3,
+      "title": "Attendance Field  ",
+      "priority": "Low",
+      "duedate": "2025-06-21T00:00:00.000Z",
+      "completed": true
+    },
+    {
+      "title": "Task Search Function",
+      "assignedTo": 1,
+      "assignedName": "Chintan Rathod",
+      "clientname": "Google",
+      "priority": "High",
+      "taskdate": "2025-06-20",
+      "duedate": "2025-06-21",
+      "eventdetails": "Add Searching Function in Task ",
+      "completed": null,
+      "id": 4
+    }
+  ]
 }

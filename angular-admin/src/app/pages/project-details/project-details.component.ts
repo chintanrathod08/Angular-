@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router'; 
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../model/project';
 
 @Component({
   selector: 'app-project-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, MatProgressBarModule, NgClass,], 
+  imports: [CommonModule, RouterModule, MatIconModule, MatProgressBarModule, NgClass,],
   templateUrl: './project-details.component.html',
   styleUrl: './project-details.component.scss'
 })
@@ -21,12 +21,12 @@ export class ProjectDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private projectService: ProjectService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-      this.projectService.getDataByID(id).subscribe({
-      next: (res) =>{
+    this.projectService.getDataByID(id).subscribe({
+      next: (res) => {
         this.projectData = res;
       }
     })
@@ -45,7 +45,7 @@ export class ProjectDetailsComponent implements OnInit {
     }
   }
 
-   getPriorityClass(priority: string): string {
+  getPriorityClass(priority: string): string {
     switch (priority) {
       case 'Low': return 'text-green-500';
       case 'Medium': return 'text-blue-500';
@@ -55,13 +55,13 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   getPriorityIcon(priority: string): string {
-   switch (priority) {
-    case 'Low': return 'keyboard_arrow_down';
-    case 'Medium': return 'code';
-    case 'High': return 'keyboard_arrow_up';
-    default: return '';
-  }
+    switch (priority) {
+      case 'Low': return 'keyboard_arrow_down';
+      case 'Medium': return 'code';
+      case 'High': return 'keyboard_arrow_up';
+      default: return '';
+    }
 
-}
+  }
 
 }

@@ -88,7 +88,7 @@ export class MytaskComponent implements AfterViewInit {
     return new Date(); // Fallback
   }
 
-   // priority - color
+  // priority - color
   getPriorityClass(priority: string): string {
     switch (priority) {
       case 'Low': return 'text-green-500';
@@ -99,8 +99,8 @@ export class MytaskComponent implements AfterViewInit {
   }
 
   // priority - icon
-  getPriorityIcon(priority: string): string{
-    switch(priority){
+  getPriorityIcon(priority: string): string {
+    switch (priority) {
       case 'Low': return 'arrow_downward';
       case 'Normal': return 'remove';
       case 'High': return 'arrow_upward';
@@ -143,7 +143,8 @@ export class MytaskComponent implements AfterViewInit {
     return this.dataSource?.data?.filter(task => task.completed)?.length || 0;
   }
 
-  //search 
+
+  // searching 
   get filteredRecords(): any[] {
     const data = this.dataSource?.data || [];
 
@@ -152,14 +153,17 @@ export class MytaskComponent implements AfterViewInit {
     const search = this.searchText.toLowerCase();
 
     return data.filter(record =>
-      record.title.toLowerCase().includes(search)||
-      record.priority.toLowerCase().includes(search)||
-      record.duedate.toLowerCase().includes(search)
+      record.title.toLowerCase().includes(search) ||
+      record.priority.toLowerCase().includes(search) ||
+      (
+        record.duedate instanceof Date
+          ? record.duedate.toLocaleDateString('en-GB').toLowerCase().includes(search)
+          : false
+      )
     );
   }
 
-
-  // sorting 
+    // sorting 
   sortByPriority(priority: 'High' | 'Normal' | 'Low') {
     const priorityOrder: Record<string, number> = {
       High: 3,

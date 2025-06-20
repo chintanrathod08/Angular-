@@ -5,14 +5,14 @@
         <!-- section-1 -->
         <div class="w-full md:grid md:grid-cols-2 md:flex md:justify-between md:items-center md:mb-5">
 
-            <!-- <div class="flex items-center">
-                <button [routerLink]="isAdmin ? '/task' : '/mytask'"
+            <div class="flex items-center">
+                <!-- <button [routerLink]="isAdmin ? '/task' : '/mytask'"
                     class="p-2 text-[12px] md:text-[16px] text-[white] cursor-pointer rounded-[8px] bg-[#6777EF] shadow-xl flex items-center">
                     <mat-icon class="me-1">keyboard_backspace</mat-icon>
                     Go back
-                </button>
+                </button> -->
                 <h1 class="md:text-[1.3rem] text-[#767676] ms-3">Task Details</h1>
-            </div> -->
+            </div>
 
             <div class="flex md:justify-end text-[#767676] opacity-0 md:opacity-100">
                 <mat-icon>home</mat-icon>
@@ -29,24 +29,42 @@
             <h2 class="text-[#5B626B] mb-2">Task Details :</h2>
 
             <div class="w-full h-auto p-3">
-                <h1 class="text-[#6777EF] text-[1.5rem]">{{taskData.title}}</h1>
+                <h1 class="text-[#FF9859] text-[1.5rem]">{{taskData.title}}</h1>
 
-                <div class="w-full h-auto flex flex-col gap-2 mt-3">
+                <div class="w-full h-auto flex flex-col gap-3 mt-3">
+
                     <p class="flex gap-2"> <span class="text-[#767676]">Employee Id : </span>
-                        <span>{{taskData.assignedTo}}</span></p>
+                        <span class="text-[red]">{{taskData.assignedTo}}</span>
+                    </p>
+
                     <p class="flex gap-2"> <span class="text-[#767676]">Employee Name : </span>
-                        <span>{{taskData.assignedName}}</span></p>
-                    <p class="flex gap-2"> <span class="text-[#767676]">Client : </span>
-                        <span>{{taskData.clientname}}</span></p>
-                    <p class="flex gap-2"> <span class="text-[#767676]">Priority Of : </span>
-                        <span>{{taskData.priority}}</span></p>
+                        <span class="text-[#6777EF] text-[1.1rem] ">{{taskData.assignedName}}</span>
+                    </p>
+
+                    <p class="flex items-center gap-2"> <span class="text-[#767676]">Priority Of : </span>
+                        <span class="flex items-center" [ngClass]="getPriorityClass(taskData.priority)">
+                            <mat-icon>{{getPriorityIcon(taskData.priority)}}</mat-icon>
+                            {{taskData.priority}}</span>
+                    </p>
+
                     <p class="flex gap-2"> <span class="text-[#767676]">Task Date : </span>
-                        <span>{{taskData.taskdate}}</span></p>
+                        <span>{{taskData.taskdate}}</span>
+                    </p>
+
                     <p class="flex gap-2"> <span class="text-[#767676]">Due Date : </span>
-                        <span>{{taskData.duedate}}</span></p>
+                        <span>{{taskData.duedate}}</span>
+                    </p>
+
+                    <p class="flex gap-2"> <span class="text-[#767676]">Client : </span>
+                        <span class="text-[#FF9859]" >{{taskData.clientname}}</span>
+                    </p>
+
                     <p class="flex gap-2"> <span class="text-[#767676]">Event Details : </span>
-                        <span>{{taskData.eventdetails}}</span></p>
-                    <p class="flex gap-2"> <span class="text-[#767676]"></span> <span></span></p>
+                        <span>{{taskData.eventdetails}}</span>
+                    </p>
+
+                   <p class="flex gap-2"> <span class="text-[#767676]"></span> <span></span></p>
+
                 </div>
             </div>
 
