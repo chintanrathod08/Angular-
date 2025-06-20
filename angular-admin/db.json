@@ -167,48 +167,26 @@
   ],
   "Tasks": [
     {
-      "title": "To Do List ",
-      "assignedTo": 1,
-      "assignedName": "Chintan Rathod",
-      "clientname": "Google ",
+      "position": 1,
+      "id": 1,
+      "title": "Searching Task ",
       "priority": "High",
-      "taskdate": "2025-06-20",
-      "duedate": "2025-06-21",
-      "eventdetails": "- Create To Do List \n- CRUD \n- Searchinig - Filtering - Task",
-      "completed": false,
-      "id": 1
+      "taskdate": "2025-06-20T00:00:00.000Z",
+      "duedate": "2025-06-21T00:00:00.000Z",
+      "completed": true,
+      "assignedName": "Chintan Rathod"
     },
     {
-      "title": "Sorting Function",
-      "assignedTo": 1,
-      "assignedName": "Chintan Rathod",
-      "clientname": "Google ",
+      "title": "Sorting Task",
+      "assignedTo": 2,
+      "assignedName": "John Wick",
+      "clientname": "Google",
       "priority": "Normal",
       "taskdate": "2025-06-20",
       "duedate": "2025-06-21",
-      "eventdetails": "Sorting Function In Task Features ",
+      "eventdetails": "NA",
       "completed": false,
       "id": 2
-    },
-    {
-      "position": 3,
-      "id": 3,
-      "title": "Attendance Field  ",
-      "priority": "Low",
-      "duedate": "2025-06-21T00:00:00.000Z",
-      "completed": true
-    },
-    {
-      "title": "Task Search Function",
-      "assignedTo": 1,
-      "assignedName": "Chintan Rathod",
-      "clientname": "Google",
-      "priority": "High",
-      "taskdate": "2025-06-20",
-      "duedate": "2025-06-21",
-      "eventdetails": "Add Searching Function in Task ",
-      "completed": null,
-      "id": 4
     }
   ]
 }

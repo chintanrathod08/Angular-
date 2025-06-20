@@ -98,11 +98,18 @@
                 <ng-container matColumnDef="priority">
                     <th mat-header-cell *matHeaderCellDef>Priority</th>
                     <td mat-cell *matCellDef="let element">
-                        <span class="flex items-center gap-1"  
-                        [ngClass]="getPriorityClass(element.priority)">
+                        <span class="flex items-center gap-1" [ngClass]="getPriorityClass(element.priority)">
                             <mat-icon>{{getPriorityIcon(element.priority)}}</mat-icon>
                             {{element.priority}}
                         </span>
+                    </td>
+                </ng-container>
+
+                <!-- Due Date Column -->
+                <ng-container matColumnDef="taskdate">
+                    <th mat-header-cell *matHeaderCellDef>Task Date</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.taskdate | date:'dd/MM/yyyy'}} <!-- Using DatePipe with format -->
                     </td>
                 </ng-container>
 
@@ -122,6 +129,14 @@
                             [class]="element.completed ? 'text-green-500 p-2 rounded-md bg-[#DDEDE6] ' : 'text-gray-500 p-2 rounded-md bg-[#f0f0f0] '">
                             {{element.completed ? 'Completed' : 'Pending'}}
                         </span>
+                    </td>
+                </ng-container>
+
+                <!-- Action  -->
+                <ng-container matColumnDef="action"> 
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element">
+                        <button (click)="onView(element.id)" class="ms-2.5" ><mat-icon style="color: #6777EF; cursor: pointer;" >visibility</mat-icon></button>
                     </td>
                 </ng-container>
 

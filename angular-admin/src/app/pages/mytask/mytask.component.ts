@@ -7,9 +7,9 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, NgModelGroup } from '@angular/forms';
-import { Tasks } from '../../model/tasks';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mytask',
@@ -23,13 +23,13 @@ import { MatMenuModule } from '@angular/material/menu';
     FormsModule,
     MatButtonModule,
     MatMenuModule,
-    DatePipe // This is the critical addition
+    DatePipe,
   ],
   templateUrl: './mytask.component.html',
   styleUrls: ['./mytask.component.scss']
 })
 export class MytaskComponent implements AfterViewInit {
-  displayedColumns: string[] = ['position', 'title', 'priority', 'duedate', 'status'];
+  displayedColumns: string[] = ['position', 'title', 'priority', 'taskdate', 'duedate', 'status', 'action'];
   dataSource = new MatTableDataSource<any>();
   currentUser: any;
   searchText: string = '';
@@ -39,7 +39,8 @@ export class MytaskComponent implements AfterViewInit {
 
   constructor(
     private taskService: TaskService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
   ) { }
 
   ngAfterViewInit() {
@@ -47,6 +48,7 @@ export class MytaskComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  // laodTask
   loadTasks() {
     this.currentUser = this.authService.getUser();
     if (this.currentUser) {
@@ -57,8 +59,10 @@ export class MytaskComponent implements AfterViewInit {
             id: task.id,
             title: task.title,
             priority: task.priority,
-            duedate: this.parseDate(task.duedate), // Parse date here
-            completed: task.completed
+            taskdate: this.parseDate(task.taskdate),
+            duedate: this.parseDate(task.duedate),
+            completed: task.completed,
+            assignedName: task.assignedName
           }));
         },
         error: (err) => {
@@ -76,16 +80,14 @@ export class MytaskComponent implements AfterViewInit {
 
     if (typeof dateString === 'string') {
       if (dateString.includes('/')) {
-        // Handle DD/MM/YYYY format
         const [day, month, year] = dateString.split('/');
         return new Date(+year, +month - 1, +day);
       } else if (dateString.includes('-')) {
-        // Handle YYYY-MM-DD format
         return new Date(dateString);
       }
     }
 
-    return new Date(); // Fallback
+    return new Date(dateString); // Fallback
   }
 
   // priority - color
@@ -108,31 +110,28 @@ export class MytaskComponent implements AfterViewInit {
     }
   }
 
-
   // Add this method to properly toggle task completion
   async toggleCompletion(task: any) {
-    // Create updated task object
     const updatedTask = {
       ...task,
       completed: !task.completed
     };
 
     try {
-      // Update the task on the server
       await this.taskService.updateTask(task.id, updatedTask).toPromise();
-
-      // Update local data
-      const updatedData = this.dataSource.data.map(t =>
-        t.id === task.id ? updatedTask : t
-      );
-      this.dataSource.data = updatedData;
-
+      // Update local data immediately
+      const index = this.dataSource.data.findIndex(t => t.id === task.id);
+      if (index !== -1) {
+        this.dataSource.data[index] = updatedTask;
+        this.dataSource._updateChangeSubscription(); // Force table update
+      }
     } catch (error) {
       console.error('Error updating task:', error);
-      // Revert the checkbox if update fails
+      // Revert the change if update fails
       task.completed = !task.completed;
     }
   }
+
 
   // Add these properties to your component class
   get totalTasks(): number {
@@ -150,20 +149,23 @@ export class MytaskComponent implements AfterViewInit {
 
     if (!this.searchText) return data;
 
-    const search = this.searchText.toLowerCase();
+    const normalize = (str: string) => str.toLowerCase().replace(/\s+/g, '');
+
+    const search = normalize(this.searchText);
 
     return data.filter(record =>
-      record.title.toLowerCase().includes(search) ||
-      record.priority.toLowerCase().includes(search) ||
+      normalize(record.title).includes(search) ||
+      normalize(record.priority).includes(search) ||
       (
         record.duedate instanceof Date
-          ? record.duedate.toLocaleDateString('en-GB').toLowerCase().includes(search)
+          ? normalize(record.duedate.toLocaleDateString('en-GB')).includes(search)
           : false
       )
     );
   }
 
-    // sorting 
+
+  // sorting 
   sortByPriority(priority: 'High' | 'Normal' | 'Low') {
     const priorityOrder: Record<string, number> = {
       High: 3,
@@ -182,4 +184,8 @@ export class MytaskComponent implements AfterViewInit {
     this.dataSource.data = sorted;
   }
 
+  onView(id: number) {
+    console.log("Viewing task with ID :", id)
+    this.router.navigate(['viewtask', id])
+  }
 }

@@ -109,6 +109,7 @@
                                 <span [ngClass]="{ 'line-through decoration-overline text-[#9D9D9D]': data.completed }">
                                     {{ data.title }}
                                 </span>
+                                <span *ngIf="data.completed" class="text-green-500 text-sm ml-2">(Completed)</span>
                             </mat-checkbox>
                         </div>
 
@@ -123,7 +124,8 @@
                             </p>
 
                             <div class="h-full flex items-center gap-1">
-                                <p class="text-sm text-gray-600 flex gap-1"> <span class="text-[gray]">Due date : </span> {{ data.duedate}}</p>
+                                <p class="text-sm text-gray-600 flex gap-1"> <span class="text-[gray]">Due date :
+                                    </span> {{ data.duedate}}</p>
 
                                 <button matButton [matMenuTriggerFor]="menu" class="flex items-center cursor-pointer"
                                     style="color: #6F6F6F;"><mat-icon>more_vert</mat-icon></button>
@@ -165,7 +167,7 @@
                             </div>
 
                             <!-- Title -->
-                            <mat-form-field appearance="outline" class="w-full mb-1">
+                            <mat-form-field appearance="outline" class="w-full mb-3">
                                 <mat-label>Title</mat-label>
                                 <input matInput placeholder="Task Title" formControlName="title" required />
                                 <button mat-icon-button matSuffix>
@@ -175,11 +177,6 @@
                                     Task title is required
                                 </mat-error>
                             </mat-form-field>
-
-                            <!-- Checkbox -->
-                            <div class="flex items-center mb-2">
-                                <mat-checkbox>Mark as complete</mat-checkbox>
-                            </div>
 
                             <!-- Assigned Name -->
                             <mat-form-field appearance="outline" class="w-full mb-3">

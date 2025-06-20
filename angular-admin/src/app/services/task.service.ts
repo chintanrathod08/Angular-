@@ -14,7 +14,7 @@ export class TaskService {
   constructor(
     private http: HttpClient,
     private authService: AuthService
-  ) {}
+  ) { }
 
   getTasks(): Observable<Tasks[]> {
     const user = this.authService.getUser();
@@ -35,10 +35,12 @@ export class TaskService {
     return this.http.get<Tasks>(`${this.taskApi}/${id}`);
   }
 
-  updateTask(id: number, data: Tasks) {
-    return this.http.put<Tasks>(`${this.taskApi}/${id}`, data);
+  // In your task service
+  updateTask(id: number, task: any): Observable<any> {
+    return this.http.put(`${this.taskApi}/${id}`, task);
   }
 
+  //delete-task
   deleteTask(id: number) {
     return this.http.delete(`${this.taskApi}/${id}`);
   }

@@ -37,7 +37,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatMenuModule,
     FormsModule,
   ],
-  
+
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss'],
 })
@@ -103,28 +103,29 @@ export class TaskComponent implements OnInit, AfterViewInit {
   validateDueDate(control: AbstractControl): ValidationErrors | null {
     const taskDate = this.addTaskForm?.get('taskdate')?.value;
     const dueDate = control.value;
-    
+
     if (taskDate && dueDate && new Date(dueDate) < new Date(taskDate)) {
       return { invalidDueDate: true };
     }
     return null;
   }
 
-  parseDate(dateValue: string | Date): Date {
-    if (!dateValue) return new Date();
-    if (dateValue instanceof Date) return dateValue;
+  // In both components, ensure consistent date parsing
+  parseDate(dateString: string | Date): Date {
+    if (dateString instanceof Date) {
+      return dateString;
+    }
 
-    if (typeof dateValue === 'string') {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-        const [year, month, day] = dateValue.split('-');
+    if (typeof dateString === 'string') {
+      if (dateString.includes('/')) {
+        const [day, month, year] = dateString.split('/');
         return new Date(+year, +month - 1, +day);
-      }
-      else if (dateValue.includes('/')) {
-        const [day, month, year] = dateValue.split('/');
-        return new Date(+year, +month - 1, +day);
+      } else if (dateString.includes('-')) {
+        return new Date(dateString);
       }
     }
-    return new Date(dateValue);
+
+    return new Date(dateString); // Fallback
   }
 
   formatDate(date: Date | string): string {
@@ -165,10 +166,10 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
+
   prepareFormData(): any {
     const selectedEmployee = this.employees.find(emp => emp.id === this.addTaskForm.value.assignedTo);
-    
-    return {
+      return {
       ...this.addTaskForm.value,
       assignedTo: selectedEmployee?.id,
       assignedName: selectedEmployee ? `${selectedEmployee.firstName} ${selectedEmployee.lastName}` : '',
@@ -303,7 +304,7 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onView(id: number){
+  onView(id: number) {
     console.log("Viewing task with ID :", id);
     this.router.navigate(['viewtask', id])
   }
@@ -341,15 +342,21 @@ export class TaskComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // serching
   get filteredRecords(): Tasks[] {
     if (!this.searchText) return this.taskRecord;
-    const search = this.searchText.toLowerCase();
+
+    // Normalize input: lowercase and remove spaces
+    const normalize = (value: string) => value.toLowerCase().replace(/\s+/g, '');
+    const search = normalize(this.searchText);
+
     return this.taskRecord.filter(record =>
-      record.title.toLowerCase().includes(search) ||
-      record.priority.toLowerCase().includes(search) ||
-      (record.assignedName && record.assignedName.toLowerCase().includes(search))
+      normalize(record.title).includes(search) ||
+      normalize(record.priority).includes(search) ||
+      (record.assignedName && normalize(record.assignedName).includes(search))
     );
   }
+
 
   get totalTasks(): number {
     return this.taskRecord.length;
