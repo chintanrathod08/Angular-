@@ -5,7 +5,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TaskService } from '../../services/task.service';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule, DatePipe } from '@angular/common';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, NgModelGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -111,24 +111,30 @@ export class MytaskComponent implements AfterViewInit {
   }
 
   // Add this method to properly toggle task completion
-  async toggleCompletion(task: any) {
-    const updatedTask = {
-      ...task,
-      completed: !task.completed
-    };
+  async toggleCompletion(event: MatCheckboxChange, task: any) {
+    // Don't use preventDefault() - it's not needed with (change)
 
     try {
+      // Create updated task with toggled completion status
+      const updatedTask = {
+        ...task,
+        completed: event.checked
+      };
+
+      // Update the task in the backend
       await this.taskService.updateTask(task.id, updatedTask).toPromise();
-      // Update local data immediately
+
+      // Update the local data source immutably
       const index = this.dataSource.data.findIndex(t => t.id === task.id);
       if (index !== -1) {
-        this.dataSource.data[index] = updatedTask;
-        this.dataSource._updateChangeSubscription(); // Force table update
+        const newData = [...this.dataSource.data];
+        newData[index] = updatedTask;
+        this.dataSource.data = newData;
       }
     } catch (error) {
       console.error('Error updating task:', error);
-      // Revert the change if update fails
-      task.completed = !task.completed;
+      // Revert the checkbox state if update fails
+      event.source.checked = !event.checked;
     }
   }
 

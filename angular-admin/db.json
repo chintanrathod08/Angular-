@@ -163,30 +163,27 @@
       "checkOutTime": "",
       "totalWorkingHours": "",
       "id": 8
+    },
+    {
+      "employeeId": 1,
+      "employeename": "Chintan Rathod",
+      "date": "2025-06-23",
+      "checkInTime": "10:06 AM",
+      "checkOutTime": "",
+      "totalWorkingHours": "",
+      "id": 9
     }
   ],
   "Tasks": [
     {
       "position": 1,
       "id": 1,
-      "title": "Searching Task ",
+      "title": "HR Portal ",
       "priority": "High",
-      "taskdate": "2025-06-20T00:00:00.000Z",
-      "duedate": "2025-06-21T00:00:00.000Z",
+      "taskdate": "2025-06-23T00:00:00.000Z",
+      "duedate": "2025-06-24T00:00:00.000Z",
       "completed": true,
       "assignedName": "Chintan Rathod"
-    },
-    {
-      "title": "Sorting Task",
-      "assignedTo": 2,
-      "assignedName": "John Wick",
-      "clientname": "Google",
-      "priority": "Normal",
-      "taskdate": "2025-06-20",
-      "duedate": "2025-06-21",
-      "eventdetails": "NA",
-      "completed": false,
-      "id": 2
     }
   ]
 }
