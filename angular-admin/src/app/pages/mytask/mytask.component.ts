@@ -6,10 +6,16 @@ import { TaskService } from '../../services/task.service';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
-import { FormsModule, NgModelGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskFormDialogComponent } from '../task-form-dialog/task-form-dialog.component';
+import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-mytask',
@@ -24,16 +30,27 @@ import { Router } from '@angular/router';
     MatButtonModule,
     MatMenuModule,
     DatePipe,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   templateUrl: './mytask.component.html',
-  styleUrls: ['./mytask.component.scss']
+  styleUrls: ['./mytask.component.scss'],
+  providers: [
+    provideNativeDateAdapter(),
+  ]
 })
 export class MytaskComponent implements AfterViewInit {
   displayedColumns: string[] = ['position', 'title', 'priority', 'taskdate', 'duedate', 'status', 'action'];
   dataSource = new MatTableDataSource<any>();
   currentUser: any;
   searchText: string = '';
-
+  priorityList = ['High', 'Normal', 'Low'];
+  employees = []; // Populate this with your employees data
+  addTaskForm: FormGroup;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -41,14 +58,25 @@ export class MytaskComponent implements AfterViewInit {
     private taskService: TaskService,
     private authService: AuthService,
     private router: Router,
-  ) { }
+    private dialog: MatDialog,
+    private fb: FormBuilder
+  ) {
+    this.addTaskForm = this.fb.group({
+      title: ['', Validators.required],
+      assignedTo: ['', Validators.required],
+      clientname: ['', Validators.required],
+      priority: ['', Validators.required],
+      taskdate: [''],
+      duedate: [''],
+      eventdetails: ['']
+    });
+  }
 
   ngAfterViewInit() {
     this.loadTasks();
     this.dataSource.paginator = this.paginator;
   }
 
-  // laodTask
   loadTasks() {
     this.currentUser = this.authService.getUser();
     if (this.currentUser) {
@@ -62,7 +90,10 @@ export class MytaskComponent implements AfterViewInit {
             taskdate: this.parseDate(task.taskdate),
             duedate: this.parseDate(task.duedate),
             completed: task.completed,
-            assignedName: task.assignedName
+            assignedName: task.assignedName,
+            clientname: task.clientname,
+            eventdetails: task.eventdetails,
+            assignedTo: task.assignedTo
           }));
         },
         error: (err) => {
@@ -72,7 +103,6 @@ export class MytaskComponent implements AfterViewInit {
     }
   }
 
-  // Add this method to parse dates
   parseDate(dateString: string | Date): Date {
     if (dateString instanceof Date) {
       return dateString;
@@ -87,10 +117,9 @@ export class MytaskComponent implements AfterViewInit {
       }
     }
 
-    return new Date(dateString); // Fallback
+    return new Date(dateString);
   }
 
-  // priority - color
   getPriorityClass(priority: string): string {
     switch (priority) {
       case 'Low': return 'text-green-500';
@@ -100,7 +129,6 @@ export class MytaskComponent implements AfterViewInit {
     }
   }
 
-  // priority - icon
   getPriorityIcon(priority: string): string {
     switch (priority) {
       case 'Low': return 'arrow_downward';
@@ -110,21 +138,15 @@ export class MytaskComponent implements AfterViewInit {
     }
   }
 
-  // Add this method to properly toggle task completion
   async toggleCompletion(event: MatCheckboxChange, task: any) {
-    // Don't use preventDefault() - it's not needed with (change)
-
     try {
-      // Create updated task with toggled completion status
       const updatedTask = {
         ...task,
         completed: event.checked
       };
 
-      // Update the task in the backend
       await this.taskService.updateTask(task.id, updatedTask).toPromise();
 
-      // Update the local data source immutably
       const index = this.dataSource.data.findIndex(t => t.id === task.id);
       if (index !== -1) {
         const newData = [...this.dataSource.data];
@@ -133,13 +155,54 @@ export class MytaskComponent implements AfterViewInit {
       }
     } catch (error) {
       console.error('Error updating task:', error);
-      // Revert the checkbox state if update fails
       event.source.checked = !event.checked;
     }
   }
 
+  onEdit(taskId: number) {
+    const task = this.dataSource.data.find(t => t.id === taskId);
+    if (task) {
+      const dialogRef = this.dialog.open(TaskFormDialogComponent, {
+        width: '600px',
+        data: {
+          form: this.addTaskForm,
+          employees: this.employees,
+          priorityList: this.priorityList,
+          isEdit: true
+        }
+      });
 
-  // Add these properties to your component class
+      this.addTaskForm.patchValue({
+        title: task.title,
+        assignedTo: task.assignedTo,
+        clientname: task.clientname,
+        priority: task.priority,
+        taskdate: task.taskdate,
+        duedate: task.duedate,
+        eventdetails: task.eventdetails
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.updateTask(taskId, result);
+        } else {
+          this.addTaskForm.reset();
+        }
+      });
+    }
+  }
+
+  updateTask(taskId: number, updatedData: any) {
+    this.taskService.updateTask(taskId, updatedData).subscribe({
+      next: () => {
+        this.loadTasks();
+      },
+      error: (err) => {
+        console.error('Error updating task:', err);
+      }
+    });
+  }
+
   get totalTasks(): number {
     return this.dataSource?.data?.length || 0;
   }
@@ -148,8 +211,6 @@ export class MytaskComponent implements AfterViewInit {
     return this.dataSource?.data?.filter(task => task.completed)?.length || 0;
   }
 
-
-  // searching 
   get filteredRecords(): any[] {
     const data = this.dataSource?.data || [];
 
@@ -170,8 +231,6 @@ export class MytaskComponent implements AfterViewInit {
     );
   }
 
-
-  // sorting 
   sortByPriority(priority: 'High' | 'Normal' | 'Low') {
     const priorityOrder: Record<string, number> = {
       High: 3,
@@ -179,7 +238,7 @@ export class MytaskComponent implements AfterViewInit {
       Low: 1
     };
 
-    const isAscending = priority === 'Low'; // Low → High, others → High → Low
+    const isAscending = priority === 'Low';
 
     const sorted = [...this.dataSource.data].sort((a, b) =>
       isAscending
@@ -191,7 +250,7 @@ export class MytaskComponent implements AfterViewInit {
   }
 
   onView(id: number) {
-    console.log("Viewing task with ID :", id)
-    this.router.navigate(['viewtask', id])
+    console.log("Viewing task with ID:", id);
+    this.router.navigate(['viewtask', id]);
   }
 }

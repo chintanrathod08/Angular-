@@ -332,12 +332,20 @@ export class TaskComponent implements OnInit, AfterViewInit {
   toggleCompletion(task: Tasks) {
     task.completed = !task.completed;
 
-    // Create a new object with properly formatted dates
-    const updatedTask = {
-      ...task,
+    const updatedTask: Tasks = {
+      id: task.id,
+      title: task.title ?? '',
+      assignedTo: task.assignedTo ?? 0,
+      assignedName: task.assignedName ?? '',
+      clientname: task.clientname ?? '',
+      priority: task.priority ?? 'Normal',
       taskdate: this.formatDate(task.taskdate),
-      duedate: this.formatDate(task.duedate)
+      duedate: this.formatDate(task.duedate),
+      eventdetails: task.eventdetails ?? '',
+      completed: task.completed
     };
+
+    console.log('Final Updated Task being sent:', updatedTask);
 
     this.taskService.updateTask(task.id!, updatedTask).subscribe(() => {
       this.getTaskList();
@@ -384,7 +392,6 @@ export class TaskComponent implements OnInit, AfterViewInit {
       (record.assignedName && normalize(record.assignedName).includes(search))
     );
   }
-
 
   get totalTasks(): number {
     return this.taskRecord.length;

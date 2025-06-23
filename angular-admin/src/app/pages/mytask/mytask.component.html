@@ -138,8 +138,19 @@
                 <ng-container matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef>Action</th>
                     <td mat-cell *matCellDef="let element">
-                        <button (click)="onView(element.id)" class="ms-2.5"><mat-icon
-                                style="color: #6777EF; cursor: pointer;">visibility</mat-icon></button>
+                        <button matButton [matMenuTriggerFor]="menu" class="flex items-center cursor-pointer"
+                            style="color: #6F6F6F;">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item style="color: #218B5A;" (click)="onEdit(element.id)">
+                                <mat-icon style="color: #218B5A;">create</mat-icon> Edit
+                            </button>
+                            <button mat-menu-item style="color: #6777EF;" (click)="onView(element.id)">
+                                <mat-icon style="color: #6777EF">visibility</mat-icon> View
+                            </button>
+                        </mat-menu>
                     </td>
                 </ng-container>
 

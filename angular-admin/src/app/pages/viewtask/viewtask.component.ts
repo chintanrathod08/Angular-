@@ -46,6 +46,7 @@ export class ViewtaskComponent implements OnInit {
           if (this.taskData) {
             this.taskData.taskdate = this.formatDate(res.taskdate);
             this.taskData.duedate = this.formatDate(res.duedate);
+            console.log("Raw task from API:", res);
           }
         },
         error: (err) => {

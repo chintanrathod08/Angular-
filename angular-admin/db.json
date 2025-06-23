@@ -176,14 +176,14 @@
   ],
   "Tasks": [
     {
-      "position": 1,
-      "id": 1,
-      "title": "Task ",
+      "title": "HR Portal ",
+      "assignedTo": 1,
+      "clientname": "Techlab",
       "priority": "High",
       "taskdate": "2025-06-23T00:00:00.000Z",
       "duedate": "2025-06-24T00:00:00.000Z",
-      "completed": true,
-      "assignedName": "Chintan Rathod"
+      "eventdetails": "Bug is clear ",
+      "id": 1
     }
   ]
 }

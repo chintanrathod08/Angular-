@@ -31,7 +31,7 @@ export class TaskService {
     return this.http.post<Tasks>(this.taskApi, data);
   }
 
-  getTaskById(id: number) {
+  getTaskById(id: number): Observable<Tasks>{
     return this.http.get<Tasks>(`${this.taskApi}/${id}`);
   }
 
