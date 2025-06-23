@@ -44,4 +44,10 @@ export class TaskService {
   deleteTask(id: number) {
     return this.http.delete(`${this.taskApi}/${id}`);
   }
+
+  getEmployees(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.taskApi}/employees`);
+    // Adjust the endpoint according to your API
+  }
+
 }

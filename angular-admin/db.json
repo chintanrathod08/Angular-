@@ -169,21 +169,24 @@
       "employeename": "Chintan Rathod",
       "date": "2025-06-23",
       "checkInTime": "10:06 AM",
-      "checkOutTime": "",
-      "totalWorkingHours": "",
+      "checkOutTime": "6:56 PM",
+      "totalWorkingHours": "07:50",
       "id": 9
     }
   ],
   "Tasks": [
     {
+      "position": 1,
+      "id": 1,
       "title": "HR Portal ",
-      "assignedTo": 1,
-      "clientname": "Techlab",
       "priority": "High",
       "taskdate": "2025-06-23T00:00:00.000Z",
       "duedate": "2025-06-24T00:00:00.000Z",
-      "eventdetails": "Bug is clear ",
-      "id": 1
+      "completed": true,
+      "assignedName": "Chintan Rathod",
+      "clientname": "Techlab",
+      "eventdetails": "Bug is clear in this task",
+      "assignedTo": 1
     }
   ]
 }
