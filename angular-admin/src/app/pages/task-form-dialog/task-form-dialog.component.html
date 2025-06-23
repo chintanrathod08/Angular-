@@ -1,7 +1,7 @@
 <form [formGroup]="data.form" (ngSubmit)="onSubmit()" class="w-auto h-[25rem] md:h-[30rem] p-6 overflow-auto">
 
      <!-- Form Header -->
-    <div class="flex justify-between items-center mb-4">
+    <div class="flex justify-between items-center mb-4 sticky top-0 z-10 bg-[#FAF9FD]">
         <h2 class="text-lg font-medium">{{ data.isEdit ? 'Edit Task' : 'New Task' }}</h2>
         <div class="space-x-2">
             <button mat-icon-button type="submit">
