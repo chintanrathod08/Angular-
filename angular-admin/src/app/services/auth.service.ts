@@ -98,7 +98,10 @@ export class AuthService {
       localStorage.removeItem(this.USER_KEY);
     }
   }
-  
-  
 
+  isAdmin(): boolean {
+    const user = this.getUser(); 
+    return user?.role === 'admin'; 
+  }
+  
 }

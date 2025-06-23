@@ -5,8 +5,10 @@ export interface Tasks {
     assignedName: string;
     clientname: string;
     priority: 'Low' | 'Normal' | 'High';
-    taskdate : Date | string;
+    taskdate: Date | string;
     duedate: Date | string;
     eventdetails: string;
     completed: boolean;
+    formattedTaskDate?: string;
+    formattedDueDate?: string;
 }

@@ -128,11 +128,28 @@ export class TaskComponent implements OnInit, AfterViewInit {
     return new Date(dateString); // Fallback
   }
 
-  formatDate(date: Date | string): string {
-    const dateObj = this.parseDate(date);
+  formatDate(date: Date | string | null | undefined): string {
+    if (!date) return '';
+
+    // If already formatted in YYYY-MM-DD, return as-is
+    if (typeof date === 'string' && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return date;
+    }
+
+    // If in dd/mm/yyyy format, convert to Date object first
+    if (typeof date === 'string' && date.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+      const [day, month, year] = date.split('/');
+      date = new Date(+year, +month - 1, +day);
+    }
+
+    // Handle Date objects and other string formats
+    const dateObj = new Date(date);
+    if (isNaN(dateObj.getTime())) return ''; // Invalid date
+
     const year = dateObj.getFullYear();
     const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
     const day = dateObj.getDate().toString().padStart(2, '0');
+
     return `${year}-${month}-${day}`;
   }
 
@@ -169,7 +186,8 @@ export class TaskComponent implements OnInit, AfterViewInit {
 
   prepareFormData(): any {
     const selectedEmployee = this.employees.find(emp => emp.id === this.addTaskForm.value.assignedTo);
-      return {
+
+    return {
       ...this.addTaskForm.value,
       assignedTo: selectedEmployee?.id,
       assignedName: selectedEmployee ? `${selectedEmployee.firstName} ${selectedEmployee.lastName}` : '',
@@ -225,7 +243,9 @@ export class TaskComponent implements OnInit, AfterViewInit {
     this.taskService.getTasks().subscribe((data) => {
       this.taskRecord = data.map(task => ({
         ...task,
-        completed: task.completed ?? false
+        completed: task.completed ?? false,
+        taskdate: this.formatDate(task.taskdate),
+        duedate: this.formatDate(task.duedate)
       }));
     });
   }
@@ -311,7 +331,15 @@ export class TaskComponent implements OnInit, AfterViewInit {
 
   toggleCompletion(task: Tasks) {
     task.completed = !task.completed;
-    this.taskService.updateTask(task.id!, task).subscribe(() => {
+
+    // Create a new object with properly formatted dates
+    const updatedTask = {
+      ...task,
+      taskdate: this.formatDate(task.taskdate),
+      duedate: this.formatDate(task.duedate)
+    };
+
+    this.taskService.updateTask(task.id!, updatedTask).subscribe(() => {
       this.getTaskList();
     });
   }
@@ -366,6 +394,7 @@ export class TaskComponent implements OnInit, AfterViewInit {
     return this.taskRecord.filter(task => task.completed).length;
   }
 
+  // sorting
   sortByPriority(priority: 'High' | 'Normal' | 'Low') {
     const priorityOrder: Record<string, number> = {
       High: 3,
