@@ -1,19 +1,47 @@
-@media(min-width: 0px) and (max-width: 768px){
-    #sidebarmenu1 {
-        display: block;
+.header-toolbar {
+  background-color: #6777EF !important;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  height: 64px;
+  font-family: Poppins, sans-serif;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+
+      img {
+        height: 32px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 500;
+      }
     }
 
-    #sidebarmenu2 {
-        display: none;
+    .menu-button {
+      mat-icon {
+        color: white;
+      }
     }
-}
+  }
 
-@media(min-width: 769px ) and (max-width: 2560px)  {
-    #sidebarmenu1 {
-        display: none;
+  .header-right {
+    .profile-button {
+      mat-icon {
+        color: white;
+      }
     }
-
-    #sidebarmenu2 {
-        display: block;
-    }
+  }
 }

@@ -1,8 +1,9 @@
 <!-- Layout shown when NOT on login/signup -->
 <section class="w-full h-[100vh] flex flex-col" *ngIf="showLayout">
-  <app-header (sidebarToggle)="drawer.toggle()"></app-header>
+  <app-header (sidebarToggle)="sidenav.toggle()"></app-header>
 
   <mat-drawer-container class="example-container" autosize>
+    
     <mat-drawer #drawer class="example-sidenav" [mode]="drawerMode" [opened]="isSideOpen"
       [style.width]="drawerMode === 'over' ? '100%' : '15%'" style="border-radius: 0px;">
       <div class="bg-white h-full">
@@ -10,38 +11,32 @@
 
           <!-- Role Display -->
           <div class="px-4 py-5 flex flex-col items-center gap-2 border-b border-gray-200 cursor-pointer">
-
-            <!-- Profile Image Section -->
             <div class="w-full flex flex-col items-center py-4 relative group cursor-pointer">
-              <!-- Employee (editable image) -->
               <label *ngIf="role === 'employee'" for="profileImageInput"
                 class="relative w-20 h-20 rounded-full overflow-hidden border border-gray-300 group-hover:opacity-80">
                 <img [src]="profileImageUrl || defaultImageUrl" alt="Profile" class="w-full h-full object-cover" />
-                <div
-                  class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-200">
+                <div class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-200">
                   <mat-icon class="text-white">edit</mat-icon>
                 </div>
               </label>
 
-              <!-- Admin (non-editable image) -->
               <div *ngIf="role === 'admin'"
                 class="relative w-20 h-20 rounded-full overflow-hidden border border-gray-300">
                 <img [src]="profileImageUrl || defaultImageUrl" alt="Profile" class="w-full h-full object-cover" />
               </div>
 
-              <!-- Image input (only for employee) -->
               <input *ngIf="role === 'employee'" type="file" id="profileImageInput" accept="image/*"
                 (change)="onImageSelected($event)" hidden />
             </div>
 
-            <!-- Username and Role -->
             <div class="text-md font-semibold text-[#6777EF] capitalize">{{ username }}</div>
             <div class="text-xs text-[#888] capitalize">{{ role }}</div>
           </div>
 
           <!-- Dashboard -->
-          <mat-list-item class="px-3">
-            <a routerLink="/home" class="flex items-center gap-3 text-[#767676]">
+          <mat-list-item class="px-3 nav-item">
+            <a routerLink="/home" class="flex items-center gap-3 text-[#767676]"
+            (click)="closeSidebarOnNavigation()">
               <mat-icon>home</mat-icon>
               <span>Dashboard</span>
             </a>
@@ -60,27 +55,27 @@
             </mat-list-item>
 
             <ng-container *ngIf="isProjectMenuOpen">
-              <mat-list-item>
+              <mat-list-item class="nav-item">
                 <div class="ml-6 w-full">
-                  <a routerLink="/addproject" class="flex items-center gap-2 text-sm text-[#888]">
+                  <a routerLink="/addproject" (click)="closeSidebarOnNavigation()" class="flex items-center gap-2 text-sm text-[#888]">
                     <mat-icon class="text-[18px]">create_new_folder</mat-icon>
                     <span>Add Project</span>
                   </a>
                 </div>
               </mat-list-item>
 
-              <mat-list-item>
+              <mat-list-item class="nav-item">
                 <div class="ml-6 w-full">
-                  <a routerLink="/allproject" class="flex items-center gap-2 text-sm text-[#888]">
+                  <a routerLink="/allproject" (click)="closeSidebarOnNavigation()" class="flex items-center gap-2 text-sm text-[#888]">
                     <mat-icon class="text-[18px]">folder</mat-icon>
                     <span>All Projects</span>
                   </a>
                 </div>
               </mat-list-item>
 
-              <mat-list-item>
+              <mat-list-item class="nav-item">
                 <div class="ml-6 w-full">
-                  <a routerLink="/estimate" class="flex items-center gap-2 text-sm text-[#888]">
+                  <a routerLink="/estimate" (click)="closeSidebarOnNavigation()" class="flex items-center gap-2 text-sm text-[#888]">
                     <mat-icon class="text-[18px]">library_books</mat-icon>
                     <span>Estimate</span>
                   </a>
@@ -91,8 +86,8 @@
 
           <!-- Projects (Employee Only) -->
           <ng-container *ngIf="role === 'employee'">
-            <mat-list-item class="px-3">
-              <a routerLink="/allproject" class="flex items-center gap-3 text-[#767676]">
+            <mat-list-item class="px-3 nav-item">
+              <a routerLink="/allproject" (click)="closeSidebarOnNavigation()" class="flex items-center gap-3 text-[#767676]">
                 <mat-icon>folder</mat-icon>
                 <span>All Projects</span>
               </a>
@@ -112,18 +107,18 @@
             </mat-list-item>
 
             <ng-container *ngIf="isEmployeeMenuOpen">
-              <mat-list-item>
+              <mat-list-item class="nav-item">
                 <div class="ml-6 w-full">
-                  <a routerLink="/addemployee" class="flex items-center gap-2 text-sm text-[#888]">
+                  <a routerLink="/addemployee" (click)="closeSidebarOnNavigation()" class="flex items-center gap-2 text-sm text-[#888]">
                     <mat-icon class="text-[18px]">group_add</mat-icon>
                     <span>Add Employee</span>
                   </a>
                 </div>
               </mat-list-item>
 
-              <mat-list-item>
+              <mat-list-item class="nav-item">
                 <div class="ml-6 w-full">
-                  <a routerLink="/allemployee" class="flex items-center gap-2 text-sm text-[#888]">
+                  <a routerLink="/allemployee" (click)="closeSidebarOnNavigation()" class="flex items-center gap-2 text-sm text-[#888]">
                     <mat-icon class="text-[18px]">groups</mat-icon>
                     <span>All Employees</span>
                   </a>
@@ -133,8 +128,8 @@
           </ng-container>
 
           <!-- Attendance (Both Roles) -->
-          <mat-list-item class="px-3">
-            <a routerLink="/attendance" class="flex items-center gap-3 text-[#767676]">
+          <mat-list-item class="px-3 nav-item">
+            <a routerLink="/attendance" (click)="closeSidebarOnNavigation()" class="flex items-center gap-3 text-[#767676]">
               <mat-icon>border_color</mat-icon>
               <span>Attendance</span>
             </a>
@@ -142,8 +137,8 @@
 
           <!-- Task (Admin only) -->
           <ng-container *ngIf="role === 'admin'">
-            <mat-list-item class="px-3">
-              <a routerLink="/task" class="flex items-center gap-3 text-[#767676]">
+            <mat-list-item class="px-3 nav-item">
+              <a routerLink="/task" (click)="closeSidebarOnNavigation()" class="flex items-center gap-3 text-[#767676]">
                 <mat-icon>check_circle</mat-icon>
                 <span>Task</span>
               </a>
@@ -152,9 +147,9 @@
 
           <!-- My Task (Employee only) -->
           <ng-container *ngIf="role === 'employee'">
-            <mat-list-item class="px-3">
-              <a routerLink="/mytask" class="flex items-center gap-3 text-[#767676]">
-                <mat-icon> list_alt</mat-icon>
+            <mat-list-item class="px-3 nav-item">
+              <a routerLink="/mytask" (click)="closeSidebarOnNavigation()" class="flex items-center gap-3 text-[#767676]">
+                <mat-icon>list_alt</mat-icon>
                 <span>My Tasks</span>
               </a>
             </mat-list-item>

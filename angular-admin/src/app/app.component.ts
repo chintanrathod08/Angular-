@@ -3,7 +3,9 @@ import {
   OnInit,
   inject,
   Inject,
-  PLATFORM_ID
+  PLATFORM_ID,
+  ViewChild,
+  AfterViewInit
 } from '@angular/core';
 import {
   Router,
@@ -18,13 +20,14 @@ import {
   LayoutModule
 } from '@angular/cdk/layout';
 import { NgIf, isPlatformBrowser } from '@angular/common';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { HeaderComponent } from './components/header/header.component';
 import { AuthService } from './services/auth.service';
 import { filter } from 'rxjs';
+
 
 @Component({
   selector: 'app-root',
@@ -44,7 +47,7 @@ import { filter } from 'rxjs';
     HeaderComponent
   ]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   showLayout = true;
   isSideOpen = true;
   drawerMode: 'side' | 'over' = 'side';
@@ -57,6 +60,8 @@ export class AppComponent implements OnInit {
   profileImageUrl: string | null = null;
 
   breakpointObserver = inject(BreakpointObserver);
+
+  @ViewChild('drawer') sidenav!: MatSidenav;
 
   constructor(
     private router: Router,
@@ -96,15 +101,10 @@ export class AppComponent implements OnInit {
           localStorage.setItem('profileImage', this.profileImageUrl);
         }
       } else if (this.role === 'admin') {
-        // ✅ Hardcoded image for admin if no backend image
-        this.profileImageUrl = 'https://www.pngmart.com/files/21/Admin-Profile-Vector-PNG-File.png'; // any static image URL
+        this.profileImageUrl = 'https://www.pngmart.com/files/21/Admin-Profile-Vector-PNG-File.png';
       } else if (isPlatformBrowser(this.platformId) && this.role === 'employee') {
         const savedImage = localStorage.getItem('profileImage');
-        if (savedImage) {
-          this.profileImageUrl = savedImage;
-        } else {
-          this.profileImageUrl = null;
-        }
+        this.profileImageUrl = savedImage ? savedImage : null;
       }
     });
 
@@ -117,25 +117,30 @@ export class AppComponent implements OnInit {
       });
   }
 
+  ngAfterViewInit() {
+    // Add click handlers to all nav items
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.addEventListener('click', () => this.closeSidebarOnNavigation());
+        });
+      });
+    }
+  }
 
-  // Optional image upload handler for employee only
   onImageSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
         this.profileImageUrl = reader.result as string;
-
-        // Save ONLY for Employee
         if (isPlatformBrowser(this.platformId) && this.role === 'employee') {
           localStorage.setItem('profileImage', this.profileImageUrl);
         }
-
-        // Update local AuthService user image (temporary session)
         const user = this.auth.getUser();
         if (user && 'image' in user) {
           user.image = this.profileImageUrl;
-          (this.auth as any)['safeSetUser']?.(user); // Optional helper
+          (this.auth as any)['safeSetUser']?.(user);
         }
       };
       reader.readAsDataURL(file);
@@ -148,5 +153,11 @@ export class AppComponent implements OnInit {
 
   toggleEmployeeMenu(): void {
     this.isEmployeeMenuOpen = !this.isEmployeeMenuOpen;
+  }
+
+  closeSidebarOnNavigation() {
+    if (this.drawerMode === 'over' && this.sidenav) {
+      this.sidenav.close();
+    }
   }
 }
