@@ -181,21 +181,29 @@
       "checkOutTime": "",
       "totalWorkingHours": "",
       "id": 10
+    },
+    {
+      "employeeId": 2,
+      "employeename": "John Wick",
+      "date": "2025-06-24",
+      "checkInTime": "10:56 AM",
+      "checkOutTime": "",
+      "totalWorkingHours": "",
+      "id": 11
     }
   ],
   "Tasks": [
     {
-      "position": 1,
-      "id": 1,
-      "title": "Task Management",
-      "priority": "High",
-      "taskdate": "2025-06-24T00:00:00.000Z",
-      "duedate": "2025-06-25T00:00:00.000Z",
-      "completed": true,
+      "title": "HR Portal",
+      "assignedTo": 1,
       "assignedName": "Chintan Rathod",
       "clientname": "Techlab",
-      "eventdetails": "Task is completed",
-      "assignedTo": 1
+      "priority": "High",
+      "taskdate": "2025-06-24",
+      "duedate": "2025-06-25",
+      "eventdetails": "NA",
+      "completed": false,
+      "id": 1
     }
   ]
 }

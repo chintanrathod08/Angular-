@@ -164,6 +164,7 @@ export class MytaskComponent implements AfterViewInit {
     if (task) {
       const dialogRef = this.dialog.open(TaskFormDialogComponent, {
         width: '600px',
+        height: '250px',
         data: {
           form: this.addTaskForm,
           employees: this.employees,
