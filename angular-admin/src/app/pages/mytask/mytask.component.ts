@@ -168,7 +168,8 @@ export class MytaskComponent implements AfterViewInit {
           form: this.addTaskForm,
           employees: this.employees,
           priorityList: this.priorityList,
-          isEdit: true
+          isEdit: true,
+          currentAssignedName: task.assignedName
         }
       });
 
@@ -184,7 +185,10 @@ export class MytaskComponent implements AfterViewInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.updateTask(taskId, result);
+          this.updateTask(taskId,{
+            ...result,
+            assignedName: task.assignedName
+          });
         } else {
           this.addTaskForm.reset();
         }
